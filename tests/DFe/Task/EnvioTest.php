@@ -89,7 +89,7 @@ class EnvioTest extends \PHPUnit\Framework\TestCase
         $this->expectException('\DFe\Exception\NetworkException');
         try {
             $envio->envia();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             \DFe\Common\CurlSoap::setPostFunction(null);
             $this->sefaz->getConfiguracao()->setOffline(null);
             throw $e;
@@ -105,7 +105,7 @@ class EnvioTest extends \PHPUnit\Framework\TestCase
         $this->expectException('\DFe\Exception\NetworkException');
         try {
             $envio->envia();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             \DFe\Common\CurlSoap::setPostFunction(null);
             $this->sefaz->getConfiguracao()->setOffline(null);
             throw $e;

@@ -93,7 +93,7 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
             $autorizacao->fromArray($autorizacao);
             $autorizacao->fromArray($autorizacao->toArray());
             $autorizacao->fromArray(null);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
@@ -112,7 +112,7 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
         try {
             $autorizacao = new Autorizacao();
             $retorno = $autorizacao->envia($nota, $dom);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
@@ -130,7 +130,7 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
         try {
             $autorizacao = new Autorizacao();
             $retorno = $autorizacao->envia($nota, $dom);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
