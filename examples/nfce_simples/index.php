@@ -1,5 +1,7 @@
 <?php
 
+namespace Example;
+
 require dirname(dirname(__DIR__)) . '/vendor/autoload.php';
 require __DIR__ . '/Gerador.php';
 require __DIR__ . '/Processador.php';
@@ -56,6 +58,8 @@ $processador->init([
     'contrib' => $contribuinte,
     'emitente' => $emitente,
 ]);
-$processador->getBanco()->nota_numero = $numero_da_nota;
+/** @var Gerador */
+$banco = $processador->getBanco();
+$banco->nota_numero = $numero_da_nota;
 $quantidade = $processador->processa();
 echo "{$quantidade} notas processadas";

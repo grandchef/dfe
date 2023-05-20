@@ -11,7 +11,7 @@ class Gerador extends Estatico
      * Numero da nota a ser usado
      * @var int
      */
-    public $nfce_numero = 1;
+    public $nota_numero = 1;
 
     /**
      * Obtém as notas pendentes de envio, em contingência e corrigidas após
