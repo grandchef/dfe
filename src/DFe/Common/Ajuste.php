@@ -29,9 +29,7 @@
 
 namespace DFe\Common;
 
-use DFe\Task\Tarefa;
 use DFe\Core\Nota;
-use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
 
 /**
  * Configurações padrão para emissão de nota fiscal

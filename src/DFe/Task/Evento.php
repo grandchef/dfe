@@ -32,9 +32,9 @@ namespace DFe\Task;
 use DFe\Core\Nota;
 use DFe\Core\SEFAZ;
 use DFe\Common\Util;
+use DFe\Util\AdapterInterface;
+use DFe\Util\XmlseclibsAdapter;
 use DFe\Exception\ValidationException;
-use FR3D\XmlDSig\Adapter\AdapterInterface;
-use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
 
 class Evento extends Retorno
 {

@@ -34,10 +34,7 @@
     "autoload": {
         "psr-4": {
             "DFe\\": "src/DFe"
-        },
-        "classmap": [
-            "src/util"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {

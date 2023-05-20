@@ -1,6 +1,6 @@
 <?php
 
-namespace FR3D\XmlDSig\Adapter;
+namespace DFe\Util;
 
 use DOMDocument;
 use DOMNode;

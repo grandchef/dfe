@@ -42,9 +42,9 @@ use DFe\Entity\Transporte;
 use DFe\Entity\Responsavel;
 use DFe\Entity\Destinatario;
 use DFe\Entity\Intermediador;
+use DFe\Util\AdapterInterface;
+use DFe\Util\XmlseclibsAdapter;
 use DFe\Exception\ValidationException;
-use FR3D\XmlDSig\Adapter\AdapterInterface;
-use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
 
 /**
  * Classe base para a formação da nota fiscal
