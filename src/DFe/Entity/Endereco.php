@@ -27,10 +27,10 @@
  *
  */
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
-use NFe\Common\Node;
-use NFe\Common\Util;
+use DFe\Common\Node;
+use DFe\Common\Util;
 
 /**
  * Informação de endereço que será informado nos clientes e no emitente

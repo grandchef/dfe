@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
 class PesoTest extends \PHPUnit\Framework\TestCase
 {
@@ -10,7 +10,7 @@ class PesoTest extends \PHPUnit\Framework\TestCase
 
     public function testPeso()
     {
-        $peso = new \NFe\Entity\Peso();
+        $peso = new \DFe\Entity\Peso();
         $peso->setLiquido(15.0);
         $peso->setBruto(21.0);
         $peso->fromArray($peso);

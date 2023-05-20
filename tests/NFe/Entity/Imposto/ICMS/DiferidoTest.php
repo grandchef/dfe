@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity\Imposto\ICMS;
+namespace DFe\Entity\Imposto\ICMS;
 
 class DiferidoTest extends \PHPUnit\Framework\TestCase
 {
@@ -13,7 +13,7 @@ class DiferidoTest extends \PHPUnit\Framework\TestCase
 
     public function testDiferidoXML()
     {
-        $icms_diferido = new \NFe\Entity\Imposto\ICMS\Diferido();
+        $icms_diferido = new \DFe\Entity\Imposto\ICMS\Diferido();
         $icms_diferido->fromArray($icms_diferido);
         $icms_diferido->fromArray($icms_diferido->toArray());
         $icms_diferido->fromArray(null);
@@ -55,7 +55,7 @@ class DiferidoTest extends \PHPUnit\Framework\TestCase
     public function testDiferidoReducaoXML()
     {
         $icms_diferido = new Diferido();
-        $icms_diferido->setModalidade(\NFe\Entity\Imposto\ICMS\Normal::MODALIDADE_OPERACAO);
+        $icms_diferido->setModalidade(\DFe\Entity\Imposto\ICMS\Normal::MODALIDADE_OPERACAO);
         $icms_diferido->setBase(80.00);
         $icms_diferido->setReducao(20.00);
         $icms_diferido->setAliquota(18.00);
@@ -100,8 +100,8 @@ class DiferidoTest extends \PHPUnit\Framework\TestCase
 
     public function testDiferidoDiferimentoXML()
     {
-        $icms_diferido = new \NFe\Entity\Imposto\ICMS\Diferido();
-        $icms_diferido->setModalidade(\NFe\Entity\Imposto\ICMS\Normal::MODALIDADE_OPERACAO);
+        $icms_diferido = new \DFe\Entity\Imposto\ICMS\Diferido();
+        $icms_diferido->setModalidade(\DFe\Entity\Imposto\ICMS\Normal::MODALIDADE_OPERACAO);
         $icms_diferido->setBase(1000.00);
         $icms_diferido->setAliquota(18.00);
         $icms_diferido->setDiferimento(33.3333);
@@ -133,7 +133,7 @@ class DiferidoTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testDiferidoDiferimentoXML.xml');
 
-        $icms_diferido = new \NFe\Entity\Imposto\ICMS\Diferido();
+        $icms_diferido = new \DFe\Entity\Imposto\ICMS\Diferido();
         $icms_diferido->loadNode($dom_cmp->documentElement);
 
         $xml = $icms_diferido->getNode();

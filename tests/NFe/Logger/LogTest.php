@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Logger;
+namespace DFe\Logger;
 
 class LogTest extends \PHPUnit\Framework\TestCase
 {

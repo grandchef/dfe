@@ -27,10 +27,10 @@
  *
  */
 
-namespace NFe\Entity\Imposto\IPI;
+namespace DFe\Entity\Imposto\IPI;
 
-use NFe\Common\Util;
-use NFe\Entity\Imposto;
+use DFe\Common\Util;
+use DFe\Entity\Imposto;
 
 /**
  * Quantidade x valor Unidade de Produto

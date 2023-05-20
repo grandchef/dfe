@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
 class ImpostoTest extends \PHPUnit\Framework\TestCase
 {

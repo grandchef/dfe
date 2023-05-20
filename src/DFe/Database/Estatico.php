@@ -27,10 +27,10 @@
  *
  */
 
-namespace NFe\Database;
+namespace DFe\Database;
 
-use NFe\Common\Util;
-use NFe\Core\Nota;
+use DFe\Common\Util;
+use DFe\Core\Nota;
 
 class Estatico extends Banco
 {

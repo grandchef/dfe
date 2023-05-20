@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
 class EmitenteTest extends \PHPUnit\Framework\TestCase
 {
@@ -8,19 +8,19 @@ class EmitenteTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->sefaz = \NFe\Core\SEFAZ::getInstance(true);
+        $this->sefaz = \DFe\Core\SEFAZ::getInstance(true);
     }
 
     public static function createEmitente()
     {
-        $emitente = new \NFe\Entity\Emitente();
+        $emitente = new \DFe\Entity\Emitente();
         $emitente->setRazaoSocial('Empresa LTDA');
         $emitente->setFantasia('Minha Empresa');
         $emitente->setCNPJ('08380787000176');
         $emitente->setTelefone('11955886644');
         $emitente->setIE('123456789');
         $emitente->setIM('98765');
-        $emitente->setRegime(\NFe\Entity\Emitente::REGIME_SIMPLES);
+        $emitente->setRegime(\DFe\Entity\Emitente::REGIME_SIMPLES);
 
         $endereco = EnderecoTest::createEndereco();
         $emitente->setEndereco($endereco);
@@ -29,16 +29,16 @@ class EmitenteTest extends \PHPUnit\Framework\TestCase
 
     public function testEmitenteXML()
     {
-        $emitente = new \NFe\Entity\Emitente();
+        $emitente = new \DFe\Entity\Emitente();
         $emitente->setRazaoSocial('Empresa LTDA');
         $emitente->setFantasia('Minha Empresa');
         $emitente->setCNPJ('12345678000123');
         $emitente->setTelefone('11955886644');
         $emitente->setIE('123456789');
         $emitente->setIM('95656');
-        $emitente->setRegime(\NFe\Entity\Emitente::REGIME_SIMPLES);
+        $emitente->setRegime(\DFe\Entity\Emitente::REGIME_SIMPLES);
 
-        $endereco = new \NFe\Entity\Endereco();
+        $endereco = new \DFe\Entity\Endereco();
         $endereco->setCEP('01122500');
         $endereco->getMunicipio()
                  ->setNome('Paranavaí')
@@ -81,7 +81,7 @@ class EmitenteTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/emitente/testEmitenteXML.xml');
 
-        $emitente = new \NFe\Entity\Emitente();
+        $emitente = new \DFe\Entity\Emitente();
         $emitente->loadNode($dom_cmp->documentElement);
 
         $xml = $emitente->getNode();

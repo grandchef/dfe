@@ -1,8 +1,8 @@
 <?php
 
-namespace NFe\Database;
+namespace DFe\Database;
 
-use NFe\Logger\Log;
+use DFe\Logger\Log;
 
 class IBPTTest extends \PHPUnit\Framework\TestCase
 {
@@ -10,7 +10,7 @@ class IBPTTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->ibpt = new \NFe\Database\IBPT();
+        $this->ibpt = new \DFe\Database\IBPT();
         Log::getInstance()->setHandler(new \Monolog\Handler\NullHandler());
     }
 

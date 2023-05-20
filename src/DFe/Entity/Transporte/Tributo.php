@@ -27,11 +27,11 @@
  *
  */
 
-namespace NFe\Entity\Transporte;
+namespace DFe\Entity\Transporte;
 
-use NFe\Common\Util;
-use NFe\Entity\Imposto;
-use NFe\Entity\Municipio;
+use DFe\Common\Util;
+use DFe\Entity\Imposto;
+use DFe\Entity\Municipio;
 
 /**
  * ICMS retido do Transportador

@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Common;
+namespace DFe\Common;
 
 class CertificadoTest extends \PHPUnit\Framework\TestCase
 {

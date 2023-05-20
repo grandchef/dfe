@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Destinatario` (
   `email` VARCHAR(100) NULL COMMENT 'Informar o e-mail do destinatário. O campo pode ser utilizado para informar o e-mail de recepção da NF-e indicada pelo destinatário[L:email]',
   `indicador` ENUM('pagamento', 'isento', 'nenhum') NOT NULL DEFAULT 'self::INDICADOR_NENHUM' COMMENT 'Indicador da IE do destinatário:\n1 – Contribuinte ICMS pagamento à vista;\n2 – Contribuinte isento de inscrição;\n9 – Não Contribuinte[E:1|2|9][L:indIEDest][F:self::INDICADOR_NENHUM]')
 ENGINE = InnoDB
-COMMENT = 'Cliente ou destinatário pessoa física ou jurídica que está comprando os produtos e irá receber a nota fiscal[L:dest][H:Pessoa][K:NFe\\Entity|NFe\\Entity\\]';
+COMMENT = 'Cliente ou destinatário pessoa física ou jurídica que está comprando os produtos e irá receber a nota fiscal[L:dest][H:Pessoa][K:DFe\\Entity|DFe\\Entity\\]';
 
 
 -- -----------------------------------------------------
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Produto` (
   `cest` VARCHAR(20) NULL COMMENT ' Código Especificador da Substituição Tributária[L:CEST]',
   `impostos` VARCHAR(20) NOT NULL DEFAULT 'array()' COMMENT 'Lista de impostos incidentes sobre o produto[D][F:array()][S:S][U:impostos|imposto][L:imposto]')
 ENGINE = InnoDB
-COMMENT = 'Produto ou serviço que está sendo vendido ou prestado e será adicionado na nota fiscal[H:Total][L:prod][K:NFe\\Entity|NFe\\Entity\\]';
+COMMENT = 'Produto ou serviço que está sendo vendido ou prestado e será adicionado na nota fiscal[H:Total][L:prod][K:DFe\\Entity|DFe\\Entity\\]';
 
 
 -- -----------------------------------------------------
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Pessoa` (
   `endereco` VARCHAR(20) NULL DEFAULT 'new Endereco()' COMMENT 'Dados do endereço[L:enderEmit][S][F:new Endereco()]',
   `telefone` VARCHAR(20) NULL COMMENT 'Telefone para contato[L:fone]')
 ENGINE = InnoDB
-COMMENT = 'Classe base para preenchimento de informações de pessoas físicas e empresas[L:emit][K:NFe\\Entity|NFe\\Entity\\]';
+COMMENT = 'Classe base para preenchimento de informações de pessoas físicas e empresas[L:emit][K:DFe\\Entity|DFe\\Entity\\]';
 
 
 -- -----------------------------------------------------
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Endereco` (
   `logradouro` VARCHAR(200) NOT NULL COMMENT 'Nome da rua ou avenida[L:xLgr]',
   `numero` VARCHAR(20) NOT NULL COMMENT 'Número da casa ou condomínio[L:nro]',
   `complemento` VARCHAR(200) NULL COMMENT 'Complemento do endereço, serve para informar o apartamento e bloco[L:xCpl]')
-COMMENT = 'Informação de endereço que será informado nos clientes e no emitente[L:enderEmit][K:NFe\\Entity|NFe\\Entity\\]';
+COMMENT = 'Informação de endereço que será informado nos clientes e no emitente[L:enderEmit][K:DFe\\Entity|DFe\\Entity\\]';
 
 
 -- -----------------------------------------------------
@@ -108,13 +108,13 @@ CREATE TABLE IF NOT EXISTS `NFe.Core.Nota` (
   `consumidor_final` ENUM('Y', 'N') NOT NULL DEFAULT 'Y' COMMENT 'Indica operação com consumidor final (0-Não;1-Consumidor Final)[E:1|0][F:\'Y\'][L:indFinal]',
   `presenca` ENUM('nenhum', 'presencial', 'internet', 'teleatendimento', 'entrega', 'ambulante', 'outros') NOT NULL COMMENT 'Indicador de presença do comprador no estabelecimento comercial no momento da operação (0-Não se aplica ex.: Nota Fiscal complementar ou de ajuste;1-Operação presencial;2-Não presencial, internet;3-Não presencial, teleatendimento;4-NFC-e entrega em domicílio;5-Operação presencial, fora do estabelecimento;9-Não presencial, outros)[E:0|1|2|3|4|5|9][L:indPres]',
   `intermediacao` ENUM('nenhum', 'terceiros') NULL COMMENT 'Indicador de intermediador/marketplace 0=Operação sem intermediador (em site ou plataforma própria) 1=Operação em site ou plataforma de terceiros (intermediadores/marketplace)[E:0|1][L:indIntermed]',
-  `total` VARCHAR(45) NOT NULL DEFAULT 'new Total()' COMMENT 'Dados dos totais da NF-e[F:new \\NFe\\Entity\\Total()][S][L:total]',
+  `total` VARCHAR(45) NOT NULL DEFAULT 'new Total()' COMMENT 'Dados dos totais da NF-e[F:new \\DFe\\Entity\\Total()][S][L:total]',
   `adicionais` TEXT NULL COMMENT 'Informações adicionais de interesse do Fisco[L:infAdFisco]',
   `observacoes` VARCHAR(60) NULL COMMENT 'Campo de uso livre do contribuinte informar o nome do campo no atributo xCampo e o conteúdo do campo no xTexto[F:array()][S:S][U:observacoes|observacao][L:obsCont]',
   `informacoes` VARCHAR(60) NULL COMMENT 'Campo de uso exclusivo do Fisco informar o nome do campo no atributo xCampo e o conteúdo do campo no xTexto[F:array()][S:S][U:informacoes|informacao][L:obsFisco]',
   `protocolo` VARCHAR(45) NULL COMMENT 'Protocolo de autorização da nota, informado apenas quando a nota for enviada e autorizada[S][L:protNFe]')
 ENGINE = InnoDB
-COMMENT = 'Classe base para a formação da nota fiscal[L:infNFe][K:NFe\\Core|NFe\\Core\\]';
+COMMENT = 'Classe base para a formação da nota fiscal[L:infNFe][K:DFe\\Core|DFe\\Core\\]';
 
 
 -- -----------------------------------------------------
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Core.NFCe` (
   `qrcode_url` VARCHAR(200) NOT NULL COMMENT 'Texto com o QR-Code impresso no DANFE NFC-e[L:qrCode]',
   `consulta_url` VARCHAR(200) NOT NULL COMMENT 'Informar a URL da \"Consulta por chave de acesso da NFC-e\". A mesma URL que deve estar informada no DANFE NFC-e para consulta por chave de acesso.[L:urlChave]')
 ENGINE = InnoDB
-COMMENT = 'Classe para validação da nota fiscal eletrônica do consumidor[H:Nota][K:NFe\\Core|NFe\\Core\\]';
+COMMENT = 'Classe para validação da nota fiscal eletrônica do consumidor[H:Nota][K:DFe\\Core|DFe\\Core\\]';
 
 
 -- -----------------------------------------------------
@@ -133,7 +133,7 @@ COMMENT = 'Classe para validação da nota fiscal eletrônica do consumidor[H:No
 CREATE TABLE IF NOT EXISTS `NFe.Core.NFe` (
 )
 ENGINE = InnoDB
-COMMENT = 'Classe para validação da nota fiscal eletrônica[H:Nota][K:NFe\\Core|NFe\\Core\\]';
+COMMENT = 'Classe para validação da nota fiscal eletrônica[H:Nota][K:DFe\\Core|DFe\\Core\\]';
 
 
 -- -----------------------------------------------------
@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Emitente` (
   `fantasia` VARCHAR(200) NULL COMMENT 'Nome fantasia do da empresa emitente[L:xFant]',
   `regime` ENUM('simples', 'excesso', 'normal') NOT NULL DEFAULT 'self::REGIME_SIMPLES' COMMENT 'Código de Regime Tributário. Este campo será obrigatoriamente preenchido com: 1 – Simples Nacional; 2 – Simples Nacional – excesso de sublimite de receita bruta; 3 – Regime Normal.[L:CRT][F:self::REGIME_SIMPLES][E:1|2|3]')
 ENGINE = InnoDB
-COMMENT = 'Empresa que irá emitir as notas fiscais[L:emit][H:Pessoa][K:NFe\\Entity|NFe\\Entity\\]';
+COMMENT = 'Empresa que irá emitir as notas fiscais[L:emit][H:Pessoa][K:DFe\\Entity|DFe\\Entity\\]';
 
 
 -- -----------------------------------------------------
@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Core.SEFAZ` (
   `notas` VARCHAR(45) NOT NULL DEFAULT 'array()' COMMENT 'Notas fiscais a serem enviadas para autorização[D][F:array()][S:S][L:NFe][N:Notas|Nota]',
   `configuracao` VARCHAR(45) NOT NULL DEFAULT 'new Ajustes' COMMENT 'Informa a configuração que deverá ser utilizada para o envio[F:new Ajuste()][S]')
 ENGINE = InnoDB
-COMMENT = 'Classe que envia uma ou mais notas fiscais para os servidores da sefaz[K:NFe\\Core|NFe\\Core\\]';
+COMMENT = 'Classe que envia uma ou mais notas fiscais para os servidores da sefaz[K:DFe\\Core|DFe\\Core\\]';
 
 
 -- -----------------------------------------------------
@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Pagamento` (
   `autorizacao` VARCHAR(100) NOT NULL COMMENT 'Número de autorização da operação cartão de crédito/débito[L:cAut]',
   `bandeira` ENUM('visa', 'mastercard', 'amex', 'sorocred', 'diners', 'elo', 'hipercard', 'aura', 'cabal', 'outros') NOT NULL COMMENT 'Bandeira da operadora de cartão de crédito/débito:01–Visa; 02–Mastercard; 03–American Express; 04–Sorocred;05-Diners Club;06-Elo;07-Hipercard;08-Aura;09-Cabal;99–Outros[L:tBand][E:01|02|03|04|05|06|07|08|09|99]')
 ENGINE = InnoDB
-COMMENT = 'Pagamento efetuado no pedido[L:detPag][K:NFe\\Entity|NFe\\Entity\\]';
+COMMENT = 'Pagamento efetuado no pedido[L:detPag][K:DFe\\Entity|DFe\\Entity\\]';
 
 
 -- -----------------------------------------------------
@@ -177,7 +177,7 @@ COMMENT = 'Pagamento efetuado no pedido[L:detPag][K:NFe\\Entity|NFe\\Entity\\]';
 CREATE TABLE IF NOT EXISTS `NFe.Core.NFSe` (
 )
 ENGINE = InnoDB
-COMMENT = 'Nota fiscal eletrônica de serviços[H:Nota][K:NFe\\Core|NFe\\Core\\]';
+COMMENT = 'Nota fiscal eletrônica de serviços[H:Nota][K:DFe\\Core|DFe\\Core\\]';
 
 
 -- -----------------------------------------------------
@@ -188,7 +188,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Municipio` (
   `codigo` INT NOT NULL COMMENT 'Código do município (utilizar a tabela do IBGE), informar 9999999 para operações com o exterior.[L:cMun]',
   `nome` VARCHAR(200) NOT NULL COMMENT 'Nome do munícipio[L:xMun]')
 ENGINE = InnoDB
-COMMENT = 'Município de um endereço[L:municipio][K:NFe\\Entity|NFe\\Entity\\]';
+COMMENT = 'Município de um endereço[L:municipio][K:DFe\\Entity|DFe\\Entity\\]';
 
 
 -- -----------------------------------------------------
@@ -198,7 +198,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Pais` (
   `codigo` INT NOT NULL COMMENT 'Código do país[L:cPais]',
   `nome` VARCHAR(200) NOT NULL COMMENT 'Nome do país[L:xPais]')
 ENGINE = InnoDB
-COMMENT = 'Informações do pais do emitente ou destinatário[L:pais][K:NFe\\Entity|NFe\\Entity\\]';
+COMMENT = 'Informações do pais do emitente ou destinatário[L:pais][K:DFe\\Entity|DFe\\Entity\\]';
 
 
 -- -----------------------------------------------------
@@ -213,7 +213,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto` (
   `valor` DECIMAL(19,4) NOT NULL COMMENT 'Calcula o valor do imposto com base na aliquota e valor base',
   `total` DECIMAL(19,4) NOT NULL COMMENT 'Obtém o valor total do imposto')
 ENGINE = InnoDB
-COMMENT = 'Classe base dos impostos[L:imposto][K:NFe\\Entity|NFe\\Entity\\]';
+COMMENT = 'Classe base dos impostos[L:imposto][K:DFe\\Entity|DFe\\Entity\\]';
 
 
 -- -----------------------------------------------------
@@ -222,7 +222,7 @@ COMMENT = 'Classe base dos impostos[L:imposto][K:NFe\\Entity|NFe\\Entity\\]';
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Normal` (
   `modalidade` ENUM('agregado', 'pauta', 'tabelado', 'operacao') NOT NULL COMMENT 'Modalidade de determinação da BC do ICMS:\n0 - Margem Valor Agregado (%);\n1 - Pauta (valor);\n2 - Preço Tabelado Máximo (valor);\n3 - Valor da Operação.[L:modBC][E:0|1|2|3]')
 ENGINE = InnoDB
-COMMENT = 'Classe base do ICMS normal[L:ICMS][K:NFe\\Entity\\Imposto\\ICMS|NFe\\Entity\\Imposto\\ICMS\\][H:Base]';
+COMMENT = 'Classe base do ICMS normal[L:ICMS][K:DFe\\Entity\\Imposto\\ICMS|DFe\\Entity\\Imposto\\ICMS\\][H:Base]';
 
 
 -- -----------------------------------------------------
@@ -231,7 +231,7 @@ COMMENT = 'Classe base do ICMS normal[L:ICMS][K:NFe\\Entity\\Imposto\\ICMS|NFe\\
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.PIS.Aliquota` (
   `tributacao` ENUM('normal', 'diferenciada') NOT NULL DEFAULT 'self::TRIBUTACAO_NORMAL' COMMENT 'Código de Situação Tributária do PIS.\n 01 – Operação Tributável - Base de Cálculo = Valor da Operação Alíquota Normal (Cumulativo/Não Cumulativo);\n02 - Operação Tributável - Base de Calculo = Valor da Operação (Alíquota Diferenciada);[E:01|02][L:CST][F:self::TRIBUTACAO_NORMAL]')
 ENGINE = InnoDB
-COMMENT = 'Aliquota do PIS[L:PISAliq][K:NFe\\Entity\\Imposto\\PIS|NFe\\Entity\\Imposto\\PIS\\][H:Imposto]';
+COMMENT = 'Aliquota do PIS[L:PISAliq][K:DFe\\Entity\\Imposto\\PIS|DFe\\Entity\\Imposto\\PIS\\][H:Imposto]';
 
 
 -- -----------------------------------------------------
@@ -240,7 +240,7 @@ COMMENT = 'Aliquota do PIS[L:PISAliq][K:NFe\\Entity\\Imposto\\PIS|NFe\\Entity\\I
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.COFINS.Aliquota` (
   `tributacao` ENUM('normal', 'diferenciada') NOT NULL DEFAULT 'self::TRIBUTACAO_NORMAL' COMMENT 'Código de Situação Tributária do COFINS.\n 01 – Operação Tributável - Base de Cálculo = Valor da Operação Alíquota Normal (Cumulativo/Não Cumulativo);\n02 - Operação Tributável - Base de Calculo = Valor da Operação (Alíquota Diferenciada);[E:01|02][L:CST][F:self::TRIBUTACAO_NORMAL]')
 ENGINE = InnoDB
-COMMENT = 'Contribuição para o Financiamento da Seguridade Social usando porcentagem[L:COFINSAliq][K:NFe\\Entity\\Imposto\\COFINS|NFe\\Entity\\Imposto\\COFINS\\][H:Imposto]';
+COMMENT = 'Contribuição para o Financiamento da Seguridade Social usando porcentagem[L:COFINSAliq][K:DFe\\Entity\\Imposto\\COFINS|DFe\\Entity\\Imposto\\COFINS\\][H:Imposto]';
 
 
 -- -----------------------------------------------------
@@ -254,7 +254,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.IPI` (
   `enquadramento` VARCHAR(3) NOT NULL DEFAULT '999' COMMENT 'Código de Enquadramento Legal do IPI, informar 999 enquanto a tabela não tiver sido criada pela Receita Federal do Brasil[L:cEnq][F:\'999\']',
   `tributo` VARCHAR(45) NOT NULL COMMENT 'Informa o imposto aplicado[S]')
 ENGINE = InnoDB
-COMMENT = 'Este grupo só precisa ser informado por emissores que sejam contribuintes do IPI ou em uma operação de importação que tenha incidência de IPI[L:IPI][K:NFe\\Entity\\Imposto|NFe\\Entity\\Imposto\\][H:Imposto]';
+COMMENT = 'Este grupo só precisa ser informado por emissores que sejam contribuintes do IPI ou em uma operação de importação que tenha incidência de IPI[L:IPI][K:DFe\\Entity\\Imposto|DFe\\Entity\\Imposto\\][H:Imposto]';
 
 
 -- -----------------------------------------------------
@@ -263,7 +263,7 @@ COMMENT = 'Este grupo só precisa ser informado por emissores que sejam contribu
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.PIS.Quantidade` (
   `quantidade` DOUBLE NOT NULL COMMENT 'Quantidade Vendida[L:qBCProd]')
 ENGINE = InnoDB
-COMMENT = 'Quantidade Vendida x Alíquota por Unidade de Produto[L:PISQtde][K:NFe\\Entity\\Imposto\\PIS|NFe\\Entity\\Imposto\\PIS\\][H:Imposto]';
+COMMENT = 'Quantidade Vendida x Alíquota por Unidade de Produto[L:PISQtde][K:DFe\\Entity\\Imposto\\PIS|DFe\\Entity\\Imposto\\PIS\\][H:Imposto]';
 
 
 -- -----------------------------------------------------
@@ -272,7 +272,7 @@ COMMENT = 'Quantidade Vendida x Alíquota por Unidade de Produto[L:PISQtde][K:NF
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.PIS.Isento` (
   `tributacao` ENUM('monofasica', 'zero', 'isenta', 'incidencia', 'suspensao') NOT NULL COMMENT 'Código de Situação Tributária do PIS.\n04 - Operação Tributável - Tributação Monofásica - (Alíquota Zero);\n06 - Operação Tributável - Alíquota Zero;\n07 - Operação Isenta da contribuição;\n08 - Operação Sem Incidência da contribuição;\n09 - Operação com suspensão da contribuição;\n[E:04|06|07|08|09][L:CST]')
 ENGINE = InnoDB
-COMMENT = 'PIS não tributado[L:PISNT][K:NFe\\Entity\\Imposto\\PIS|NFe\\Entity\\Imposto\\PIS\\][H:Imposto]';
+COMMENT = 'PIS não tributado[L:PISNT][K:DFe\\Entity\\Imposto\\PIS|DFe\\Entity\\Imposto\\PIS\\][H:Imposto]';
 
 
 -- -----------------------------------------------------
@@ -281,7 +281,7 @@ COMMENT = 'PIS não tributado[L:PISNT][K:NFe\\Entity\\Imposto\\PIS|NFe\\Entity\\
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.PIS.Generico` (
   `valor` DECIMAL(19,4) NOT NULL COMMENT 'Valor do PIS[L:vPIS]')
 ENGINE = InnoDB
-COMMENT = 'PIS para Outras Operações[L:PISOutr][K:NFe\\Entity\\Imposto\\PIS|NFe\\Entity\\Imposto\\PIS\\][H:Imposto]';
+COMMENT = 'PIS para Outras Operações[L:PISOutr][K:DFe\\Entity\\Imposto\\PIS|DFe\\Entity\\Imposto\\PIS\\][H:Imposto]';
 
 
 -- -----------------------------------------------------
@@ -290,7 +290,7 @@ COMMENT = 'PIS para Outras Operações[L:PISOutr][K:NFe\\Entity\\Imposto\\PIS|NF
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.COFINS.Generico` (
   `valor` DECIMAL(19,4) NOT NULL COMMENT 'Valor do PIS[L:vPIS]')
 ENGINE = InnoDB
-COMMENT = 'PIS para Outras Operações[L:PISOutr][K:NFe\\Entity\\Imposto\\COFINS|NFe\\Entity\\Imposto\\COFINS\\][H:Imposto]';
+COMMENT = 'PIS para Outras Operações[L:PISOutr][K:DFe\\Entity\\Imposto\\COFINS|DFe\\Entity\\Imposto\\COFINS\\][H:Imposto]';
 
 
 -- -----------------------------------------------------
@@ -299,7 +299,7 @@ COMMENT = 'PIS para Outras Operações[L:PISOutr][K:NFe\\Entity\\Imposto\\COFINS
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.COFINS.Isento` (
   `tributacao` ENUM('monofasica', 'st', 'zero', 'isenta', 'incidencia', 'suspensao') NOT NULL COMMENT 'Código de Situação Tributária do COFINS:\n04 - Operação Tributável - Tributação Monofásica - (Alíquota Zero);\n05 - Operação Tributável (ST);\n06 - Operação Tributável - Alíquota Zero;\n07 - Operação Isenta da contribuição;\n08 - Operação Sem Incidência da contribuição;\n09 - Operação com suspensão da contribuição;\n[E:04|05|06|07|08|09][L:CST]')
 ENGINE = InnoDB
-COMMENT = 'PIS não tributado[L:PISNT][K:NFe\\Entity\\Imposto\\COFINS|NFe\\Entity\\Imposto\\COFINS\\][H:Imposto]';
+COMMENT = 'PIS não tributado[L:PISNT][K:DFe\\Entity\\Imposto\\COFINS|DFe\\Entity\\Imposto\\COFINS\\][H:Imposto]';
 
 
 -- -----------------------------------------------------
@@ -308,7 +308,7 @@ COMMENT = 'PIS não tributado[L:PISNT][K:NFe\\Entity\\Imposto\\COFINS|NFe\\Entit
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.COFINS.Quantidade` (
   `quantidade` DOUBLE NOT NULL COMMENT 'Quantidade Vendida[L:qBCProd]')
 ENGINE = InnoDB
-COMMENT = 'Contribuição para o Financiamento da Seguridade Social usando Quantidade Vendida x Alíquota por Unidade de Produto[L:COFINSQtde][K:NFe\\Entity\\Imposto\\COFINS|NFe\\Entity\\Imposto\\COFINS\\][H:Imposto]';
+COMMENT = 'Contribuição para o Financiamento da Seguridade Social usando Quantidade Vendida x Alíquota por Unidade de Produto[L:COFINSQtde][K:DFe\\Entity\\Imposto\\COFINS|DFe\\Entity\\Imposto\\COFINS\\][H:Imposto]';
 
 
 -- -----------------------------------------------------
@@ -317,7 +317,7 @@ COMMENT = 'Contribuição para o Financiamento da Seguridade Social usando Quant
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Integral` (
 )
 ENGINE = InnoDB
-COMMENT = 'Tributação pelo ICMS\n00 - Tributada integralmente, estende de Normal[L:ICMS00][K:NFe\\Entity\\Imposto\\ICMS|NFe\\Entity\\Imposto\\ICMS\\][H:Normal]';
+COMMENT = 'Tributação pelo ICMS\n00 - Tributada integralmente, estende de Normal[L:ICMS00][K:DFe\\Entity\\Imposto\\ICMS|DFe\\Entity\\Imposto\\ICMS\\][H:Normal]';
 
 
 -- -----------------------------------------------------
@@ -328,7 +328,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Parcial` (
   `margem` DOUBLE NOT NULL COMMENT 'Percentual da Margem de Valor Adicionado ICMS ST[L:pMVAST]',
   `reducao` DOUBLE NOT NULL COMMENT 'Percentual de redução da BC ICMS ST[L:pRedBCST]')
 ENGINE = InnoDB
-COMMENT = 'Tributação pelo ICMS\n30 - Isenta ou não tributada e com cobrança do ICMS por substituição tributária[L:ICMS30][K:NFe\\Entity\\Imposto\\ICMS|NFe\\Entity\\Imposto\\ICMS\\][H:Base]';
+COMMENT = 'Tributação pelo ICMS\n30 - Isenta ou não tributada e com cobrança do ICMS por substituição tributária[L:ICMS30][K:DFe\\Entity\\Imposto\\ICMS|DFe\\Entity\\Imposto\\ICMS\\][H:Base]';
 
 
 -- -----------------------------------------------------
@@ -337,7 +337,7 @@ COMMENT = 'Tributação pelo ICMS\n30 - Isenta ou não tributada e com cobrança
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Cobranca` (
   `normal` VARCHAR(25) NOT NULL DEFAULT 'new Normal()' COMMENT 'Imposto não ST[F:new Normal()][S]')
 ENGINE = InnoDB
-COMMENT = 'Tributação pelo ICMS\n10 - Tributada e com cobrança do ICMS por substituição tributária, estende de Parcial[L:ICMS10][K:NFe\\Entity\\Imposto\\ICMS|NFe\\Entity\\Imposto\\ICMS\\][H:Parcial]';
+COMMENT = 'Tributação pelo ICMS\n10 - Tributada e com cobrança do ICMS por substituição tributária, estende de Parcial[L:ICMS10][K:DFe\\Entity\\Imposto\\ICMS|DFe\\Entity\\Imposto\\ICMS\\][H:Parcial]';
 
 
 -- -----------------------------------------------------
@@ -346,7 +346,7 @@ COMMENT = 'Tributação pelo ICMS\n10 - Tributada e com cobrança do ICMS por su
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Reducao` (
   `reducao` DOUBLE NOT NULL COMMENT 'Percentual de redução da BC[L:pRedBC]')
 ENGINE = InnoDB
-COMMENT = 'Tributção pelo ICMS\n20 - Com redução de base de cálculo, estende de Normal[L:ICMS20][K:NFe\\Entity\\Imposto\\ICMS|NFe\\Entity\\Imposto\\ICMS\\][H:Normal]';
+COMMENT = 'Tributção pelo ICMS\n20 - Com redução de base de cálculo, estende de Normal[L:ICMS20][K:DFe\\Entity\\Imposto\\ICMS|DFe\\Entity\\Imposto\\ICMS\\][H:Normal]';
 
 
 -- -----------------------------------------------------
@@ -356,7 +356,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Isento` (
   `desoneracao` DECIMAL(19,4) NULL COMMENT 'O valor do ICMS será informado apenas nas operações com veículos beneficiados com a desoneração condicional do ICMS.[L:vICMSDeson]',
   `motivo` ENUM('taxi', 'produtor', 'locadora', 'consular', 'contran', 'suframa', 'venda', 'outros', 'condutor', 'deficiente', 'olimpiadas') NULL COMMENT 'Informar o motivo da desoneração:\n1 – Táxi;\n3 – Produtor Agropecuário;\n4 – Frotista/Locadora;\n5 – Diplomático/Consular;\n6 – Utilitários e Motocicletas da Amazônia Ocidental e Áreas de Livre Comércio (Resolução 714/88 e 790/94 – CONTRAN e suas alterações);\n7 – SUFRAMA;\n8 - Venda a órgão Público;\n9 – Outros\n10- Deficiente Condutor\n11- Deficiente não condutor\n16 - Olimpíadas Rio 2016[L:motDesICMS][E:1|3|4|5|6|7|8|9|10|11|16]')
 ENGINE = InnoDB
-COMMENT = 'Tributação pelo ICMS\n40 - Isenta \n41 - Não tributada \n50 - Suspensão, estende de Generico[L:ICMS40][K:NFe\\Entity\\Imposto\\ICMS|NFe\\Entity\\Imposto\\ICMS\\][H:Generico]';
+COMMENT = 'Tributação pelo ICMS\n40 - Isenta \n41 - Não tributada \n50 - Suspensão, estende de Generico[L:ICMS40][K:DFe\\Entity\\Imposto\\ICMS|DFe\\Entity\\Imposto\\ICMS\\][H:Generico]';
 
 
 -- -----------------------------------------------------
@@ -367,7 +367,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Diferido` (
   `diferimento` DOUBLE NOT NULL COMMENT 'Percentual do diferemento[L:pDif]',
   `diferido` DECIMAL(19,4) NOT NULL COMMENT 'Valor do ICMS da diferido[L:vICMSDif]')
 ENGINE = InnoDB
-COMMENT = 'Tributção pelo ICMS\n51 - Diferimento\nA exigência do preenchimento das informações do ICMS diferido fica à critério de cada UF, estende de Reducao[L:ICMS51][K:NFe\\Entity\\Imposto\\ICMS|NFe\\Entity\\Imposto\\ICMS\\][H:Reducao]';
+COMMENT = 'Tributção pelo ICMS\n51 - Diferimento\nA exigência do preenchimento das informações do ICMS diferido fica à critério de cada UF, estende de Reducao[L:ICMS51][K:DFe\\Entity\\Imposto\\ICMS|DFe\\Entity\\Imposto\\ICMS\\][H:Reducao]';
 
 
 -- -----------------------------------------------------
@@ -376,7 +376,7 @@ COMMENT = 'Tributção pelo ICMS\n51 - Diferimento\nA exigência do preenchiment
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Cobrado` (
   `valor` DECIMAL(19,4) NOT NULL COMMENT 'Informar o valor do ICMS ST retido na UF remetente[L:vICMSSTRet]')
 ENGINE = InnoDB
-COMMENT = 'Tributação pelo ICMS\n60 - ICMS cobrado anteriormente por substituição tributária[L:ICMS60][K:NFe\\Entity\\Imposto\\ICMS|NFe\\Entity\\Imposto\\ICMS\\][H:Generico]';
+COMMENT = 'Tributação pelo ICMS\n60 - ICMS cobrado anteriormente por substituição tributária[L:ICMS60][K:DFe\\Entity\\Imposto\\ICMS|DFe\\Entity\\Imposto\\ICMS\\][H:Generico]';
 
 
 -- -----------------------------------------------------
@@ -385,7 +385,7 @@ COMMENT = 'Tributação pelo ICMS\n60 - ICMS cobrado anteriormente por substitui
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Mista` (
 )
 ENGINE = InnoDB
-COMMENT = 'Tributação pelo ICMS \n70 - Com redução de base de cálculo e cobrança do ICMS por substituição tributária, estende de Cobranca[L:ICMS70][K:NFe\\Entity\\Imposto\\ICMS|NFe\\Entity\\Imposto\\ICMS\\][H:Cobranca]';
+COMMENT = 'Tributação pelo ICMS \n70 - Com redução de base de cálculo e cobrança do ICMS por substituição tributária, estende de Cobranca[L:ICMS70][K:DFe\\Entity\\Imposto\\ICMS|DFe\\Entity\\Imposto\\ICMS\\][H:Cobranca]';
 
 
 -- -----------------------------------------------------
@@ -394,7 +394,7 @@ COMMENT = 'Tributação pelo ICMS \n70 - Com redução de base de cálculo e cob
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Generico` (
 )
 ENGINE = InnoDB
-COMMENT = 'Tributação pelo ICMS\n90 - Outras, estende de Normal[L:ICMS90][K:NFe\\Entity\\Imposto\\ICMS|NFe\\Entity\\Imposto\\ICMS\\][H:Mista]';
+COMMENT = 'Tributação pelo ICMS\n90 - Outras, estende de Normal[L:ICMS90][K:DFe\\Entity\\Imposto\\ICMS|DFe\\Entity\\Imposto\\ICMS\\][H:Mista]';
 
 
 -- -----------------------------------------------------
@@ -404,7 +404,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Peso` (
   `liquido` DOUBLE NOT NULL COMMENT 'Peso liquido[E:pesoL]',
   `bruto` DOUBLE NOT NULL COMMENT 'Peso bruto[E:pesoB]')
 ENGINE = InnoDB
-COMMENT = 'Peso de um produto, utilizado no cálculo do frete[K:NFe\\Entity|NFe\\Entity\\]';
+COMMENT = 'Peso de um produto, utilizado no cálculo do frete[K:DFe\\Entity|DFe\\Entity\\]';
 
 
 -- -----------------------------------------------------
@@ -420,7 +420,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Database.Banco` (
   `notas_tarefas` VARCHAR(45) NOT NULL COMMENT 'Obtém as tarefas de inutilização, cancelamento e consulta de notas pendentes que entraram em contingência[S]',
   `informacao_servico` VARCHAR(45) NOT NULL COMMENT 'Obtém URL de webservices de acordo com o tipo de nota, ambiente e UF[S]')
 ENGINE = InnoDB
-COMMENT = 'Classe abstrata que permite fornecer códigos, aliquotas e notas pendentes[K:NFe\\Database|NFe\\Database\\]';
+COMMENT = 'Classe abstrata que permite fornecer códigos, aliquotas e notas pendentes[K:DFe\\Database|DFe\\Database\\]';
 
 
 -- -----------------------------------------------------
@@ -429,7 +429,7 @@ COMMENT = 'Classe abstrata que permite fornecer códigos, aliquotas e notas pend
 CREATE TABLE IF NOT EXISTS `NFe.Database.Estatico` (
   `ibpt` VARCHAR(45) NOT NULL DEFAULT 'new IBPT()' COMMENT 'Classe que fornece aliquotas para implementar a função getImpostoAliquota[F:new IBPT()][S]')
 ENGINE = InnoDB
-COMMENT = 'Banco estático que fornece os dados através de arquivos em disco[K:NFe\\Database|NFe\\Database\\][H:Banco]';
+COMMENT = 'Banco estático que fornece os dados através de arquivos em disco[K:DFe\\Database|DFe\\Database\\][H:Banco]';
 
 
 -- -----------------------------------------------------
@@ -450,7 +450,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Common.Configuracao` (
   `sincrono` ENUM('Y', 'N') NOT NULL DEFAULT 'Y' COMMENT 'Informa se o processo de autorização da nota é síncrono ou assíncrono[S][F:\'Y\']',
   `offline` ENUM('Y', 'N') NOT NULL COMMENT 'Informa se está operando offline[S]')
 ENGINE = InnoDB
-COMMENT = 'Fornece informações importante para a geração e envio das notas fiscais[K:NFe\\Common|NFe\\Common\\]';
+COMMENT = 'Fornece informações importante para a geração e envio das notas fiscais[K:DFe\\Common|DFe\\Common\\]';
 
 
 -- -----------------------------------------------------
@@ -474,7 +474,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Common.Evento` (
   `on_tarefa_executada` VARCHAR(45) NOT NULL COMMENT 'Chamado quando uma tarefa é executada[S]',
   `on_tarefa_erro` VARCHAR(45) NOT NULL COMMENT 'Chamado quando ocorre uma falha na execução de uma tarefa[S]')
 ENGINE = InnoDB
-COMMENT = 'Evento de emissão de nota fiscal eletrônica[K:NFe\\Common|NFe\\Common\\]';
+COMMENT = 'Evento de emissão de nota fiscal eletrônica[K:DFe\\Common|DFe\\Common\\]';
 
 
 -- -----------------------------------------------------
@@ -483,7 +483,7 @@ COMMENT = 'Evento de emissão de nota fiscal eletrônica[K:NFe\\Common|NFe\\Comm
 CREATE TABLE IF NOT EXISTS `NFe.Database.IBPT` (
   `imposto` DECIMAL(19,4) NOT NULL COMMENT 'Obtém as aliquotas municipal, estadual, federal e de importação para o NCM informado[S]')
 ENGINE = InnoDB
-COMMENT = 'Classe que fornece a aliquota de um NCM por estado, também realiza consultas online quando configurado[K:NFe\\Database|NFe\\Database\\]';
+COMMENT = 'Classe que fornece a aliquota de um NCM por estado, também realiza consultas online quando configurado[K:DFe\\Database|DFe\\Database\\]';
 
 
 -- -----------------------------------------------------
@@ -500,7 +500,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Common.Ajuste` (
   `pasta_xml_processamento` VARCHAR(45) NOT NULL COMMENT 'Pasta onde ficam os XML das notas em processamento de retorno de autorização[S]',
   `pasta_xml_assinado` VARCHAR(45) NOT NULL COMMENT 'Pasta onde ficam os XMLs após assinado e antes de serem enviados[S]')
 ENGINE = InnoDB
-COMMENT = 'Configurações padrão para emissão de nota fiscal[H:Configuracao][K:NFe\\Common|NFe\\Common\\]';
+COMMENT = 'Configurações padrão para emissão de nota fiscal[H:Configuracao][K:DFe\\Common|DFe\\Common\\]';
 
 
 -- -----------------------------------------------------
@@ -511,7 +511,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Estado` (
   `nome` VARCHAR(200) NULL COMMENT 'Nome do estado (Opcional)[L:xUF]',
   `uf` VARCHAR(2) NOT NULL COMMENT 'Sigla do estado[L:UF]')
 ENGINE = InnoDB
-COMMENT = 'Estado de origem do emitente ou do destinatário[L:estado][K:NFe\\Entity|NFe\\Entity\\]';
+COMMENT = 'Estado de origem do emitente ou do destinatário[L:estado][K:DFe\\Entity|DFe\\Entity\\]';
 
 
 -- -----------------------------------------------------
@@ -520,7 +520,7 @@ COMMENT = 'Estado de origem do emitente ou do destinatário[L:estado][K:NFe\\Ent
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.Total` (
 )
 ENGINE = InnoDB
-COMMENT = 'Permite calcular o imposto com base na tabela IBPT[L:vTotTrib][K:NFe\\Entity\\Imposto|NFe\\Entity\\Imposto\\][H:Imposto]';
+COMMENT = 'Permite calcular o imposto com base na tabela IBPT[L:vTotTrib][K:DFe\\Entity\\Imposto|DFe\\Entity\\Imposto\\][H:Imposto]';
 
 
 -- -----------------------------------------------------
@@ -536,7 +536,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Transporte` (
   `balsa` VARCHAR(45) NULL COMMENT 'Identificação da balsa (v2.0)[L:balsa]',
   `volumes` VARCHAR(45) NULL DEFAULT 'array()' COMMENT 'Dados dos volumes[F:array()][S:S][L:vol][U:volumes|volume]')
 ENGINE = InnoDB
-COMMENT = 'Dados dos transportes da NF-e[L:transp][K:NFe\\Entity|NFe\\Entity\\]';
+COMMENT = 'Dados dos transportes da NF-e[L:transp][K:DFe\\Entity|DFe\\Entity\\]';
 
 
 -- -----------------------------------------------------
@@ -545,7 +545,7 @@ COMMENT = 'Dados dos transportes da NF-e[L:transp][K:NFe\\Entity|NFe\\Entity\\]'
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Transporte.Transportador` (
 )
 ENGINE = InnoDB
-COMMENT = 'Dados da transportadora[H:Destinatario][L:transporta][K:NFe\\Entity\\Transporte|NFe\\Entity\\Transporte\\]';
+COMMENT = 'Dados da transportadora[H:Destinatario][L:transporta][K:DFe\\Entity\\Transporte|DFe\\Entity\\Transporte\\]';
 
 
 -- -----------------------------------------------------
@@ -556,7 +556,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Transporte.Tributo` (
   `cfop` VARCHAR(45) NOT NULL COMMENT 'Código Fiscal de Operações e Prestações[L:CFOP]',
   `municipio` VARCHAR(45) NULL DEFAULT 'new Municipio()' COMMENT 'Código do Município de Ocorrência do Fato Gerador (utilizar a tabela do IBGE)[L:cMunFG][S][F:new Municipio()]')
 ENGINE = InnoDB
-COMMENT = 'ICMS retido do Transportador[L:retTransp][H:Imposto][K:NFe\\Entity\\Transporte|NFe\\Entity\\Transporte\\]';
+COMMENT = 'ICMS retido do Transportador[L:retTransp][H:Imposto][K:DFe\\Entity\\Transporte|DFe\\Entity\\Transporte\\]';
 
 
 -- -----------------------------------------------------
@@ -567,7 +567,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Transporte.Veiculo` (
   `uf` VARCHAR(2) NOT NULL COMMENT 'Sigla da UF[L:UF]',
   `rntc` VARCHAR(45) NULL COMMENT 'Registro Nacional de Transportador de Carga (ANTT)[L:RNTC]')
 ENGINE = InnoDB
-COMMENT = 'Dados do veículo do transporte[L:veicTransp][K:NFe\\Entity\\Transporte|NFe\\Entity\\Transporte\\]';
+COMMENT = 'Dados do veículo do transporte[L:veicTransp][K:DFe\\Entity\\Transporte|DFe\\Entity\\Transporte\\]';
 
 
 -- -----------------------------------------------------
@@ -581,7 +581,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Volume` (
   `peso` VARCHAR(45) NULL DEFAULT 'new Peso()' COMMENT 'Peso líquido e bruto (em kg)[F:new Peso()][L:pesoLB][S]',
   `lacres` VARCHAR(45) NULL DEFAULT 'array()' COMMENT 'Número dos Lacres[F:array()][S:S][L:lacres][U:lacres|lacre]')
 ENGINE = InnoDB
-COMMENT = 'Volume de mercadoria para ser entregue[L:vol][K:NFe\\Entity|NFe\\Entity\\]';
+COMMENT = 'Volume de mercadoria para ser entregue[L:vol][K:DFe\\Entity|DFe\\Entity\\]';
 
 
 -- -----------------------------------------------------
@@ -590,7 +590,7 @@ COMMENT = 'Volume de mercadoria para ser entregue[L:vol][K:NFe\\Entity|NFe\\Enti
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Lacre` (
   `numero` INT NOT NULL COMMENT 'Número do lacre[L:nLacre]')
 ENGINE = InnoDB
-COMMENT = 'Lacre do volume[L:lacres][K:NFe\\Entity|NFe\\Entity\\]';
+COMMENT = 'Lacre do volume[L:lacres][K:DFe\\Entity|DFe\\Entity\\]';
 
 
 -- -----------------------------------------------------
@@ -599,7 +599,7 @@ COMMENT = 'Lacre do volume[L:lacres][K:NFe\\Entity|NFe\\Entity\\]';
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.IPI.Aliquota` (
   `tributacao` ENUM('credito', 'entrada', 'tributada', 'saida') NOT NULL DEFAULT 'self::TRIBUTACAO_TRIBUTADA' COMMENT 'Código da Situação Tributária do IPI:\n00-Entrada com recuperação de crédito\n49 - Outras entradas\n50-Saída tributada\n99-Outras saídas[E:00|49|50|99][L:CST][F:self::TRIBUTACAO_TRIBUTADA]')
 ENGINE = InnoDB
-COMMENT = 'Imposto Sobre Produtos Industrializados usando porcentagem[L:IPITrib][K:NFe\\Entity\\Imposto\\IPI|NFe\\Entity\\Imposto\\IPI\\][H:Imposto]';
+COMMENT = 'Imposto Sobre Produtos Industrializados usando porcentagem[L:IPITrib][K:DFe\\Entity\\Imposto\\IPI|DFe\\Entity\\Imposto\\IPI\\][H:Imposto]';
 
 
 -- -----------------------------------------------------
@@ -609,7 +609,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.IPI.Quantidade` (
   `quantidade` DOUBLE NOT NULL COMMENT 'Quantidade total na unidade padrão para tributação[L:qUnid]',
   `preco` DECIMAL(19,4) NOT NULL COMMENT 'Valor por Unidade Tributável. Informar o valor do imposto Pauta por unidade de medida.[L:vUnid]')
 ENGINE = InnoDB
-COMMENT = 'Imposto Sobre Produtos Industrializados usando Quantidade x Preço por Unidade de Produto[L:IPITrib][K:NFe\\Entity\\Imposto\\IPI|NFe\\Entity\\Imposto\\IPI\\][H:Imposto]';
+COMMENT = 'Imposto Sobre Produtos Industrializados usando Quantidade x Preço por Unidade de Produto[L:IPITrib][K:DFe\\Entity\\Imposto\\IPI|DFe\\Entity\\Imposto\\IPI\\][H:Imposto]';
 
 
 -- -----------------------------------------------------
@@ -618,7 +618,7 @@ COMMENT = 'Imposto Sobre Produtos Industrializados usando Quantidade x Preço po
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.IPI.Isento` (
 )
 ENGINE = InnoDB
-COMMENT = 'IPI não tributado[L:IPINT][K:NFe\\Entity\\Imposto\\IPI|NFe\\Entity\\Imposto\\IPI\\][H:Imposto]';
+COMMENT = 'IPI não tributado[L:IPINT][K:DFe\\Entity\\Imposto\\IPI|DFe\\Entity\\Imposto\\IPI\\][H:Imposto]';
 
 
 -- -----------------------------------------------------
@@ -629,7 +629,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.II` (
   `valor` DECIMAL(19,4) NOT NULL COMMENT 'Informar a o valor do Imposto de Importação[L:vII]',
   `iof` VARCHAR(45) NOT NULL COMMENT 'Informar o Valor do IOF - Imposto sobre Operações Financeiras[L:vIOF]')
 ENGINE = InnoDB
-COMMENT = 'Funcionalidade para gerar as informações do II do item de produto da NF-e. Este grupo só precisa ser informado em uma operação de importação que tenha incidência de II.[L:II][K:NFe\\Entity\\Imposto|NFe\\Entity\\Imposto\\][H:Imposto]';
+COMMENT = 'Funcionalidade para gerar as informações do II do item de produto da NF-e. Este grupo só precisa ser informado em uma operação de importação que tenha incidência de II.[L:II][K:DFe\\Entity\\Imposto|DFe\\Entity\\Imposto\\][H:Imposto]';
 
 
 -- -----------------------------------------------------
@@ -638,7 +638,7 @@ COMMENT = 'Funcionalidade para gerar as informações do II do item de produto d
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.PIS.ST.Aliquota` (
 )
 ENGINE = InnoDB
-COMMENT = 'Este grupo só deve ser informado se o produto for sujeito a PIS por ST, CST = 05, a informação deste grupo não desobriga a informação do grupo PIS.[L:PISST][K:NFe\\Entity\\Imposto\\PIS\\ST|NFe\\Entity\\Imposto\\PIS\\ST\\][H:\\NFe\\Entity\\Imposto\\PIS\\Aliquota]';
+COMMENT = 'Este grupo só deve ser informado se o produto for sujeito a PIS por ST, CST = 05, a informação deste grupo não desobriga a informação do grupo PIS.[L:PISST][K:DFe\\Entity\\Imposto\\PIS\\ST|DFe\\Entity\\Imposto\\PIS\\ST\\][H:\\DFe\\Entity\\Imposto\\PIS\\Aliquota]';
 
 
 -- -----------------------------------------------------
@@ -647,7 +647,7 @@ COMMENT = 'Este grupo só deve ser informado se o produto for sujeito a PIS por 
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.PIS.ST.Quantidade` (
 )
 ENGINE = InnoDB
-COMMENT = 'Quantidade Vendida x Alíquota por Unidade de Produto[L:PISST][K:NFe\\Entity\\Imposto\\PIS\\ST|NFe\\Entity\\Imposto\\PIS\\ST\\][H:\\NFe\\Entity\\Imposto\\PIS\\Quantidade]';
+COMMENT = 'Quantidade Vendida x Alíquota por Unidade de Produto[L:PISST][K:DFe\\Entity\\Imposto\\PIS\\ST|DFe\\Entity\\Imposto\\PIS\\ST\\][H:\\DFe\\Entity\\Imposto\\PIS\\Quantidade]';
 
 
 -- -----------------------------------------------------
@@ -657,7 +657,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Partilha` (
   `operacao` DOUBLE NOT NULL COMMENT 'Percentual para determinação do valor  da Base de Cálculo da operação própria.[L:pBCOp]',
   `uf` VARCHAR(45) NOT NULL COMMENT 'Sigla da UF para qual é devido o ICMS ST da operação.[L:UFST]')
 ENGINE = InnoDB
-COMMENT = 'Partilha do ICMS entre a UF de origem e UF de destino ou a UF definida na legislação\nOperação interestadual para consumidor final com partilha do ICMS  devido na operação entre a UF de origem e a UF do destinatário ou ou a UF definida na legislação. (Ex. UF da concessionária de entrega do  veículos)[L:ICMSPart][K:NFe\\Entity\\Imposto\\ICMS|NFe\\Entity\\Imposto\\ICMS\\][H:Mista]';
+COMMENT = 'Partilha do ICMS entre a UF de origem e UF de destino ou a UF definida na legislação\nOperação interestadual para consumidor final com partilha do ICMS  devido na operação entre a UF de origem e a UF do destinatário ou ou a UF definida na legislação. (Ex. UF da concessionária de entrega do  veículos)[L:ICMSPart][K:DFe\\Entity\\Imposto\\ICMS|DFe\\Entity\\Imposto\\ICMS\\][H:Mista]';
 
 
 -- -----------------------------------------------------
@@ -666,7 +666,7 @@ COMMENT = 'Partilha do ICMS entre a UF de origem e UF de destino ou a UF definid
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Substituto` (
 )
 ENGINE = InnoDB
-COMMENT = 'Grupo de informação do ICMSST devido para a UF de destino, nas operações interestaduais de produtos que tiveram retenção antecipada de ICMS por ST na UF do remetente. Repasse via Substituto Tributário.[L:ICMSST][K:NFe\\Entity\\Imposto\\ICMS|NFe\\Entity\\Imposto\\ICMS\\][H:Cobrado]';
+COMMENT = 'Grupo de informação do ICMSST devido para a UF de destino, nas operações interestaduais de produtos que tiveram retenção antecipada de ICMS por ST na UF do remetente. Repasse via Substituto Tributário.[L:ICMSST][K:DFe\\Entity\\Imposto\\ICMS|DFe\\Entity\\Imposto\\ICMS\\][H:Cobrado]';
 
 
 -- -----------------------------------------------------
@@ -675,7 +675,7 @@ COMMENT = 'Grupo de informação do ICMSST devido para a UF de destino, nas oper
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Simples.Generico` (
 )
 ENGINE = InnoDB
-COMMENT = 'Tributação do ICMS pelo SIMPLES NACIONAL, CRT=1 - Simples Nacional e CSOSN=900 (v2.0)[L:ICMSSN900][K:NFe\\Entity\\Imposto\\ICMS\\Simples|NFe\\Entity\\Imposto\\ICMS\\Simples\\][H:Cobranca]';
+COMMENT = 'Tributação do ICMS pelo SIMPLES NACIONAL, CRT=1 - Simples Nacional e CSOSN=900 (v2.0)[L:ICMSSN900][K:DFe\\Entity\\Imposto\\ICMS\\Simples|DFe\\Entity\\Imposto\\ICMS\\Simples\\][H:Cobranca]';
 
 
 -- -----------------------------------------------------
@@ -684,7 +684,7 @@ COMMENT = 'Tributação do ICMS pelo SIMPLES NACIONAL, CRT=1 - Simples Nacional 
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Simples.Cobranca` (
   `normal` VARCHAR(25) NOT NULL DEFAULT 'new Normal()' COMMENT 'Imposto não ST[F:new Normal()][S]')
 ENGINE = InnoDB
-COMMENT = 'Tributada pelo Simples Nacional com permissão de crédito e com cobrança do ICMS por substituição tributária[L:ICMSSN201][K:NFe\\Entity\\Imposto\\ICMS\\Simples|NFe\\Entity\\Imposto\\ICMS\\Simples\\][H:Parcial]';
+COMMENT = 'Tributada pelo Simples Nacional com permissão de crédito e com cobrança do ICMS por substituição tributária[L:ICMSSN201][K:DFe\\Entity\\Imposto\\ICMS\\Simples|DFe\\Entity\\Imposto\\ICMS\\Simples\\][H:Parcial]';
 
 
 -- -----------------------------------------------------
@@ -693,7 +693,7 @@ COMMENT = 'Tributada pelo Simples Nacional com permissão de crédito e com cobr
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Simples.Parcial` (
 )
 ENGINE = InnoDB
-COMMENT = 'Tributada pelo Simples Nacional sem permissão de crédito e com cobrança do ICMS por substituição tributária[L:ICMSSN202][K:NFe\\Entity\\Imposto\\ICMS\\Simples|NFe\\Entity\\Imposto\\ICMS\\Simples\\][H:\\NFe\\Entity\\Imposto\\ICMS\\Parcial]';
+COMMENT = 'Tributada pelo Simples Nacional sem permissão de crédito e com cobrança do ICMS por substituição tributária[L:ICMSSN202][K:DFe\\Entity\\Imposto\\ICMS\\Simples|DFe\\Entity\\Imposto\\ICMS\\Simples\\][H:\\DFe\\Entity\\Imposto\\ICMS\\Parcial]';
 
 
 -- -----------------------------------------------------
@@ -702,7 +702,7 @@ COMMENT = 'Tributada pelo Simples Nacional sem permissão de crédito e com cobr
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Simples.Cobrado` (
   `valor` DECIMAL(19,4) NOT NULL COMMENT 'Valor do ICMS ST retido anteriormente[L:vICMSSTRet]')
 ENGINE = InnoDB
-COMMENT = 'ICMS cobrado anteriormente por substituição tributária (substituído) ou por antecipação[L:ICMSSN500][K:NFe\\Entity\\Imposto\\ICMS\\Simples|NFe\\Entity\\Imposto\\ICMS\\Simples\\][H:Generico]';
+COMMENT = 'ICMS cobrado anteriormente por substituição tributária (substituído) ou por antecipação[L:ICMSSN500][K:DFe\\Entity\\Imposto\\ICMS\\Simples|DFe\\Entity\\Imposto\\ICMS\\Simples\\][H:Generico]';
 
 
 -- -----------------------------------------------------
@@ -711,7 +711,7 @@ COMMENT = 'ICMS cobrado anteriormente por substituição tributária (substituí
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Simples.Normal` (
 )
 ENGINE = InnoDB
-COMMENT = 'Tributada pelo Simples Nacional com permissão de crédito[L:ICMSSN101][K:NFe\\Entity\\Imposto\\ICMS\\Simples|NFe\\Entity\\Imposto\\ICMS\\Simples\\][H:\\NFe\\Entity\\Imposto\\ICMS\\Normal]';
+COMMENT = 'Tributada pelo Simples Nacional com permissão de crédito[L:ICMSSN101][K:DFe\\Entity\\Imposto\\ICMS\\Simples|DFe\\Entity\\Imposto\\ICMS\\Simples\\][H:\\DFe\\Entity\\Imposto\\ICMS\\Normal]';
 
 
 -- -----------------------------------------------------
@@ -720,7 +720,7 @@ COMMENT = 'Tributada pelo Simples Nacional com permissão de crédito[L:ICMSSN10
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Simples.Isento` (
 )
 ENGINE = InnoDB
-COMMENT = 'Tributada pelo Simples Nacional sem permissão de crédito[L:ICMSSN102][K:NFe\\Entity\\Imposto\\ICMS\\Simples|NFe\\Entity\\Imposto\\ICMS\\Simples\\][H:Generico]';
+COMMENT = 'Tributada pelo Simples Nacional sem permissão de crédito[L:ICMSSN102][K:DFe\\Entity\\Imposto\\ICMS\\Simples|DFe\\Entity\\Imposto\\ICMS\\Simples\\][H:Generico]';
 
 
 -- -----------------------------------------------------
@@ -729,7 +729,7 @@ COMMENT = 'Tributada pelo Simples Nacional sem permissão de crédito[L:ICMSSN10
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.COFINS.ST.Aliquota` (
 )
 ENGINE = InnoDB
-COMMENT = 'Este grupo só deve ser informado se o produto for sujeito a COFINS por ST, CST = 05, a informação deste grupo não desobriga a informação do grupo COFINS.[L:COFINSST][K:NFe\\Entity\\Imposto\\COFINS\\ST|NFe\\Entity\\Imposto\\COFINS\\ST\\][H:\\NFe\\Entity\\Imposto\\COFINS\\Aliquota]';
+COMMENT = 'Este grupo só deve ser informado se o produto for sujeito a COFINS por ST, CST = 05, a informação deste grupo não desobriga a informação do grupo COFINS.[L:COFINSST][K:DFe\\Entity\\Imposto\\COFINS\\ST|DFe\\Entity\\Imposto\\COFINS\\ST\\][H:\\DFe\\Entity\\Imposto\\COFINS\\Aliquota]';
 
 
 -- -----------------------------------------------------
@@ -738,7 +738,7 @@ COMMENT = 'Este grupo só deve ser informado se o produto for sujeito a COFINS p
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.COFINS.ST.Quantidade` (
 )
 ENGINE = InnoDB
-COMMENT = 'Quantidade Vendida x Alíquota por Unidade de Produto[L:COFINSST][K:NFe\\Entity\\Imposto\\COFINS\\ST|NFe\\Entity\\Imposto\\COFINS\\ST\\][H:\\NFe\\Entity\\Imposto\\COFINS\\Quantidade]';
+COMMENT = 'Quantidade Vendida x Alíquota por Unidade de Produto[L:COFINSST][K:DFe\\Entity\\Imposto\\COFINS\\ST|DFe\\Entity\\Imposto\\COFINS\\ST\\][H:\\DFe\\Entity\\Imposto\\COFINS\\Quantidade]';
 
 
 -- -----------------------------------------------------
@@ -747,7 +747,7 @@ COMMENT = 'Quantidade Vendida x Alíquota por Unidade de Produto[L:COFINSST][K:N
 CREATE TABLE IF NOT EXISTS `NFe.Task.Autorizacao` (
 )
 ENGINE = InnoDB
-COMMENT = 'Processa o retorno após enviar uma nota para a SEFAZ, quando autorizado um protocolo é retornado para anexar na nota ou um recibo é retornado para consultar mais tarde[K:NFe\\Task|NFe\\Task\\][H:Retorno]';
+COMMENT = 'Processa o retorno após enviar uma nota para a SEFAZ, quando autorizado um protocolo é retornado para anexar na nota ou um recibo é retornado para consultar mais tarde[K:DFe\\Task|DFe\\Task\\][H:Retorno]';
 
 
 -- -----------------------------------------------------
@@ -760,7 +760,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Task.Protocolo` (
   `mensagem` VARCHAR(200) NULL COMMENT 'Mensagem da SEFAZ para o emissor.[L:xMsg]',
   `codigo` VARCHAR(4) NULL COMMENT 'Código da Mensagem.[L:cMsg]')
 ENGINE = InnoDB
-COMMENT = 'Protocolo de autorização da nota, é retornado pela autorização, recibo ou situação e anexado à nota[K:NFe\\Task|NFe\\Task\\][H:Retorno][L:infProt]';
+COMMENT = 'Protocolo de autorização da nota, é retornado pela autorização, recibo ou situação e anexado à nota[K:DFe\\Task|DFe\\Task\\][H:Retorno][L:infProt]';
 
 
 -- -----------------------------------------------------
@@ -777,7 +777,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Task.Inutilizacao` (
   `justificativa` VARCHAR(45) NOT NULL COMMENT 'Justificativa do pedido de inutilização[L:xJust]',
   `numero` VARCHAR(45) NULL COMMENT 'Número do Protocolo de Status da NF-e. 1 posição (1 – Secretaria de Fazenda Estadual 2 – Receita Federal); 2 - código da UF - 2 posições ano; 10 seqüencial no ano.[L:nProt]')
 ENGINE = InnoDB
-COMMENT = 'Permite inutilizar uma nota ou uma faixa de números de notas fiscais[K:NFe\\Task|NFe\\Task\\][L:inutNFe][H:Retorno]';
+COMMENT = 'Permite inutilizar uma nota ou uma faixa de números de notas fiscais[K:DFe\\Task|DFe\\Task\\][L:inutNFe][H:Retorno]';
 
 
 -- -----------------------------------------------------
@@ -798,7 +798,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Task.Evento` (
   `modelo` VARCHAR(45) NOT NULL COMMENT 'Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.[L:mod]',
   `informacao` VARCHAR(45) NOT NULL COMMENT 'Resposta de informação do evento[L:infEvento][S]')
 ENGINE = InnoDB
-COMMENT = 'Permite cancelar uma nota fiscal por evento[K:NFe\\Task|NFe\\Task\\][H:Retorno][L:infEvento]';
+COMMENT = 'Permite cancelar uma nota fiscal por evento[K:DFe\\Task|DFe\\Task\\][H:Retorno][L:infEvento]';
 
 
 -- -----------------------------------------------------
@@ -811,7 +811,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Task.Status` (
   `motivo` VARCHAR(45) NOT NULL COMMENT 'Descrição literal do status do serviço solicitado.[L:xMotivo]',
   `uf` VARCHAR(45) NULL COMMENT 'código da UF de atendimento[L:cUF]')
 ENGINE = InnoDB
-COMMENT = 'Status das respostas de envios para os servidores da SEFAZ[K:NFe\\Task|NFe\\Task\\][G:o]';
+COMMENT = 'Status das respostas de envios para os servidores da SEFAZ[K:DFe\\Task|DFe\\Task\\][G:o]';
 
 
 -- -----------------------------------------------------
@@ -824,7 +824,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Task.Envio` (
   `emissao` VARCHAR(45) NOT NULL COMMENT 'Forma de emissão da NF-e',
   `conteudo` VARCHAR(45) NOT NULL COMMENT 'Conteudo a ser enviado[S]')
 ENGINE = InnoDB
-COMMENT = 'Envia requisições para os servidores da SEFAZ[K:NFe\\Task|NFe\\Task\\][L:nfeDadosMsg]';
+COMMENT = 'Envia requisições para os servidores da SEFAZ[K:DFe\\Task|DFe\\Task\\][L:nfeDadosMsg]';
 
 
 -- -----------------------------------------------------
@@ -833,7 +833,7 @@ COMMENT = 'Envia requisições para os servidores da SEFAZ[K:NFe\\Task|NFe\\Task
 CREATE TABLE IF NOT EXISTS `NFe.Task.Retorno` (
   `data_recebimento` DATETIME NULL COMMENT 'Data e hora do recebimento[L:dhRecbto]')
 ENGINE = InnoDB
-COMMENT = 'Informações de retorno de envios para a SEFAZ[K:NFe\\Task|NFe\\Task\\][H:Status]';
+COMMENT = 'Informações de retorno de envios para a SEFAZ[K:DFe\\Task|DFe\\Task\\][H:Status]';
 
 
 -- -----------------------------------------------------
@@ -846,7 +846,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Task.Recibo` (
   `mensagem` VARCHAR(45) NULL COMMENT 'Mensagem da SEFAZ para o emissor. (v2.0)[L:xMsg]',
   `modelo` VARCHAR(45) NOT NULL COMMENT 'Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.[L:mod]')
 ENGINE = InnoDB
-COMMENT = 'Processa a resposta da SEFAZ quando no modo assíncrono, permite também consultar o status de em envio pelo número do recibo[K:NFe\\Task|NFe\\Task\\][H:Retorno][L:retConsReciNFe]';
+COMMENT = 'Processa a resposta da SEFAZ quando no modo assíncrono, permite também consultar o status de em envio pelo número do recibo[K:DFe\\Task|DFe\\Task\\][H:Retorno][L:retConsReciNFe]';
 
 
 -- -----------------------------------------------------
@@ -856,7 +856,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Task.Situacao` (
   `chave` VARCHAR(45) NOT NULL COMMENT 'Chaves de acesso da NF-e, compostas por: UF do emitente, AAMM da emissão da NFe, CNPJ do emitente, modelo, série e número da NF-e e código numérico+DV.[L:chNFe]',
   `modelo` VARCHAR(45) NOT NULL COMMENT 'Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.[L:mod]')
 ENGINE = InnoDB
-COMMENT = 'Consulta a situação da nota fiscal e retorna o protocolo quando autorizado[K:NFe\\Task|NFe\\Task\\][H:Retorno][L:retConsSitNFe]';
+COMMENT = 'Consulta a situação da nota fiscal e retorna o protocolo quando autorizado[K:DFe\\Task|DFe\\Task\\][H:Retorno][L:retConsSitNFe]';
 
 
 -- -----------------------------------------------------
@@ -870,7 +870,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Task.Tarefa` (
   `agente` VARCHAR(45) NULL COMMENT 'Agente que obteve ou vai obter a resposta, podendo ser: pedido de inutilização (Inutilizacao), recibo (Recibo) ou pedido de cancelamento (Evento)[S]',
   `resposta` VARCHAR(45) NULL COMMENT 'Resposta da tarefa após ser executada[S]')
 ENGINE = InnoDB
-COMMENT = 'Tarefa de processamento de notas fiscais[K:NFe\\Task|NFe\\Task\\]';
+COMMENT = 'Tarefa de processamento de notas fiscais[K:DFe\\Task|DFe\\Task\\]';
 
 
 -- -----------------------------------------------------
@@ -880,7 +880,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.ICMS.Base` (
   `origem` ENUM('nacional', 'estrangeira', 'interno') NOT NULL DEFAULT 'self::ORIGEM_NACIONAL' COMMENT 'origem da mercadoria:\n0 - Nacional\n1 - Estrangeira - Importação direta\n2 - Estrangeira - Adquirida no mercado interno[E:0|1|2][L:orig][F:self::ORIGEM_NACIONAL]',
   `fundo` VARCHAR(45) NULL DEFAULT NULL COMMENT 'Fundo de Combate à Probreza[S]')
 ENGINE = InnoDB
-COMMENT = 'Classe base do ICMS, estende de Imposto[L:ICMS][K:NFe\\Entity\\Imposto\\ICMS|NFe\\Entity\\Imposto\\ICMS\\][H:Imposto]';
+COMMENT = 'Classe base do ICMS, estende de Imposto[L:ICMS][K:DFe\\Entity\\Imposto\\ICMS|DFe\\Entity\\Imposto\\ICMS\\][H:Imposto]';
 
 
 -- -----------------------------------------------------
@@ -889,7 +889,7 @@ COMMENT = 'Classe base do ICMS, estende de Imposto[L:ICMS][K:NFe\\Entity\\Impost
 CREATE TABLE IF NOT EXISTS `NFe.Logger.Log` (
   `directory` VARCHAR(200) NOT NULL DEFAULT 'dirname(...)' COMMENT 'Pasta onde serão salvos os arquivos de Log[S][F:dirname(dirname(__DIR__)).\'/logs\']')
 ENGINE = InnoDB
-COMMENT = 'Salva mensagens de erro, depuração entre outros[K:NFe\\Logger|NFe\\Logger\\]';
+COMMENT = 'Salva mensagens de erro, depuração entre outros[K:DFe\\Logger|DFe\\Logger\\]';
 
 
 -- -----------------------------------------------------
@@ -904,7 +904,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Total` (
   `tributos` DECIMAL(19,4) NULL COMMENT 'Valor estimado total de impostos federais, estaduais e municipais[L:vTotTrib]',
   `complemento` TEXT NULL COMMENT 'Informações complementares de interesse do Contribuinte[L:infCpl]')
 ENGINE = InnoDB
-COMMENT = 'Dados dos totais da NF-e e do produto[L:prod][K:NFe\\Entity|NFe\\Entity\\]';
+COMMENT = 'Dados dos totais da NF-e e do produto[L:prod][K:DFe\\Entity|DFe\\Entity\\]';
 
 
 -- -----------------------------------------------------
@@ -913,7 +913,7 @@ COMMENT = 'Dados dos totais da NF-e e do produto[L:prod][K:NFe\\Entity|NFe\\Enti
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.Fundo.Base` (
 )
 ENGINE = InnoDB
-COMMENT = 'Valor e Percentual do imposto para o Fundo de Combate à Pobreza[L:FCP][K:NFe\\Entity\\Imposto\\Fundo|NFe\\Entity\\Imposto\\Fundo\\][H:Imposto]';
+COMMENT = 'Valor e Percentual do imposto para o Fundo de Combate à Pobreza[L:FCP][K:DFe\\Entity\\Imposto\\Fundo|DFe\\Entity\\Imposto\\Fundo\\][H:Imposto]';
 
 
 -- -----------------------------------------------------
@@ -922,7 +922,7 @@ COMMENT = 'Valor e Percentual do imposto para o Fundo de Combate à Pobreza[L:FC
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.Fundo.Substituido` (
 )
 ENGINE = InnoDB
-COMMENT = 'Valor e Percentual do imposto para o Fundo de Combate à Pobreza retido por substituição tributária[L:FCP][K:NFe\\Entity\\Imposto\\Fundo|NFe\\Entity\\Imposto\\Fundo\\][H:Base]';
+COMMENT = 'Valor e Percentual do imposto para o Fundo de Combate à Pobreza retido por substituição tributária[L:FCP][K:DFe\\Entity\\Imposto\\Fundo|DFe\\Entity\\Imposto\\Fundo\\][H:Base]';
 
 
 -- -----------------------------------------------------
@@ -931,7 +931,7 @@ COMMENT = 'Valor e Percentual do imposto para o Fundo de Combate à Pobreza reti
 CREATE TABLE IF NOT EXISTS `NFe.Entity.Imposto.Fundo.Retido` (
 )
 ENGINE = InnoDB
-COMMENT = 'Valor e Percentual do imposto para o Fundo de Combate à Pobreza retido anteriormente por substituição tributária[L:FCP][K:NFe\\Entity\\Imposto\\Fundo|NFe\\Entity\\Imposto\\Fundo\\][H:Substituido]';
+COMMENT = 'Valor e Percentual do imposto para o Fundo de Combate à Pobreza retido anteriormente por substituição tributária[L:FCP][K:DFe\\Entity\\Imposto\\Fundo|DFe\\Entity\\Imposto\\Fundo\\][H:Substituido]';
 
 
 -- -----------------------------------------------------
@@ -943,7 +943,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Responsavel` (
   `id_csrt` INT NULL COMMENT 'Identificador do CSRT utilizado para montar o hash do CSRT[L:idCSRT]',
   `hash_csrt` VARCHAR(45) NULL COMMENT 'O hashCSRT é o resultado da função hash (SHA-1 – Base64) do CSRT fornecido pelo fisco mais a Chave de Acesso da NFe.[L:hashCSRT]')
 ENGINE = InnoDB
-COMMENT = 'Grupo de informações do responsável técnico pelo sistema[L:respEmit][K:NFe\\Entity|NFe\\Entity\\]';
+COMMENT = 'Grupo de informações do responsável técnico pelo sistema[L:respEmit][K:DFe\\Entity|DFe\\Entity\\]';
 
 
 -- -----------------------------------------------------
@@ -953,7 +953,7 @@ CREATE TABLE IF NOT EXISTS `NFe.Entity.Intermediador` (
   `cnpj` VARCHAR(60) NOT NULL COMMENT 'CNPJ do Intermediador da Transação (agenciador, plataforma de delivery, marketplace e similar) de serviços e de negócios.[L:CNPJ]',
   `identificador` VARCHAR(60) NOT NULL COMMENT 'Identificador cadastrado no intermediador[L:idCadIntTran]')
 ENGINE = InnoDB
-COMMENT = 'Informações do Intermediador da Transação[L:infIntermed][K:NFe\\Entity|NFe\\Entity\\]';
+COMMENT = 'Informações do Intermediador da Transação[L:infIntermed][K:DFe\\Entity|DFe\\Entity\\]';
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

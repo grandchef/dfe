@@ -27,10 +27,10 @@
  *
  */
 
-namespace NFe\Entity\Imposto\ICMS;
+namespace DFe\Entity\Imposto\ICMS;
 
-use NFe\Common\Util;
-use NFe\Entity\Imposto\Fundo\Base as Fundo;
+use DFe\Common\Util;
+use DFe\Entity\Imposto\Fundo\Base as Fundo;
 
 /**
  * Classe base do ICMS normal, estende de ICMS\Base

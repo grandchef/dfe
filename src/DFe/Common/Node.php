@@ -27,7 +27,7 @@
  *
  */
 
-namespace NFe\Common;
+namespace DFe\Common;
 
 interface Node
 {

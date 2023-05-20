@@ -27,7 +27,7 @@
  *
  */
 
-namespace NFe\Logger;
+namespace DFe\Logger;
 
 /**
  * Salva mensagens de erro, depuração entre outros

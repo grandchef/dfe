@@ -27,16 +27,16 @@
  *
  */
 
-namespace NFe\Entity\Imposto\PIS\ST;
+namespace DFe\Entity\Imposto\PIS\ST;
 
-use NFe\Common\Util;
+use DFe\Common\Util;
 
 /**
  * Este grupo só deve ser informado se o produto for sujeito a PIS por ST,
  * CST = 05, a informação deste grupo não desobriga a informação do grupo
  * PIS.
  */
-class Aliquota extends \NFe\Entity\Imposto\PIS\Aliquota
+class Aliquota extends \DFe\Entity\Imposto\PIS\Aliquota
 {
     public function __construct($aliquota = [])
     {

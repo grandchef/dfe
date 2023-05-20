@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
 class EnderecoTest extends \PHPUnit\Framework\TestCase
 {
@@ -8,12 +8,12 @@ class EnderecoTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->sefaz = \NFe\Core\SEFAZ::getInstance(true);
+        $this->sefaz = \DFe\Core\SEFAZ::getInstance(true);
     }
 
     public static function createEndereco()
     {
-        $endereco = new \NFe\Entity\Endereco();
+        $endereco = new \DFe\Entity\Endereco();
         $endereco->setCEP('01122500');
         $endereco->getMunicipio()
                  ->setNome('Paranavaí')
@@ -28,7 +28,7 @@ class EnderecoTest extends \PHPUnit\Framework\TestCase
 
     public function testEnderecoXML()
     {
-        $endereco = new \NFe\Entity\Endereco();
+        $endereco = new \DFe\Entity\Endereco();
         $endereco->setCEP('01122500');
         $endereco->getMunicipio()
                  ->setNome('Paranavaí')
@@ -66,7 +66,7 @@ class EnderecoTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/endereco/testEnderecoXML.xml');
 
-        $endereco = new \NFe\Entity\Endereco();
+        $endereco = new \DFe\Entity\Endereco();
         $endereco->loadNode($dom_cmp->documentElement);
 
         $xml = $endereco->getNode();

@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity\Imposto\IPI;
+namespace DFe\Entity\Imposto\IPI;
 
 class QuantidadeTest extends \PHPUnit\Framework\TestCase
 {
@@ -14,8 +14,8 @@ class QuantidadeTest extends \PHPUnit\Framework\TestCase
     public function testQuantidadeXML()
     {
         // Exemplo para Alíquota específica
-        $ipi = new \NFe\Entity\Imposto\IPI();
-        $ipi_quantidade = new \NFe\Entity\Imposto\IPI\Quantidade();
+        $ipi = new \DFe\Entity\Imposto\IPI();
+        $ipi_quantidade = new \DFe\Entity\Imposto\IPI\Quantidade();
         $ipi_quantidade->setQuantidade(1000.00);
         $ipi_quantidade->setPreco(0.7640);
         $ipi_quantidade->fromArray($ipi_quantidade);
@@ -50,7 +50,7 @@ class QuantidadeTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/ipi/testQuantidadeXML.xml');
 
-        $ipi = new \NFe\Entity\Imposto\IPI();
+        $ipi = new \DFe\Entity\Imposto\IPI();
         $ipi->loadNode($dom_cmp->documentElement);
 
         $xml = $ipi->getNode();

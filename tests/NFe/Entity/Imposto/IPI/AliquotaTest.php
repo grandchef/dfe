@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity\Imposto\IPI;
+namespace DFe\Entity\Imposto\IPI;
 
 class AliquotaTest extends \PHPUnit\Framework\TestCase
 {
@@ -14,7 +14,7 @@ class AliquotaTest extends \PHPUnit\Framework\TestCase
     public function testAliquotaXML()
     {
         // Exemplo para Alíquota ad valorem
-        $ipi = new \NFe\Entity\Imposto\IPI();
+        $ipi = new \DFe\Entity\Imposto\IPI();
         $ipi_aliquota = new Aliquota();
         $ipi_aliquota->setBase(1000.00);
         $ipi_aliquota->setAliquota(7.00);
@@ -50,8 +50,8 @@ class AliquotaTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/ipi/testAliquotaXML.xml');
 
-        $ipi = \NFe\Entity\Imposto\IPI::loadImposto($dom_cmp->documentElement);
-        $this->assertInstanceOf(\NFe\Entity\Imposto\IPI::class, $ipi);
+        $ipi = \DFe\Entity\Imposto\IPI::loadImposto($dom_cmp->documentElement);
+        $this->assertInstanceOf(\DFe\Entity\Imposto\IPI::class, $ipi);
 
         $xml = $ipi->getNode();
         $dom = $xml->ownerDocument;

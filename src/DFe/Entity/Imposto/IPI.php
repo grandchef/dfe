@@ -27,11 +27,11 @@
  *
  */
 
-namespace NFe\Entity\Imposto;
+namespace DFe\Entity\Imposto;
 
-use NFe\Common\Util;
-use NFe\Entity\Imposto;
-use NFe\Exception\ValidationException;
+use DFe\Common\Util;
+use DFe\Entity\Imposto;
+use DFe\Exception\ValidationException;
 
 /**
  * Este grupo só precisa ser informado por emissores que sejam

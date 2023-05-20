@@ -27,15 +27,15 @@
  *
  */
 
-namespace NFe\Entity\Imposto\ICMS\Simples;
+namespace DFe\Entity\Imposto\ICMS\Simples;
 
-use NFe\Common\Util;
+use DFe\Common\Util;
 
 /**
  * Tributada pelo Simples Nacional sem permissão de crédito e com cobrança
  * do ICMS por substituição tributária
  */
-class Parcial extends \NFe\Entity\Imposto\ICMS\Parcial
+class Parcial extends \DFe\Entity\Imposto\ICMS\Parcial
 {
     public function __construct($parcial = [])
     {

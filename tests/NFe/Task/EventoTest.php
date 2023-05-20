@@ -1,8 +1,8 @@
 <?php
 
-namespace NFe\Task;
+namespace DFe\Task;
 
-use NFe\Core\Nota;
+use DFe\Core\Nota;
 
 class EventoTest extends \PHPUnit\Framework\TestCase
 {
@@ -10,7 +10,7 @@ class EventoTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->sefaz = \NFe\Core\SEFAZTest::createSEFAZ();
+        $this->sefaz = \DFe\Core\SEFAZTest::createSEFAZ();
     }
 
     public static function createEvento($nota)
@@ -40,7 +40,7 @@ class EventoTest extends \PHPUnit\Framework\TestCase
 
     public function registradoPostFunction($soap_curl, $url, $data)
     {
-        \NFe\Common\CurlSoapTest::assertPostFunction(
+        \DFe\Common\CurlSoapTest::assertPostFunction(
             $this,
             $soap_curl,
             $data,
@@ -51,7 +51,7 @@ class EventoTest extends \PHPUnit\Framework\TestCase
 
     public function rejeitadoPostFunction($soap_curl, $url, $data)
     {
-        \NFe\Common\CurlSoapTest::assertPostFunction(
+        \DFe\Common\CurlSoapTest::assertPostFunction(
             $this,
             $soap_curl,
             $data,
@@ -62,9 +62,9 @@ class EventoTest extends \PHPUnit\Framework\TestCase
 
     public function testEventoRegistrado()
     {
-        $data = \NFe\Core\NFCeTest::loadNFCeValidada();
+        $data = \DFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'registradoPostFunction']);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'registradoPostFunction']);
         try {
             $evento = self::createEvento($nota);
             $dom = $evento->getNode()->ownerDocument;
@@ -75,11 +75,11 @@ class EventoTest extends \PHPUnit\Framework\TestCase
             $evento->fromArray($evento->toArray());
             $dom = $evento->addInformacao($dom);
         } catch (Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
-        $this->assertInstanceOf('\\NFe\\Task\\Evento', $retorno);
+        \DFe\Common\CurlSoap::setPostFunction(null);
+        $this->assertInstanceOf('\\DFe\\Task\\Evento', $retorno);
         $this->assertEquals('135', $retorno->getStatus());
         $this->assertEquals($nota->getID(), $retorno->getChave());
 
@@ -95,9 +95,9 @@ class EventoTest extends \PHPUnit\Framework\TestCase
 
     public function testEventoRejeitado()
     {
-        $data = \NFe\Core\NFCeTest::loadNFCeValidada();
+        $data = \DFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'rejeitadoPostFunction']);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'rejeitadoPostFunction']);
         try {
             $evento = self::createEvento($nota);
             $dom = $evento->getNode()->ownerDocument;
@@ -105,11 +105,11 @@ class EventoTest extends \PHPUnit\Framework\TestCase
             $dom = $evento->validar($dom);
             $retorno = $evento->envia($dom);
         } catch (Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
-        $this->assertInstanceOf('\\NFe\\Task\\Evento', $retorno);
+        \DFe\Common\CurlSoap::setPostFunction(null);
+        $this->assertInstanceOf('\\DFe\\Task\\Evento', $retorno);
         $this->assertEquals('573', $retorno->getStatus());
     }
 
@@ -131,7 +131,7 @@ class EventoTest extends \PHPUnit\Framework\TestCase
 
     public function testEventoInvalido()
     {
-        $data = \NFe\Core\NFCeTest::loadNFCeValidada();
+        $data = \DFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
         $evento = self::createEvento($nota);
         $evento->setAmbiente('Produção');
@@ -142,7 +142,7 @@ class EventoTest extends \PHPUnit\Framework\TestCase
 
     public function testEventoSemInformacao()
     {
-        $data = \NFe\Core\NFCeTest::loadNFCeValidada();
+        $data = \DFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
         $evento = self::createEvento($nota);
         $this->expectException('\Exception');

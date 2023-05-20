@@ -27,9 +27,9 @@
  *
  */
 
-namespace NFe\Entity\Imposto;
+namespace DFe\Entity\Imposto;
 
-use NFe\Entity\Imposto;
+use DFe\Entity\Imposto;
 
 class Total extends Imposto
 {

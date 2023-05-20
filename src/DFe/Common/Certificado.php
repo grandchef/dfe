@@ -27,10 +27,10 @@
  *
  */
 
-namespace NFe\Common;
+namespace DFe\Common;
 
-use NFe\Common\Node;
-use NFe\Common\Util;
+use DFe\Common\Node;
+use DFe\Common\Util;
 
 /**
  * Certificado digital

@@ -27,10 +27,10 @@
  *
  */
 
-namespace NFe\Common;
+namespace DFe\Common;
 
-use NFe\Entity\Emitente;
-use NFe\Database\Estatico;
+use DFe\Entity\Emitente;
+use DFe\Database\Estatico;
 
 /**
  * Fornece informações importante para a geração e envio das notas fiscais
@@ -38,12 +38,12 @@ use NFe\Database\Estatico;
 class Configuracao
 {
     /**
-     * @var \NFe\Database\Banco
+     * @var \DFe\Database\Banco
      */
     private $banco;
 
     /**
-     * @var \NFe\Entity\Emitente
+     * @var \DFe\Entity\Emitente
      */
     private $emitente;
 
@@ -97,7 +97,7 @@ class Configuracao
 
     /**
      * Banco que fornece informações sobre items da nota como: Códigos e Taxas
-     * @return \NFe\Database\Banco
+     * @return \DFe\Database\Banco
      */
     public function getBanco()
     {
@@ -106,7 +106,7 @@ class Configuracao
 
     /**
      * Banco que fornece informações sobre items da nota como: Códigos e Taxas
-     * @param \NFe\Database\Banco $banco
+     * @param \DFe\Database\Banco $banco
      * @return self
      */
     public function setBanco($banco)
@@ -117,7 +117,7 @@ class Configuracao
 
     /**
      * Emitente da nota fiscal
-     * @return \NFe\Entity\Emitente
+     * @return \DFe\Entity\Emitente
      */
     public function getEmitente()
     {
@@ -126,7 +126,7 @@ class Configuracao
 
     /**
      * Emitente da nota fiscal
-     * @param \NFe\Entity\Emitente $emitente
+     * @param \DFe\Entity\Emitente $emitente
      * @return self
      */
     public function setEmitente($emitente)

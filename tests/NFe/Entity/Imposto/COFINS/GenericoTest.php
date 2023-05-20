@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity\Imposto\COFINS;
+namespace DFe\Entity\Imposto\COFINS;
 
 class GenericoTest extends \PHPUnit\Framework\TestCase
 {

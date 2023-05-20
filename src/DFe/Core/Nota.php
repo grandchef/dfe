@@ -27,22 +27,22 @@
  *
  */
 
-namespace NFe\Core;
+namespace DFe\Core;
 
 use DOMDocument;
-use NFe\Common\Util;
-use NFe\Common\Node;
-use NFe\Task\Protocolo;
-use NFe\Entity\Total;
-use NFe\Entity\Imposto;
-use NFe\Entity\Produto;
-use NFe\Entity\Emitente;
-use NFe\Entity\Pagamento;
-use NFe\Entity\Transporte;
-use NFe\Entity\Responsavel;
-use NFe\Entity\Destinatario;
-use NFe\Entity\Intermediador;
-use NFe\Exception\ValidationException;
+use DFe\Common\Util;
+use DFe\Common\Node;
+use DFe\Task\Protocolo;
+use DFe\Entity\Total;
+use DFe\Entity\Imposto;
+use DFe\Entity\Produto;
+use DFe\Entity\Emitente;
+use DFe\Entity\Pagamento;
+use DFe\Entity\Transporte;
+use DFe\Entity\Responsavel;
+use DFe\Entity\Destinatario;
+use DFe\Entity\Intermediador;
+use DFe\Exception\ValidationException;
 use FR3D\XmlDSig\Adapter\AdapterInterface;
 use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
 
@@ -1639,13 +1639,13 @@ abstract class Nota implements Node
                 switch ($_imposto->getGrupo()) {
                     case Imposto::GRUPO_ICMS:
                         if (
-                            ($_imposto instanceof \NFe\Entity\Imposto\ICMS\Cobranca)
-                            || ($_imposto instanceof \NFe\Entity\Imposto\ICMS\Simples\Cobranca)
+                            ($_imposto instanceof \DFe\Entity\Imposto\ICMS\Cobranca)
+                            || ($_imposto instanceof \DFe\Entity\Imposto\ICMS\Simples\Cobranca)
                         ) {
                             $total[$_imposto->getGrupo()] += round($_imposto->getNormal()->getValor(), 2);
                             $total['base'] += round($_imposto->getNormal()->getBase(), 2);
                         }
-                        if ($_imposto instanceof \NFe\Entity\Imposto\ICMS\Parcial) {
+                        if ($_imposto instanceof \DFe\Entity\Imposto\ICMS\Parcial) {
                             $total['icms.st'] += round($_imposto->getValor(), 2);
                             $total['base.st'] += round($_imposto->getBase(), 2);
                         } else {
@@ -1654,11 +1654,11 @@ abstract class Nota implements Node
                         }
                         $fundo = $_imposto->getFundo();
                         // a ordem de comparação importa pois uma classe estende da outra
-                        if ($fundo instanceof \NFe\Entity\Imposto\Fundo\Retido) {
+                        if ($fundo instanceof \DFe\Entity\Imposto\Fundo\Retido) {
                             $total['fundo.retido.st'] += round($fundo->getTotal(), 2);
-                        } elseif ($fundo instanceof \NFe\Entity\Imposto\Fundo\Substituido) {
+                        } elseif ($fundo instanceof \DFe\Entity\Imposto\Fundo\Substituido) {
                             $total['fundo.st'] += round($fundo->getTotal(), 2);
-                        } elseif ($fundo instanceof \NFe\Entity\Imposto\Fundo\Base) {
+                        } elseif ($fundo instanceof \DFe\Entity\Imposto\Fundo\Base) {
                             $total['fundo'] += round($fundo->getTotal(), 2);
                         }
                         break;

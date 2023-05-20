@@ -27,7 +27,7 @@
  *
  */
 
-namespace NFe\Common;
+namespace DFe\Common;
 
 use Curl\Curl;
 
@@ -127,8 +127,8 @@ XML;
         }
         $transfer = $this->getInfo(CURLINFO_PRETRANSFER_TIME);
         if ($transfer == 0) { // never started the transfer
-            throw new \NFe\Exception\NetworkException($this->errorMessage, $this->errorCode);
+            throw new \DFe\Exception\NetworkException($this->errorMessage, $this->errorCode);
         }
-        throw new \NFe\Exception\IncompleteRequestException($this->errorMessage, $this->errorCode);
+        throw new \DFe\Exception\IncompleteRequestException($this->errorMessage, $this->errorCode);
     }
 }

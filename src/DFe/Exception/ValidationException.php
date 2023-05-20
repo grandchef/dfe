@@ -27,7 +27,7 @@
  *
  */
 
-namespace NFe\Exception;
+namespace DFe\Exception;
 
 class ValidationException extends \Exception
 {

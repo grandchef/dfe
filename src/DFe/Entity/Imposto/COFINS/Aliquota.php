@@ -27,10 +27,10 @@
  *
  */
 
-namespace NFe\Entity\Imposto\COFINS;
+namespace DFe\Entity\Imposto\COFINS;
 
-use NFe\Common\Util;
-use NFe\Entity\Imposto;
+use DFe\Common\Util;
+use DFe\Entity\Imposto;
 
 class Aliquota extends Imposto
 {

@@ -27,11 +27,11 @@
  *
  */
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
 use DOMElement;
-use NFe\Common\Util;
-use NFe\Common\Node;
+use DFe\Common\Util;
+use DFe\Common\Node;
 
 /**
  * Dados dos totais da NF-e e do produto

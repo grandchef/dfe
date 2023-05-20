@@ -27,10 +27,10 @@
  *
  */
 
-namespace NFe\Common;
+namespace DFe\Common;
 
-use NFe\Task\Tarefa;
-use NFe\Core\Nota;
+use DFe\Task\Tarefa;
+use DFe\Core\Nota;
 use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
 
 /**
@@ -157,7 +157,7 @@ class Ajuste extends Configuracao implements Evento
 
     /**
      * Exclui os arquivos XML desnecessários
-     * @param \NFe\Core\Nota $nota nota
+     * @param \DFe\Core\Nota $nota nota
      */
     protected function deleteXmlAnteriores($nota)
     {
@@ -372,7 +372,7 @@ class Ajuste extends Configuracao implements Evento
      * Chamado quando o XML da nota foi gerado,
      * aqui pode ser atualizado a chave da nota, data de emissão, além do estado da nota
      * O registro da nota pode ser encontrada pela chave ou pelo código
-     * @param \NFe\Core\Nota $nota
+     * @param \DFe\Core\Nota $nota
      * @param \DOMDocument $xml
      */
     public function onNotaGerada($nota, $xml)
@@ -381,7 +381,7 @@ class Ajuste extends Configuracao implements Evento
 
     /**
      * Chamado após o XML da nota ser assinado
-     * @param \NFe\Core\Nota $nota
+     * @param \DFe\Core\Nota $nota
      * @param \DOMDocument $xml
      */
     public function onNotaAssinada($nota, $xml)
@@ -392,7 +392,7 @@ class Ajuste extends Configuracao implements Evento
      * Chamado após o XML da nota ser validado com sucesso
      * Nesse ponto pode ser salvo o QR Code, URL de consulta, tributos e complementos da nota
      * além de atualizar o estado da nota para assinado
-     * @param \NFe\Core\Nota $nota
+     * @param \DFe\Core\Nota $nota
      * @param \DOMDocument $xml
      */
     public function onNotaValidada($nota, $xml)
@@ -405,7 +405,7 @@ class Ajuste extends Configuracao implements Evento
 
     /**
      * Chamado antes de enviar a nota para a SEFAZ
-     * @param \NFe\Core\Nota $nota
+     * @param \DFe\Core\Nota $nota
      * @param \DOMDocument $xml
      */
     public function onNotaEnviando($nota, $xml)
@@ -415,7 +415,7 @@ class Ajuste extends Configuracao implements Evento
     /**
      * Chamado quando a forma de emissão da nota fiscal muda para contingência
      * Atualizar no banco flag de contingência informando a data de contingência e motivo
-     * @param \NFe\Core\Nota $nota
+     * @param \DFe\Core\Nota $nota
      * @param bool $offline
      * @param \Exception $exception
      */
@@ -429,9 +429,9 @@ class Ajuste extends Configuracao implements Evento
      * Além de salvar o XML, a data de autorização, protocolo e estado devem ser salvos no banco
      * Nesse ponto essa nota deve ser marcada como concluída no banco de dados
      * Atenção: se a ação dessa nota for para cancelar, não troque a flag de conclusão
-     * @param \NFe\Core\Nota $nota
+     * @param \DFe\Core\Nota $nota
      * @param \DOMDocument $xml
-     * @param \NFe\Task\Retorno $retorno
+     * @param \DFe\Task\Retorno $retorno
      */
     public function onNotaAutorizada($nota, $xml, $retorno)
     {
@@ -444,7 +444,7 @@ class Ajuste extends Configuracao implements Evento
     /**
      * Chamado quando a emissão da nota foi concluída com sucesso independente
      * da forma de emissão
-     * @param \NFe\Core\Nota $nota
+     * @param \DFe\Core\Nota $nota
      * @param \DOMDocument $xml
      */
     public function onNotaCompleto($nota, $xml)
@@ -457,9 +457,9 @@ class Ajuste extends Configuracao implements Evento
      * Se a ação da nota for cancelar, deve-se mudar a ação para inutilizar se for rejeição de nota inexistente
      * Caso contrário, deve marcar a flag para corrigir a nota antes de enviar novamente
      * Além de marcar o estado como rejeitado
-     * @param \NFe\Core\Nota $nota
+     * @param \DFe\Core\Nota $nota
      * @param \DOMDocument $xml
-     * @param \NFe\Task\Retorno $retorno
+     * @param \DFe\Task\Retorno $retorno
      */
     public function onNotaRejeitada($nota, $xml, $retorno)
     {
@@ -473,9 +473,9 @@ class Ajuste extends Configuracao implements Evento
      * Chamado quando a nota é denegada e não pode ser utilizada (outra nota
      * deve ser gerada)
      * Atualizar o estado da nota e marcar como concluída mas não corrigida
-     * @param \NFe\Core\Nota $nota
+     * @param \DFe\Core\Nota $nota
      * @param \DOMDocument $xml
-     * @param \NFe\Task\Retorno $retorno
+     * @param \DFe\Task\Retorno $retorno
      */
     public function onNotaDenegada($nota, $xml, $retorno)
     {
@@ -494,7 +494,7 @@ class Ajuste extends Configuracao implements Evento
      * Atualizar a nota incerta mudando a ação para cancelar e status para pendente
      * Criar outra nota baseado na nota incerta incrementando sua numeração para uma disponível
      * Atualizar o número da $nota e seu ID com a função gerarID, salvar também a chave na nova nota
-     * @param \NFe\Core\Nota $nota
+     * @param \DFe\Core\Nota $nota
      * @param \DOMDocument $xml
      * @param \Exception $exception
      */
@@ -510,9 +510,9 @@ class Ajuste extends Configuracao implements Evento
      * Chamado quando uma nota é enviada, mas não retornou o protocolo que será
      * consultado mais tarde
      * Salvar o recibo na nota para consultar mais tarde além atualizar o status
-     * @param \NFe\Core\Nota $nota
+     * @param \DFe\Core\Nota $nota
      * @param \DOMDocument $xml
-     * @param \NFe\Task\Retorno $retorno
+     * @param \DFe\Task\Retorno $retorno
      */
     public function onNotaProcessando($nota, $xml, $retorno)
     {
@@ -525,9 +525,9 @@ class Ajuste extends Configuracao implements Evento
     /**
      * Chamado quando uma nota autorizada é cancelada na SEFAZ
      * Atualizar o protocolo do retorno, estado e flag de conclusão da nota
-     * @param \NFe\Core\Nota $nota
+     * @param \DFe\Core\Nota $nota
      * @param \DOMDocument $xml
-     * @param \NFe\Task\Retorno $retorno
+     * @param \DFe\Task\Retorno $retorno
      */
     public function onNotaCancelada($nota, $xml, $retorno)
     {
@@ -541,7 +541,7 @@ class Ajuste extends Configuracao implements Evento
      * Chamado quando ocorre um erro nas etapas de geração e envio da nota (Não
      * é chamado quando entra em contigência)
      * Alterar a flag para corrigir a nota se não for problema de rede
-     * @param \NFe\Core\Nota $nota
+     * @param \DFe\Core\Nota $nota
      * @param \Exception $exception
      */
     public function onNotaErro($nota, $exception)
@@ -550,7 +550,7 @@ class Ajuste extends Configuracao implements Evento
 
     /**
      * Chamado quando um ou mais números de notas forem inutilizados
-     * @param \NFe\Task\Inutilizacao $inutilizacao
+     * @param \DFe\Task\Inutilizacao $inutilizacao
      * @param \DOMDocument $xml
      */
     public function onInutilizado($inutilizacao, $xml)
@@ -562,8 +562,8 @@ class Ajuste extends Configuracao implements Evento
 
     /**
      * Chamado quando uma tarefa é executada com sucesso
-     * @param \NFe\Task\Tarefa $tarefa
-     * @param \NFe\Task\Retorno $retorno
+     * @param \DFe\Task\Tarefa $tarefa
+     * @param \DFe\Task\Retorno $retorno
      */
     public function onTarefaExecutada($tarefa, $retorno)
     {
@@ -571,12 +571,12 @@ class Ajuste extends Configuracao implements Evento
         // se a intenção da consulta for para cancelar ou inutilizar
         // os eventos já estão preparados para manter a ação correta para posterior processamento
         // Pode acontecer de uma nota cancelada ser consultada
-        $cancelamento = $tarefa->getAcao() == \NFe\Task\Tarefa::ACAO_CONSULTAR && $retorno->isCancelado();
+        $cancelamento = $tarefa->getAcao() == \DFe\Task\Tarefa::ACAO_CONSULTAR && $retorno->isCancelado();
 
-        if ($tarefa->getAcao() == \NFe\Task\Tarefa::ACAO_INUTILIZAR) {
+        if ($tarefa->getAcao() == \DFe\Task\Tarefa::ACAO_INUTILIZAR) {
             // implementar aqui pois o evento de inutilização não devolve o ID da nota no banco
             // atualizar a chave, protocolo, data de autorização, flag de conclusão e estado da inutilização
-        } elseif ($tarefa->getAcao() == \NFe\Task\Tarefa::ACAO_CANCELAR || $cancelamento) {
+        } elseif ($tarefa->getAcao() == \DFe\Task\Tarefa::ACAO_CANCELAR || $cancelamento) {
             // salva um XML diferenciado e não embutido no XML da nota
             $nota = $tarefa->getNota();
             $path = $this->getPastaXmlCancelado($nota->getAmbiente());
@@ -591,7 +591,7 @@ class Ajuste extends Configuracao implements Evento
      * Chamado quando ocorre uma falha na execução de uma tarefa
      * Altera a flag de correção da nota para evitar ficar enviando a nota a todo momento
      * Atenção: Não alterar a flag de correção se o erro da tarefa for causado por problema de rede
-     * @param \NFe\Task\Tarefa $tarefa
+     * @param \DFe\Task\Tarefa $tarefa
      * @param \Exception $exception
      */
     public function onTarefaErro($tarefa, $exception)

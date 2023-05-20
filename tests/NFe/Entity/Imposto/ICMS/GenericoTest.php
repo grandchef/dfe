@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity\Imposto\ICMS;
+namespace DFe\Entity\Imposto\ICMS;
 
 class GenericoTest extends \PHPUnit\Framework\TestCase
 {

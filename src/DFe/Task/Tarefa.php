@@ -27,7 +27,7 @@
  *
  */
 
-namespace NFe\Task;
+namespace DFe\Task;
 
 class Tarefa
 {

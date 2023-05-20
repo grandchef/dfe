@@ -27,10 +27,10 @@
  *
  */
 
-namespace NFe\Entity\Imposto\Fundo;
+namespace DFe\Entity\Imposto\Fundo;
 
 use DOMElement;
-use NFe\Common\Util;
+use DFe\Common\Util;
 
 /**
  * Valor e Percentual do imposto para o Fundo de Combate à Pobreza retido

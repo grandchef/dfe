@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity\Imposto\ICMS;
+namespace DFe\Entity\Imposto\ICMS;
 
 class IntegralTest extends \PHPUnit\Framework\TestCase
 {

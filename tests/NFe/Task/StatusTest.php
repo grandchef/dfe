@@ -1,8 +1,8 @@
 <?php
 
-namespace NFe\Task;
+namespace DFe\Task;
 
-use NFe\Core\Nota;
+use DFe\Core\Nota;
 
 class StatusTest extends \PHPUnit\Framework\TestCase
 {

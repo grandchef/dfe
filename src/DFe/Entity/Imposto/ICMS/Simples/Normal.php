@@ -27,14 +27,14 @@
  *
  */
 
-namespace NFe\Entity\Imposto\ICMS\Simples;
+namespace DFe\Entity\Imposto\ICMS\Simples;
 
-use NFe\Common\Util;
+use DFe\Common\Util;
 
 /**
  * Tributada pelo Simples Nacional com permissão de crédito
  */
-class Normal extends \NFe\Entity\Imposto\ICMS\Normal
+class Normal extends \DFe\Entity\Imposto\ICMS\Normal
 {
     public function __construct($normal = [])
     {

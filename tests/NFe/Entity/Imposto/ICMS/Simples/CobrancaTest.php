@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity\Imposto\ICMS\Simples;
+namespace DFe\Entity\Imposto\ICMS\Simples;
 
 class CobrancaTest extends \PHPUnit\Framework\TestCase
 {
@@ -15,10 +15,10 @@ class CobrancaTest extends \PHPUnit\Framework\TestCase
     {
         // TODO: verificar vICMSST = 12.96
         $icms_cobranca = new Cobranca();
-        $icms_cobranca->getNormal()->setModalidade(\NFe\Entity\Imposto\ICMS\Normal::MODALIDADE_OPERACAO);
+        $icms_cobranca->getNormal()->setModalidade(\DFe\Entity\Imposto\ICMS\Normal::MODALIDADE_OPERACAO);
         $icms_cobranca->getNormal()->setBase(1036.80);
         $icms_cobranca->getNormal()->setAliquota(1.25);
-        $icms_cobranca->setModalidade(\NFe\Entity\Imposto\ICMS\Parcial::MODALIDADE_AGREGADO);
+        $icms_cobranca->setModalidade(\DFe\Entity\Imposto\ICMS\Parcial::MODALIDADE_AGREGADO);
         $icms_cobranca->setBase(162.00);
         $icms_cobranca->setMargem(100.00);
         $icms_cobranca->setReducao(10.00);

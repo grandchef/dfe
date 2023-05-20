@@ -1,8 +1,8 @@
 <?php
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
-use NFe\Common\Util;
+use DFe\Common\Util;
 
 class ResponsavelTest extends \PHPUnit\Framework\TestCase
 {
@@ -10,12 +10,12 @@ class ResponsavelTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->sefaz = \NFe\Core\SEFAZ::getInstance(true);
+        $this->sefaz = \DFe\Core\SEFAZ::getInstance(true);
     }
 
     public function testResponsavelXML()
     {
-        $responsavel = new \NFe\Entity\Responsavel();
+        $responsavel = new \DFe\Entity\Responsavel();
         $responsavel->setCNPJ('12345678000123');
         $responsavel->setContato('Empresa LTDA');
         $responsavel->setEmail('contato@empresa.com.br');
@@ -51,7 +51,7 @@ class ResponsavelTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/responsavel/testResponsavelXML.xml');
 
-        $responsavel = new \NFe\Entity\Responsavel();
+        $responsavel = new \DFe\Entity\Responsavel();
         $responsavel->loadNode($dom_cmp->documentElement);
 
         $xml = $responsavel->getNode();
@@ -67,7 +67,7 @@ class ResponsavelTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/responsavel/testResponsavelXML.xml');
 
-        $responsavel = new \NFe\Entity\Responsavel();
+        $responsavel = new \DFe\Entity\Responsavel();
         $this->expectException('\Exception');
         $responsavel->loadNode($dom_cmp->documentElement, 'respTec');
     }
@@ -78,7 +78,7 @@ class ResponsavelTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/responsavel/testResponsavelInvalidXML.xml');
 
-        $responsavel = new \NFe\Entity\Responsavel();
+        $responsavel = new \DFe\Entity\Responsavel();
         $responsavel->loadNode($dom_cmp->documentElement, 'infRespTec');
 
         // Nó principal

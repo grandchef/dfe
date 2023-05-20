@@ -27,10 +27,10 @@
  *
  */
 
-namespace NFe\Entity\Transporte;
+namespace DFe\Entity\Transporte;
 
-use NFe\Common\Node;
-use NFe\Common\Util;
+use DFe\Common\Node;
+use DFe\Common\Util;
 
 class Veiculo implements Node
 {

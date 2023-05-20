@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Common;
+namespace DFe\Common;
 
 class ConfiguracaoTest extends \PHPUnit\Framework\TestCase
 {
@@ -9,7 +9,7 @@ class ConfiguracaoTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->config = \NFe\Core\SEFAZ::getInstance(true)->getConfiguracao();
+        $this->config = \DFe\Core\SEFAZ::getInstance(true)->getConfiguracao();
     }
 
     public function testObjetos()

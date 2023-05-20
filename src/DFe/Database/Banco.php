@@ -27,7 +27,7 @@
  *
  */
 
-namespace NFe\Database;
+namespace DFe\Database;
 
 abstract class Banco
 {

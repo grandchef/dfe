@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity\Transporte;
+namespace DFe\Entity\Transporte;
 
 class TributoTest extends \PHPUnit\Framework\TestCase
 {
@@ -8,12 +8,12 @@ class TributoTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->sefaz = \NFe\Core\SEFAZ::getInstance(true);
+        $this->sefaz = \DFe\Core\SEFAZ::getInstance(true);
     }
 
     public function testTributoXML()
     {
-        $retencao = new \NFe\Entity\Transporte\Tributo();
+        $retencao = new \DFe\Entity\Transporte\Tributo();
         $retencao->setServico(300.00);
         $retencao->setBase(300.00);
         $retencao->setAliquota(12.00);
@@ -50,7 +50,7 @@ class TributoTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(dirname(__DIR__))) . '/resources/xml/transporte/testTributoXML.xml');
 
-        $retencao = new \NFe\Entity\Transporte\Tributo();
+        $retencao = new \DFe\Entity\Transporte\Tributo();
         $retencao->loadNode($dom_cmp->documentElement);
 
         $xml = $retencao->getNode();

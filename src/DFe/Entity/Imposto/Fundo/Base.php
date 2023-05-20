@@ -27,11 +27,11 @@
  *
  */
 
-namespace NFe\Entity\Imposto\Fundo;
+namespace DFe\Entity\Imposto\Fundo;
 
 use DOMElement;
-use NFe\Common\Util;
-use NFe\Entity\Imposto;
+use DFe\Common\Util;
+use DFe\Entity\Imposto;
 
 /**
  * Valor e Percentual do imposto para o Fundo de Combate à Pobreza

@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
 class PaisTest extends \PHPUnit\Framework\TestCase
 {
@@ -10,7 +10,7 @@ class PaisTest extends \PHPUnit\Framework\TestCase
 
     public function testPais()
     {
-        $pais = new \NFe\Entity\Pais();
+        $pais = new \DFe\Entity\Pais();
         $pais->setCodigo(1058);
         $pais->setNome('Brasil');
         $pais->fromArray($pais);

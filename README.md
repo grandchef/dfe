@@ -1,4 +1,4 @@
-# NFe-API
+# DFe-API
 ## Bliblioteca para geração, transmissão e tratamento de eventos de notas fiscais eletrônicas
 
 [![Latest Version on Packagist][ico-version]][link-packagist]

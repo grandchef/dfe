@@ -27,12 +27,12 @@
  *
  */
 
-namespace NFe\Task;
+namespace DFe\Task;
 
-use NFe\Core\Nota;
-use NFe\Core\SEFAZ;
-use NFe\Common\Util;
-use NFe\Exception\ValidationException;
+use DFe\Core\Nota;
+use DFe\Core\SEFAZ;
+use DFe\Common\Util;
+use DFe\Exception\ValidationException;
 
 class Autorizacao extends Retorno
 {
@@ -108,7 +108,7 @@ class Autorizacao extends Retorno
         } elseif ($this->isParalisado()) {
             $config = SEFAZ::getInstance()->getConfiguracao();
             $config->setOffline(time());
-            throw new \NFe\Exception\NetworkException('Serviço paralisado ou em manutenção', $this->getStatus());
+            throw new \DFe\Exception\NetworkException('Serviço paralisado ou em manutenção', $this->getStatus());
         }
         return $this;
     }

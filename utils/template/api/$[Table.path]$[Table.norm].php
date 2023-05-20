@@ -31,9 +31,9 @@ $[table.if(package)]
 namespace $[table.package];
 $[table.end]
 
-use NFe\Common\Util;
+use DFe\Common\Util;
 $[table.if(inherited)]$[table.else]
-use NFe\Common\Node;
+use DFe\Common\Node;
 $[table.end]
 
 $[table.if(comment)]

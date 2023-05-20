@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity\Imposto\IPI;
+namespace DFe\Entity\Imposto\IPI;
 
 class IsentoTest extends \PHPUnit\Framework\TestCase
 {
@@ -14,8 +14,8 @@ class IsentoTest extends \PHPUnit\Framework\TestCase
     public function testIsentoXML()
     {
         // Exemplo para operação Não Tributada (só utilize se for contribuinte do IPI)
-        $ipi = new \NFe\Entity\Imposto\IPI();
-        $ipi_isento = new \NFe\Entity\Imposto\IPI\Isento();
+        $ipi = new \DFe\Entity\Imposto\IPI();
+        $ipi_isento = new \DFe\Entity\Imposto\IPI\Isento();
         $ipi_isento->fromArray($ipi_isento);
         $ipi_isento->fromArray($ipi_isento->toArray());
         $ipi_isento->fromArray(null);
@@ -48,7 +48,7 @@ class IsentoTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/ipi/testIsentoXML.xml');
 
-        $ipi = new \NFe\Entity\Imposto\IPI();
+        $ipi = new \DFe\Entity\Imposto\IPI();
         $ipi->loadNode($dom_cmp->documentElement);
 
         $xml = $ipi->getNode();

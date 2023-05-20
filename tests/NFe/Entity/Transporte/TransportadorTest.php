@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity\Transporte;
+namespace DFe\Entity\Transporte;
 
 class TransportadorTest extends \PHPUnit\Framework\TestCase
 {
@@ -10,12 +10,12 @@ class TransportadorTest extends \PHPUnit\Framework\TestCase
 
     public function testTransportadorXML()
     {
-        $transportador = new \NFe\Entity\Transporte\Transportador();
+        $transportador = new \DFe\Entity\Transporte\Transportador();
         $transportador->setRazaoSocial('Empresa LTDA');
         $transportador->setCNPJ('12345678000123');
         $transportador->setIE('123456789');
 
-        $endereco = new \NFe\Entity\Endereco();
+        $endereco = new \DFe\Entity\Endereco();
         $endereco->setCEP('01122500');
         $endereco->getMunicipio()
                  ->setNome('Paranavaí')
@@ -62,7 +62,7 @@ class TransportadorTest extends \PHPUnit\Framework\TestCase
             dirname(dirname(dirname(__DIR__))) . '/resources/xml/transportador/testTransportadorXML.xml'
         );
 
-        $transportador = new \NFe\Entity\Transporte\Transportador();
+        $transportador = new \DFe\Entity\Transporte\Transportador();
         $transportador->loadNode($dom_cmp->documentElement);
 
         $xml = $transportador->getNode();
@@ -74,7 +74,7 @@ class TransportadorTest extends \PHPUnit\Framework\TestCase
 
     public function testTransportadorSemEnderecoXML()
     {
-        $transportador = new \NFe\Entity\Transporte\Transportador();
+        $transportador = new \DFe\Entity\Transporte\Transportador();
         $transportador->setRazaoSocial('Empresa LTDA');
         $transportador->setCNPJ('12345678000123');
         $transportador->setIE('123456789');
@@ -108,7 +108,7 @@ class TransportadorTest extends \PHPUnit\Framework\TestCase
             dirname(dirname(dirname(__DIR__))) . '/resources/xml/transportador/testTransportadorSemEnderecoXML.xml'
         );
 
-        $transportador = new \NFe\Entity\Transporte\Transportador();
+        $transportador = new \DFe\Entity\Transporte\Transportador();
         $transportador->loadNode($dom_cmp->documentElement);
 
         $xml = $transportador->getNode();

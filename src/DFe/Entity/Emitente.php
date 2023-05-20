@@ -27,9 +27,9 @@
  *
  */
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
-use NFe\Common\Util;
+use DFe\Common\Util;
 
 /**
  * Empresa que irá emitir as notas fiscais

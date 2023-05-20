@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
 class MunicipioTest extends \PHPUnit\Framework\TestCase
 {
@@ -8,14 +8,14 @@ class MunicipioTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->sefaz = \NFe\Core\SEFAZ::getInstance(true);
+        $this->sefaz = \DFe\Core\SEFAZ::getInstance(true);
     }
 
     public function testMunicipio()
     {
-        $municipio = new \NFe\Entity\Municipio();
+        $municipio = new \DFe\Entity\Municipio();
         $municipio->setNome('Paranavaí');
-        $estado = new \NFe\Entity\Estado();
+        $estado = new \DFe\Entity\Estado();
         $estado->setNome('Paraná');
         $estado->setUF('PR');
         $municipio->setEstado($estado);

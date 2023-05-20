@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Task;
+namespace DFe\Task;
 
 class RetornoTest extends \PHPUnit\Framework\TestCase
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity\Transporte;
+namespace DFe\Entity\Transporte;
 
 class VeiculoTest extends \PHPUnit\Framework\TestCase
 {
@@ -10,7 +10,7 @@ class VeiculoTest extends \PHPUnit\Framework\TestCase
 
     public function testVeiculoXML()
     {
-        $veiculo = new \NFe\Entity\Transporte\Veiculo();
+        $veiculo = new \DFe\Entity\Transporte\Veiculo();
         $veiculo->setPlaca('KLM1234');
         $veiculo->setUF('PI');
         $veiculo->setRNTC('123456');
@@ -43,7 +43,7 @@ class VeiculoTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(dirname(__DIR__))) . '/resources/xml/transporte/testVeiculoXML.xml');
 
-        $veiculo = new \NFe\Entity\Transporte\Veiculo();
+        $veiculo = new \DFe\Entity\Transporte\Veiculo();
         $veiculo->loadNode($dom_cmp->documentElement);
 
         $xml = $veiculo->getNode();

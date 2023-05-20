@@ -27,11 +27,11 @@
  *
  */
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
-use NFe\Core\SEFAZ;
-use NFe\Common\Node;
-use NFe\Common\Util;
+use DFe\Core\SEFAZ;
+use DFe\Common\Node;
+use DFe\Common\Util;
 
 /**
  * Produto ou serviço que está sendo vendido ou prestado e será adicionado
@@ -447,7 +447,7 @@ class Produto extends Total
             Imposto::TIPO_ESTADUAL,
             Imposto::TIPO_MUNICIPAL
         ];
-        $imposto = new \NFe\Entity\Imposto\Total();
+        $imposto = new \DFe\Entity\Imposto\Total();
         $imposto->setBase($this->getBase());
         $aliquota = $db->getImpostoAliquota(
             $this->getNCM(),
@@ -809,7 +809,7 @@ class Produto extends Total
         $imposto_node = $_fields->item(0);
         $this->setTributos(Util::loadNode($imposto_node, 'vTotTrib'));
         $_items = $imposto_node->childNodes;
-        $total = new \NFe\Entity\Imposto\Total();
+        $total = new \DFe\Entity\Imposto\Total();
         foreach ($_items as $_item) {
             if (!$_item->hasChildNodes() || $_item->nodeType !== XML_ELEMENT_NODE) {
                 continue;

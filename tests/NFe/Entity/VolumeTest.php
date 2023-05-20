@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
 class VolumeTest extends \PHPUnit\Framework\TestCase
 {
@@ -10,7 +10,7 @@ class VolumeTest extends \PHPUnit\Framework\TestCase
 
     public function testVolumeXML()
     {
-        $volume = new \NFe\Entity\Volume();
+        $volume = new \DFe\Entity\Volume();
         $volume->setQuantidade(2);
         $volume->setEspecie('caixa');
         $volume->setMarca('MZSW');
@@ -20,9 +20,9 @@ class VolumeTest extends \PHPUnit\Framework\TestCase
         $volume->getPeso()
             ->setLiquido(15.0)
             ->setBruto(21.0);
-        $volume->addLacre(new \NFe\Entity\Lacre(['numero' => 123456]));
-        $volume->addLacre(new \NFe\Entity\Lacre(['numero' => 123457]));
-        $volume->addLacre(new \NFe\Entity\Lacre(['numero' => 123458]));
+        $volume->addLacre(new \DFe\Entity\Lacre(['numero' => 123456]));
+        $volume->addLacre(new \DFe\Entity\Lacre(['numero' => 123457]));
+        $volume->addLacre(new \DFe\Entity\Lacre(['numero' => 123458]));
         $volume->fromArray($volume);
         $volume->fromArray($volume->toArray());
         $volume->fromArray(null);
@@ -51,7 +51,7 @@ class VolumeTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/volume/testVolumeXML.xml');
 
-        $volume = new \NFe\Entity\Volume();
+        $volume = new \DFe\Entity\Volume();
         $volume->loadNode($dom_cmp->documentElement);
 
         $xml = $volume->getNode();
@@ -67,7 +67,7 @@ class VolumeTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/volume/testVolumeSemPesoXML.xml');
 
-        $volume = new \NFe\Entity\Volume();
+        $volume = new \DFe\Entity\Volume();
         $element = $volume->loadNode($dom_cmp->documentElement);
 
         $xml = $volume->getNode();
@@ -83,7 +83,7 @@ class VolumeTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->loadXML('<invalid/>');
 
-        $volume = new \NFe\Entity\Volume();
+        $volume = new \DFe\Entity\Volume();
         $this->expectException('\Exception');
         $element = $volume->loadNode($dom_cmp->documentElement);
     }

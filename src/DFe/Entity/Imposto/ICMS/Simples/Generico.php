@@ -27,9 +27,9 @@
  *
  */
 
-namespace NFe\Entity\Imposto\ICMS\Simples;
+namespace DFe\Entity\Imposto\ICMS\Simples;
 
-use NFe\Common\Util;
+use DFe\Common\Util;
 
 /**
  * Tributação do ICMS pelo SIMPLES NACIONAL, CRT=1 – Simples Nacional e

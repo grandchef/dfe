@@ -27,9 +27,9 @@
  *
  */
 
-namespace NFe\Entity\Imposto\ICMS;
+namespace DFe\Entity\Imposto\ICMS;
 
-use NFe\Common\Util;
+use DFe\Common\Util;
 
 /**
  * Tributção pelo ICMS

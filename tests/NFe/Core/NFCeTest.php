@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Core;
+namespace DFe\Core;
 
 class NFCeTest extends \PHPUnit\Framework\TestCase
 {
@@ -8,32 +8,32 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->sefaz = \NFe\Core\SEFAZTest::createSEFAZ();
+        $this->sefaz = \DFe\Core\SEFAZTest::createSEFAZ();
     }
 
     public static function createNFCe($sefaz)
     {
-        $nfce = new \NFe\Core\NFCe();
+        $nfce = new \DFe\Core\NFCe();
         $nfce->setCodigo('77882192');
         $nfce->setSerie('1');
         $nfce->setNumero('81');
         $nfce->setDataEmissao(strtotime('2016-09-16T21:36:03-03:00'));
-        $nfce->setPresenca(\NFe\Core\Nota::PRESENCA_PRESENCIAL);
+        $nfce->setPresenca(\DFe\Core\Nota::PRESENCA_PRESENCIAL);
         $nfce->addObservacao('Vendedor', 'Fulano de Tal');
         $nfce->addObservacao('Local', 'Mesa 02');
         $nfce->addInformacao('RegimeEspecial', '123456');
 
         /* Emitente */
-        $emitente = new \NFe\Entity\Emitente();
+        $emitente = new \DFe\Entity\Emitente();
         $emitente->setRazaoSocial('Empresa LTDA');
         $emitente->setFantasia('Minha Empresa');
         $emitente->setCNPJ('08380787000176');
         $emitente->setTelefone('11955886644');
         $emitente->setIE('123456789');
         $emitente->setIM('98765');
-        $emitente->setRegime(\NFe\Entity\Emitente::REGIME_SIMPLES);
+        $emitente->setRegime(\DFe\Entity\Emitente::REGIME_SIMPLES);
 
-        $endereco = new \NFe\Entity\Endereco();
+        $endereco = new \DFe\Entity\Endereco();
         $endereco->setCEP('01122500');
         $endereco->getMunicipio()
                  ->setNome('Paranavaí')
@@ -54,13 +54,13 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $nfce->setEmitente($emitente);
 
         /* Destinatário */
-        $destinatario = new \NFe\Entity\Destinatario();
+        $destinatario = new \DFe\Entity\Destinatario();
         $destinatario->setNome('Fulano da Silva');
         $destinatario->setCPF('12345678912');
         $destinatario->setEmail('fulano@site.com.br');
         $destinatario->setTelefone('11988220055');
 
-        $endereco = new \NFe\Entity\Endereco();
+        $endereco = new \DFe\Entity\Endereco();
         $endereco->setCEP('01122500');
         $endereco->getMunicipio()
                  ->setNome('Paranavaí')
@@ -80,7 +80,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $nfce->setDestinatario($destinatario);
 
         /* Responsável */
-        $responsavel = new \NFe\Entity\Responsavel();
+        $responsavel = new \DFe\Entity\Responsavel();
         $responsavel->setCNPJ('12345678000123');
         $responsavel->setContato('Empresa LTDA');
         $responsavel->setEmail('contato@empresa.com.br');
@@ -94,11 +94,11 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $nfce->setResponsavel($responsavel);
 
         /* Produtos */
-        $produto = new \NFe\Entity\Produto();
+        $produto = new \DFe\Entity\Produto();
         $produto->setCodigo(123456);
         $produto->setCodigoBarras('7894900011531');
         $produto->setDescricao('REFRIGERANTE COCA-COLA 2L');
-        $produto->setUnidade(\NFe\Entity\Produto::UNIDADE_UNIDADE);
+        $produto->setUnidade(\DFe\Entity\Produto::UNIDADE_UNIDADE);
         $produto->setPreco(4.99);
         $produto->setQuantidade(1);
         $produto->setNCM('22021000');
@@ -107,22 +107,22 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $nfce->addProduto($produto);
 
         /* Impostos */
-        $imposto = new \NFe\Entity\Imposto\ICMS\Cobrado();
+        $imposto = new \DFe\Entity\Imposto\ICMS\Cobrado();
         $imposto->fromArray($imposto);
         $imposto->fromArray($imposto->toArray());
         $imposto->fromArray(null);
         $produto->addImposto($imposto);
 
-        $imposto = new \NFe\Entity\Imposto\PIS\Aliquota();
-        $imposto->setTributacao(\NFe\Entity\Imposto\PIS\Aliquota::TRIBUTACAO_NORMAL);
+        $imposto = new \DFe\Entity\Imposto\PIS\Aliquota();
+        $imposto->setTributacao(\DFe\Entity\Imposto\PIS\Aliquota::TRIBUTACAO_NORMAL);
         $imposto->setAliquota(0.65);
         $imposto->fromArray($imposto);
         $imposto->fromArray($imposto->toArray());
         $imposto->fromArray(null);
         $produto->addImposto($imposto);
 
-        $imposto = new \NFe\Entity\Imposto\COFINS\Aliquota();
-        $imposto->setTributacao(\NFe\Entity\Imposto\COFINS\Aliquota::TRIBUTACAO_NORMAL);
+        $imposto = new \DFe\Entity\Imposto\COFINS\Aliquota();
+        $imposto->setTributacao(\DFe\Entity\Imposto\COFINS\Aliquota::TRIBUTACAO_NORMAL);
         $imposto->setAliquota(3.00);
         $imposto->fromArray($imposto);
         $imposto->fromArray($imposto->toArray());
@@ -132,11 +132,11 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $produto->fromArray($produto->toArray());
         $produto->fromArray(null);
 
-        $produto = new \NFe\Entity\Produto();
+        $produto = new \DFe\Entity\Produto();
         $produto->setCodigo(123456);
         $produto->setCodigoBarras('7894900011523');
         $produto->setDescricao('REFRIGERANTE FANTA LARANJA 2L');
-        $produto->setUnidade(\NFe\Entity\Produto::UNIDADE_UNIDADE);
+        $produto->setUnidade(\DFe\Entity\Produto::UNIDADE_UNIDADE);
         $produto->setPreco(9.00);
         $produto->setQuantidade(2);
         $produto->setDesconto(2.20);
@@ -146,23 +146,23 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $nfce->addProduto($produto);
 
         /* Impostos */
-        $imposto = new \NFe\Entity\Imposto\ICMS\Cobrado();
+        $imposto = new \DFe\Entity\Imposto\ICMS\Cobrado();
         $imposto->setBase(0.00);
         $imposto->fromArray($imposto);
         $imposto->fromArray($imposto->toArray());
         $imposto->fromArray(null);
         $produto->addImposto($imposto);
 
-        $imposto = new \NFe\Entity\Imposto\PIS\Aliquota();
-        $imposto->setTributacao(\NFe\Entity\Imposto\PIS\Aliquota::TRIBUTACAO_NORMAL);
+        $imposto = new \DFe\Entity\Imposto\PIS\Aliquota();
+        $imposto->setTributacao(\DFe\Entity\Imposto\PIS\Aliquota::TRIBUTACAO_NORMAL);
         $imposto->setAliquota(0.65);
         $imposto->fromArray($imposto);
         $imposto->fromArray($imposto->toArray());
         $imposto->fromArray(null);
         $produto->addImposto($imposto);
 
-        $imposto = new \NFe\Entity\Imposto\COFINS\Aliquota();
-        $imposto->setTributacao(\NFe\Entity\Imposto\COFINS\Aliquota::TRIBUTACAO_NORMAL);
+        $imposto = new \DFe\Entity\Imposto\COFINS\Aliquota();
+        $imposto->setTributacao(\DFe\Entity\Imposto\COFINS\Aliquota::TRIBUTACAO_NORMAL);
         $imposto->setAliquota(3.00);
         $imposto->fromArray($imposto);
         $imposto->fromArray($imposto->toArray());
@@ -173,18 +173,18 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $produto->fromArray(null);
 
         /* Pagamentos */
-        $pagamento = new \NFe\Entity\Pagamento();
-        $pagamento->setForma(\NFe\Entity\Pagamento::FORMA_CREDITO);
+        $pagamento = new \DFe\Entity\Pagamento();
+        $pagamento->setForma(\DFe\Entity\Pagamento::FORMA_CREDITO);
         $pagamento->setValor(4.50);
         $pagamento->setIntegrado('N');
-        $pagamento->setBandeira(\NFe\Entity\Pagamento::BANDEIRA_MASTERCARD);
+        $pagamento->setBandeira(\DFe\Entity\Pagamento::BANDEIRA_MASTERCARD);
         $pagamento->fromArray($pagamento);
         $pagamento->fromArray($pagamento->toArray());
         $pagamento->fromArray(null);
         $nfce->addPagamento($pagamento);
 
-        $pagamento = new \NFe\Entity\Pagamento();
-        $pagamento->setForma(\NFe\Entity\Pagamento::FORMA_DINHEIRO);
+        $pagamento = new \DFe\Entity\Pagamento();
+        $pagamento->setForma(\DFe\Entity\Pagamento::FORMA_DINHEIRO);
         $pagamento->setValor(9.49);
         $pagamento->fromArray($pagamento);
         $pagamento->fromArray($pagamento->toArray());
@@ -201,15 +201,15 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
     {
         $nfce = self::createNFCe($sefaz);
 
-        $pagamento = new \NFe\Entity\Pagamento();
-        $pagamento->setForma(\NFe\Entity\Pagamento::FORMA_DINHEIRO);
+        $pagamento = new \DFe\Entity\Pagamento();
+        $pagamento->setForma(\DFe\Entity\Pagamento::FORMA_DINHEIRO);
         $pagamento->setValor(5);
         $pagamento->fromArray($pagamento);
         $pagamento->fromArray($pagamento->toArray());
         $pagamento->fromArray(null);
         $nfce->addPagamento($pagamento);
 
-        $pagamento = new \NFe\Entity\Pagamento();
+        $pagamento = new \DFe\Entity\Pagamento();
         $pagamento->setValor(-5);
         $pagamento->fromArray($pagamento);
         $pagamento->fromArray($pagamento->toArray());
@@ -222,8 +222,8 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
     {
         $nfce = self::createNFCe($sefaz);
 
-        $nfce->setIntermediacao(\NFe\Core\Nota::INTERMEDIACAO_TERCEIROS);
-        $intermediador = new \NFe\Entity\Intermediador();
+        $nfce->setIntermediacao(\DFe\Core\Nota::INTERMEDIACAO_TERCEIROS);
+        $intermediador = new \DFe\Entity\Intermediador();
         $intermediador->setCNPJ('14380200000121');
         $intermediador->setIdentificador('iFood');
         $nfce->setIntermediador($intermediador);
@@ -246,7 +246,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($xml_file);
 
-        $nfce = new \NFe\Core\NFCe();
+        $nfce = new \DFe\Core\NFCe();
         $nfce->load($xml_file);
         $dom = $nfce->assinar(); // O carregamento (load) não carrega assinatura
         $dom = $nfce->validar($dom);
@@ -264,7 +264,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($xml_file);
 
-        $nfce = new \NFe\Core\NFCe();
+        $nfce = new \DFe\Core\NFCe();
         $nfce->load($xml_file);
         $dom = $nfce->assinar(); // O carregamento (load) não carrega assinatura
         $dom = $nfce->validar($dom);
@@ -298,7 +298,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $dom_cmp = self::loadNFCeXMLAssinado();
 
         $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/nota/testNFCeAssinadaXML.xml';
-        $nfce = new \NFe\Core\NFCe();
+        $nfce = new \DFe\Core\NFCe();
         $nfce->load($xml_file);
 
         $dom = $nfce->assinar(); // O carregamento (load) não carrega assinatura
@@ -329,7 +329,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $dom_cmp = self::loadNFCeXMLAutorizado();
 
         $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/nota/testNFCeAutorizadoXML.xml';
-        $nfce = new \NFe\Core\NFCe();
+        $nfce = new \DFe\Core\NFCe();
         $nfce->load($xml_file);
 
         $protocolo = $nfce->getProtocolo();
@@ -435,7 +435,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
 
     public function testNFCeLoadFail()
     {
-        $nfce = new \NFe\Core\NFCe();
+        $nfce = new \DFe\Core\NFCe();
         $this->expectException('\Exception');
         $nfce->load('invalido.xml');
     }
@@ -444,7 +444,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
     {
         $dom_cmp = self::loadNFCeXML();
 
-        $nfce = new \NFe\Core\NFCe();
+        $nfce = new \DFe\Core\NFCe();
         $nfce->loadNode($dom_cmp);
 
         $xml = $nfce->getNode();

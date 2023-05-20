@@ -27,12 +27,12 @@
  *
  */
 
-namespace NFe\Task;
+namespace DFe\Task;
 
-use NFe\Core\Nota;
-use NFe\Core\SEFAZ;
-use NFe\Common\Util;
-use NFe\Exception\ValidationException;
+use DFe\Core\Nota;
+use DFe\Core\SEFAZ;
+use DFe\Common\Util;
+use DFe\Exception\ValidationException;
 use FR3D\XmlDSig\Adapter\AdapterInterface;
 use FR3D\XmlDSig\Adapter\XmlseclibsAdapter;
 

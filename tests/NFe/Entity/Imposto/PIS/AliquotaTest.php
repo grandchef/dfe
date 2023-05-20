@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity\Imposto\PIS;
+namespace DFe\Entity\Imposto\PIS;
 
 class AliquotaTest extends \PHPUnit\Framework\TestCase
 {
@@ -13,8 +13,8 @@ class AliquotaTest extends \PHPUnit\Framework\TestCase
 
     public function testAliquotaXML()
     {
-        $pis_aliquota = new \NFe\Entity\Imposto\PIS\Aliquota();
-        $pis_aliquota->setTributacao(\NFe\Entity\Imposto\PIS\Aliquota::TRIBUTACAO_NORMAL);
+        $pis_aliquota = new \DFe\Entity\Imposto\PIS\Aliquota();
+        $pis_aliquota->setTributacao(\DFe\Entity\Imposto\PIS\Aliquota::TRIBUTACAO_NORMAL);
         $pis_aliquota->setBase(883.12);
         $pis_aliquota->setAliquota(1.65);
         $pis_aliquota->fromArray($pis_aliquota);
@@ -45,7 +45,7 @@ class AliquotaTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/pis/testAliquotaXML.xml');
 
-        $pis_aliquota = new \NFe\Entity\Imposto\PIS\Aliquota();
+        $pis_aliquota = new \DFe\Entity\Imposto\PIS\Aliquota();
         $pis_aliquota->loadNode($dom_cmp->documentElement);
 
         $xml = $pis_aliquota->getNode();

@@ -27,14 +27,14 @@
  *
  */
 
-namespace NFe\Task;
+namespace DFe\Task;
 
 use DOMElement;
 use DOMDocument;
-use NFe\Core\Nota;
-use NFe\Core\SEFAZ;
-use NFe\Common\Util;
-use NFe\Common\CurlSoap;
+use DFe\Core\Nota;
+use DFe\Core\SEFAZ;
+use DFe\Common\Util;
+use DFe\Common\CurlSoap;
 
 /**
  * Envia requisições para os servidores da SEFAZ
@@ -394,7 +394,7 @@ class Envio
             $url = $url['url'];
         }
         if ($config->isOffline()) {
-            throw new \NFe\Exception\NetworkException('Operação offline, sem conexão com a internet', 7);
+            throw new \DFe\Exception\NetworkException('Operação offline, sem conexão com a internet', 7);
         }
         $config->verificaValidadeCertificado();
         $soap = new CurlSoap();
@@ -406,7 +406,7 @@ class Envio
         try {
             $response = $soap->send($url, $dom);
             return $response;
-        } catch (\NFe\Exception\NetworkException $e) {
+        } catch (\DFe\Exception\NetworkException $e) {
             $config->setOffline(time());
             throw $e;
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
 class TransporteTest extends \PHPUnit\Framework\TestCase
 {
@@ -9,14 +9,14 @@ class TransporteTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->sefaz = \NFe\Core\SEFAZ::getInstance(true);
+        $this->sefaz = \DFe\Core\SEFAZ::getInstance(true);
         $this->resource_path = dirname(dirname(__DIR__)) . '/resources';
     }
 
     protected function createTransporte()
     {
-        $transporte = new \NFe\Entity\Transporte();
-        $transporte->setFrete(\NFe\Entity\Transporte::FRETE_REMETENTE);
+        $transporte = new \DFe\Entity\Transporte();
+        $transporte->setFrete(\DFe\Entity\Transporte::FRETE_REMETENTE);
         $transporte->getVeiculo()
                    ->setRNTC(123456789)
                    ->setPlaca('ALK1232')
@@ -27,12 +27,12 @@ class TransporteTest extends \PHPUnit\Framework\TestCase
         $transporte->setVagao('2A');
         $transporte->setBalsa('522');
 
-        $transportador = new \NFe\Entity\Transporte\Transportador();
+        $transportador = new \DFe\Entity\Transporte\Transportador();
         $transportador->setRazaoSocial('Empresa LTDA');
         $transportador->setCNPJ('12345678000123');
         $transportador->setIE('123456789');
 
-        $endereco = new \NFe\Entity\Endereco();
+        $endereco = new \DFe\Entity\Endereco();
         $endereco->setCEP('01122500');
         $endereco->getMunicipio()
                  ->setNome('Paranavaí')
@@ -47,7 +47,7 @@ class TransporteTest extends \PHPUnit\Framework\TestCase
 
         $transporte->setTransportador($transportador);
 
-        $retencao = new \NFe\Entity\Transporte\Tributo();
+        $retencao = new \DFe\Entity\Transporte\Tributo();
         $retencao->setServico(300.00);
         $retencao->setBase(300.00);
         $retencao->setAliquota(12.00);
@@ -59,7 +59,7 @@ class TransporteTest extends \PHPUnit\Framework\TestCase
 
         $transporte->setRetencao($retencao);
 
-        $volume = new \NFe\Entity\Volume();
+        $volume = new \DFe\Entity\Volume();
         $volume->setQuantidade(2);
         $volume->setEspecie('caixa');
         $volume->setMarca('MZSW');
@@ -69,9 +69,9 @@ class TransporteTest extends \PHPUnit\Framework\TestCase
         $volume->getPeso()
             ->setLiquido(15.0)
             ->setBruto(21.0);
-        $volume->addLacre(new \NFe\Entity\Lacre(['numero' => 123456]));
-        $volume->addLacre(new \NFe\Entity\Lacre(['numero' => 123457]));
-        $volume->addLacre(new \NFe\Entity\Lacre(['numero' => 123458]));
+        $volume->addLacre(new \DFe\Entity\Lacre(['numero' => 123456]));
+        $volume->addLacre(new \DFe\Entity\Lacre(['numero' => 123457]));
+        $volume->addLacre(new \DFe\Entity\Lacre(['numero' => 123458]));
 
         $transporte->addVolume($volume);
         $transporte->fromArray($transporte);
@@ -109,7 +109,7 @@ class TransporteTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/transporte/testTransporteXML.xml');
 
-        $transporte = new \NFe\Entity\Transporte();
+        $transporte = new \DFe\Entity\Transporte();
         $transporte->loadNode($dom_cmp->documentElement);
 
         $xml = $transporte->getNode();
@@ -124,7 +124,7 @@ class TransporteTest extends \PHPUnit\Framework\TestCase
         $transporte = $this->createTransporte();
         $transporte->setFrete('3'); // Número não reconhecido no frete
         $transporte->setFrete($transporte->getFrete(true));
-        $transporte->setFrete(\NFe\Entity\Transporte::FRETE_DESTINATARIO);
+        $transporte->setFrete(\DFe\Entity\Transporte::FRETE_DESTINATARIO);
 
         $xml = $transporte->getNode();
         $dom = $xml->ownerDocument;
@@ -154,7 +154,7 @@ class TransporteTest extends \PHPUnit\Framework\TestCase
             $this->resource_path . '/xml/transporte/testTransporteFreteDestinatarioXML.xml'
         );
 
-        $transporte = new \NFe\Entity\Transporte();
+        $transporte = new \DFe\Entity\Transporte();
         $transporte->loadNode($dom_cmp->documentElement);
 
         $xml = $transporte->getNode();
@@ -167,7 +167,7 @@ class TransporteTest extends \PHPUnit\Framework\TestCase
     public function testTransporteFreteTerceirosXML()
     {
         $transporte = $this->createTransporte();
-        $transporte->setFrete(\NFe\Entity\Transporte::FRETE_TERCEIROS);
+        $transporte->setFrete(\DFe\Entity\Transporte::FRETE_TERCEIROS);
 
         $xml = $transporte->getNode();
         $dom = $xml->ownerDocument;
@@ -197,7 +197,7 @@ class TransporteTest extends \PHPUnit\Framework\TestCase
             $this->resource_path . '/xml/transporte/testTransporteFreteTerceirosXML.xml'
         );
 
-        $transporte = new \NFe\Entity\Transporte();
+        $transporte = new \DFe\Entity\Transporte();
         $transporte->loadNode($dom_cmp->documentElement);
 
         $xml = $transporte->getNode();
@@ -209,8 +209,8 @@ class TransporteTest extends \PHPUnit\Framework\TestCase
 
     public function testTransporteNenhumXML()
     {
-        $transporte = new \NFe\Entity\Transporte();
-        $transporte->setFrete(\NFe\Entity\Transporte::FRETE_NENHUM);
+        $transporte = new \DFe\Entity\Transporte();
+        $transporte->setFrete(\DFe\Entity\Transporte::FRETE_NENHUM);
 
         $xml = $transporte->getNode();
         $dom = $xml->ownerDocument;
@@ -236,7 +236,7 @@ class TransporteTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/transporte/testTransporteNenhumXML.xml');
 
-        $transporte = new \NFe\Entity\Transporte();
+        $transporte = new \DFe\Entity\Transporte();
         $transporte->loadNode($dom_cmp->documentElement);
 
         $xml = $transporte->getNode();
@@ -252,7 +252,7 @@ class TransporteTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/transporte/testTransporteSemModalidadeXML.xml');
 
-        $transporte = new \NFe\Entity\Transporte();
+        $transporte = new \DFe\Entity\Transporte();
         $this->expectException('\Exception');
         $transporte->loadNode($dom_cmp->documentElement);
     }
@@ -263,7 +263,7 @@ class TransporteTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->loadXML('<invalid/>');
 
-        $transporte = new \NFe\Entity\Transporte();
+        $transporte = new \DFe\Entity\Transporte();
         $this->expectException('\Exception');
         $transporte->loadNode($dom_cmp->documentElement);
     }

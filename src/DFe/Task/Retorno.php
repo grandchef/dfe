@@ -27,9 +27,9 @@
  *
  */
 
-namespace NFe\Task;
+namespace DFe\Task;
 
-use NFe\Common\Util;
+use DFe\Common\Util;
 
 class Retorno extends Status
 {

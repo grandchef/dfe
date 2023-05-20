@@ -1,8 +1,8 @@
 <?php
 
-namespace NFe\Task;
+namespace DFe\Task;
 
-use NFe\Core\Nota;
+use DFe\Core\Nota;
 
 class EnvioTest extends \PHPUnit\Framework\TestCase
 {
@@ -10,7 +10,7 @@ class EnvioTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->sefaz = \NFe\Core\SEFAZTest::createSEFAZ();
+        $this->sefaz = \DFe\Core\SEFAZTest::createSEFAZ();
     }
 
     public static function createEnvio()
@@ -85,32 +85,32 @@ class EnvioTest extends \PHPUnit\Framework\TestCase
         $envio->fromArray($old_envio->toArray());
         $envio->fromArray(null);
         $this->sefaz->getConfiguracao()->setOffline(time());
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'nulPostFunction']);
-        $this->expectException('\NFe\Exception\NetworkException');
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'nulPostFunction']);
+        $this->expectException('\DFe\Exception\NetworkException');
         try {
             $envio->envia();
         } catch (Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             $this->sefaz->getConfiguracao()->setOffline(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
+        \DFe\Common\CurlSoap::setPostFunction(null);
         $this->sefaz->getConfiguracao()->setOffline(null);
     }
 
     public function testEnvioErro()
     {
         $envio = self::createEnvio();
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'errorPostFunction']);
-        $this->expectException('\NFe\Exception\NetworkException');
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'errorPostFunction']);
+        $this->expectException('\DFe\Exception\NetworkException');
         try {
             $envio->envia();
         } catch (Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             $this->sefaz->getConfiguracao()->setOffline(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
+        \DFe\Common\CurlSoap::setPostFunction(null);
         $this->sefaz->getConfiguracao()->setOffline(null);
     }
 

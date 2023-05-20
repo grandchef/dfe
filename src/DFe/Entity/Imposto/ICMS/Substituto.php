@@ -27,9 +27,9 @@
  *
  */
 
-namespace NFe\Entity\Imposto\ICMS;
+namespace DFe\Entity\Imposto\ICMS;
 
-use NFe\Common\Util;
+use DFe\Common\Util;
 
 /**
  * Grupo de informação do ICMSST devido para a UF de destino, nas operações

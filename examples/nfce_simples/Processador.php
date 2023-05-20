@@ -2,10 +2,10 @@
 
 namespace Example;
 
-use NFe\Common\Ajuste;
-use NFe\Common\Util;
-use NFe\Core\SEFAZ;
-use NFe\Entity\Emitente;
+use DFe\Common\Ajuste;
+use DFe\Common\Util;
+use DFe\Core\SEFAZ;
+use DFe\Entity\Emitente;
 
 class Processador extends Ajuste
 {

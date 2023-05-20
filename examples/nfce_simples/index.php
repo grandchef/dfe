@@ -5,7 +5,7 @@ require __DIR__ . '/Gerador.php';
 require __DIR__ . '/Processador.php';
 
 use Example\Processador;
-use NFe\Common\Certificado;
+use DFe\Common\Certificado;
 
 /* Preencha os campos abaixo para emitir uma NFC-e */
 

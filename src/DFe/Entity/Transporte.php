@@ -27,13 +27,13 @@
  *
  */
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
-use NFe\Common\Node;
-use NFe\Common\Util;
-use NFe\Entity\Transporte\Veiculo;
-use NFe\Entity\Transporte\Tributo;
-use NFe\Entity\Transporte\Transportador;
+use DFe\Common\Node;
+use DFe\Common\Util;
+use DFe\Entity\Transporte\Veiculo;
+use DFe\Entity\Transporte\Tributo;
+use DFe\Entity\Transporte\Transportador;
 
 /**
  * Dados dos transportes da NF-e

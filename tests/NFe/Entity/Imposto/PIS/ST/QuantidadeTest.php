@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity\Imposto\PIS\ST;
+namespace DFe\Entity\Imposto\PIS\ST;
 
 class QuantidadeTest extends \PHPUnit\Framework\TestCase
 {

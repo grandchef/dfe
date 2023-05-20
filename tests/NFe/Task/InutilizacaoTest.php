@@ -1,25 +1,25 @@
 <?php
 
-namespace NFe\Task;
+namespace DFe\Task;
 
-use NFe\Core\Nota;
+use DFe\Core\Nota;
 
 class InutilizacaoTest extends \PHPUnit\Framework\TestCase
 {
     public static function criaInutilizacao()
     {
-        \NFe\Core\SEFAZ::getInstance()
+        \DFe\Core\SEFAZ::getInstance()
             ->getConfiguracao()->getEmitente()->getEndereco()
             ->getMunicipio()->getEstado()->setUF('PR');
-        \NFe\Core\SEFAZ::getInstance()
+        \DFe\Core\SEFAZ::getInstance()
             ->getConfiguracao()->getEmitente()->setCNPJ('08380787000176');
-        $inutilizacao = new \NFe\Task\Inutilizacao();
-        $inutilizacao->setUF(\NFe\Core\SEFAZ::getInstance()
+        $inutilizacao = new \DFe\Task\Inutilizacao();
+        $inutilizacao->setUF(\DFe\Core\SEFAZ::getInstance()
             ->getConfiguracao()->getEmitente()->getEndereco()
             ->getMunicipio()->getEstado()->getUF());
-        $inutilizacao->setCNPJ(\NFe\Core\SEFAZ::getInstance()
+        $inutilizacao->setCNPJ(\DFe\Core\SEFAZ::getInstance()
             ->getConfiguracao()->getEmitente()->getCNPJ());
-        $inutilizacao->setAmbiente(\NFe\Core\Nota::AMBIENTE_HOMOLOGACAO);
+        $inutilizacao->setAmbiente(\DFe\Core\Nota::AMBIENTE_HOMOLOGACAO);
         $inutilizacao->setAno(2017);
         $inutilizacao->setModelo(65);
         $inutilizacao->setSerie(1);
@@ -31,7 +31,7 @@ class InutilizacaoTest extends \PHPUnit\Framework\TestCase
 
     public function inutilizadoPostFunction($soap_curl, $url, $data)
     {
-        \NFe\Common\CurlSoapTest::assertPostFunction(
+        \DFe\Common\CurlSoapTest::assertPostFunction(
             $this,
             $soap_curl,
             $data,
@@ -42,7 +42,7 @@ class InutilizacaoTest extends \PHPUnit\Framework\TestCase
 
     public function rejeitadoPostFunction($soap_curl, $url, $data)
     {
-        \NFe\Common\CurlSoapTest::assertPostFunction(
+        \DFe\Common\CurlSoapTest::assertPostFunction(
             $this,
             $soap_curl,
             $data,
@@ -53,7 +53,7 @@ class InutilizacaoTest extends \PHPUnit\Framework\TestCase
 
     public function testInutilizaInutilizado()
     {
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'inutilizadoPostFunction']);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'inutilizadoPostFunction']);
         try {
             $inutilizacao = self::criaInutilizacao();
             $dom = $inutilizacao->getNode()->ownerDocument;
@@ -63,10 +63,10 @@ class InutilizacaoTest extends \PHPUnit\Framework\TestCase
             $inutilizacao->fromArray($inutilizacao->toArray());
             $inutilizacao->fromArray(null);
         } catch (\Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
+        \DFe\Common\CurlSoap::setPostFunction(null);
         $this->assertEquals('102', $inutilizacao->getStatus());
         $this->assertEquals('141170000156683', $inutilizacao->getNumero());
         $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/task/testInutilizaInutilizadoProtocolo.xml';
@@ -85,7 +85,7 @@ class InutilizacaoTest extends \PHPUnit\Framework\TestCase
 
     public function testInutilizaRejeitado()
     {
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'rejeitadoPostFunction']);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'rejeitadoPostFunction']);
         $inutilizacao = self::criaInutilizacao();
         $dom = $inutilizacao->getNode()->ownerDocument;
         $dom = $inutilizacao->assinar();
@@ -93,11 +93,11 @@ class InutilizacaoTest extends \PHPUnit\Framework\TestCase
         try {
             $inutilizacao->envia($dom);
         } catch (\Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             $this->assertEquals('241', $inutilizacao->getStatus());
             throw $e;
         } finally {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
         }
     }
 

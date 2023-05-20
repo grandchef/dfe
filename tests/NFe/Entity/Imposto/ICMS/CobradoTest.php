@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity\Imposto\ICMS;
+namespace DFe\Entity\Imposto\ICMS;
 
 class CobradoTest extends \PHPUnit\Framework\TestCase
 {
@@ -13,7 +13,7 @@ class CobradoTest extends \PHPUnit\Framework\TestCase
 
     public function testCobradoXML()
     {
-        $icms_cobrado = new \NFe\Entity\Imposto\ICMS\Cobrado();
+        $icms_cobrado = new \DFe\Entity\Imposto\ICMS\Cobrado();
         $icms_cobrado->setBase(135.00);
         $icms_cobrado->setValor(24.30);
         $icms_cobrado->fromArray($icms_cobrado);
@@ -44,7 +44,7 @@ class CobradoTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testCobradoXML.xml');
 
-        $icms_cobrado = new \NFe\Entity\Imposto\ICMS\Cobrado();
+        $icms_cobrado = new \DFe\Entity\Imposto\ICMS\Cobrado();
         $icms_cobrado->loadNode($dom_cmp->documentElement);
 
         $xml = $icms_cobrado->getNode();
@@ -56,7 +56,7 @@ class CobradoTest extends \PHPUnit\Framework\TestCase
 
     public function testCobradoFundoXML()
     {
-        $icms_cobrado = new \NFe\Entity\Imposto\ICMS\Cobrado();
+        $icms_cobrado = new \DFe\Entity\Imposto\ICMS\Cobrado();
         $icms_cobrado->setBase(135.00);
         $icms_cobrado->setValor(24.30);
         $icms_cobrado->getFundo()->setBase($icms_cobrado->getBase());
@@ -89,7 +89,7 @@ class CobradoTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/icms/testCobradoFundoXML.xml');
 
-        $icms_cobrado = new \NFe\Entity\Imposto\ICMS\Cobrado();
+        $icms_cobrado = new \DFe\Entity\Imposto\ICMS\Cobrado();
         $icms_cobrado->loadNode($dom_cmp->documentElement);
 
         $xml = $icms_cobrado->getNode();

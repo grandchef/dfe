@@ -27,11 +27,11 @@
  *
  */
 
-namespace NFe\Core;
+namespace DFe\Core;
 
 use DOMElement;
-use NFe\Common\Util;
-use NFe\Entity\Imposto;
+use DFe\Common\Util;
+use DFe\Entity\Imposto;
 
 /**
  * Classe para validação da nota fiscal eletrônica do consumidor

@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity\Imposto;
+namespace DFe\Entity\Imposto;
 
 class TotalTest extends \PHPUnit\Framework\TestCase
 {
@@ -13,7 +13,7 @@ class TotalTest extends \PHPUnit\Framework\TestCase
 
     public function testTotalXML()
     {
-        $total = new \NFe\Entity\Imposto\Total();
+        $total = new \DFe\Entity\Imposto\Total();
         $total->setBase(883.12);
         $total->setAliquota(100.00);
         $total->fromArray($total);
@@ -44,7 +44,7 @@ class TotalTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/testTotalXML.xml');
 
-        $total = new \NFe\Entity\Imposto\Total();
+        $total = new \DFe\Entity\Imposto\Total();
         $total->loadNode($dom_cmp->documentElement);
 
         $xml = $total->getNode();

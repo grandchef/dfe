@@ -27,9 +27,9 @@
  *
  */
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
-use NFe\Core\SEFAZ;
+use DFe\Core\SEFAZ;
 
 /**
  * Município de um endereço

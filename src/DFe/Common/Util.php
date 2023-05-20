@@ -27,7 +27,7 @@
  *
  */
 
-namespace NFe\Common;
+namespace DFe\Common;
 
 /**
  * Utilitário para conversões de moeda, datas, verificação de dígitos, etc.

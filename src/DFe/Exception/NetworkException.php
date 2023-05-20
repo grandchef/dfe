@@ -27,7 +27,7 @@
  *
  */
 
-namespace NFe\Exception;
+namespace DFe\Exception;
 
 class NetworkException extends \Exception
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
 class EstadoTest extends \PHPUnit\Framework\TestCase
 {
@@ -8,12 +8,12 @@ class EstadoTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->sefaz = \NFe\Core\SEFAZ::getInstance(true);
+        $this->sefaz = \DFe\Core\SEFAZ::getInstance(true);
     }
 
     public function testEstado()
     {
-        $estado = new \NFe\Entity\Estado();
+        $estado = new \DFe\Entity\Estado();
         $estado->setNome('Paraná');
         $estado->setUF('PR');
         $estado->checkCodigos();

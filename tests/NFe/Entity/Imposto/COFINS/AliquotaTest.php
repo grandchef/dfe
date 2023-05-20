@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity\Imposto\COFINS;
+namespace DFe\Entity\Imposto\COFINS;
 
 class AliquotaTest extends \PHPUnit\Framework\TestCase
 {
@@ -13,8 +13,8 @@ class AliquotaTest extends \PHPUnit\Framework\TestCase
 
     public function testAliquotaXML()
     {
-        $cofins_aliquota = new \NFe\Entity\Imposto\COFINS\Aliquota();
-        $cofins_aliquota->setTributacao(\NFe\Entity\Imposto\COFINS\Aliquota::TRIBUTACAO_NORMAL);
+        $cofins_aliquota = new \DFe\Entity\Imposto\COFINS\Aliquota();
+        $cofins_aliquota->setTributacao(\DFe\Entity\Imposto\COFINS\Aliquota::TRIBUTACAO_NORMAL);
         $cofins_aliquota->setBase(883.12);
         $cofins_aliquota->setAliquota(7.60);
         $cofins_aliquota->fromArray($cofins_aliquota);
@@ -45,7 +45,7 @@ class AliquotaTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load($this->resource_path . '/xml/imposto/cofins/testAliquotaXML.xml');
 
-        $cofins_aliquota = new \NFe\Entity\Imposto\COFINS\Aliquota();
+        $cofins_aliquota = new \DFe\Entity\Imposto\COFINS\Aliquota();
         $cofins_aliquota->loadNode($dom_cmp->documentElement);
 
         $xml = $cofins_aliquota->getNode();

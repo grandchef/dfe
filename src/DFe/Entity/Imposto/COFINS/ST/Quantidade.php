@@ -27,14 +27,14 @@
  *
  */
 
-namespace NFe\Entity\Imposto\COFINS\ST;
+namespace DFe\Entity\Imposto\COFINS\ST;
 
-use NFe\Common\Util;
+use DFe\Common\Util;
 
 /**
  * Quantidade Vendida x Alíquota por Unidade de Produto
  */
-class Quantidade extends \NFe\Entity\Imposto\COFINS\Quantidade
+class Quantidade extends \DFe\Entity\Imposto\COFINS\Quantidade
 {
     public function __construct($quantidade = [])
     {

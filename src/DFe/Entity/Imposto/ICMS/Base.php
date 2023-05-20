@@ -27,13 +27,13 @@
  *
  */
 
-namespace NFe\Entity\Imposto\ICMS;
+namespace DFe\Entity\Imposto\ICMS;
 
-use NFe\Entity\Imposto;
-use NFe\Common\Util;
-use NFe\Entity\Imposto\Fundo\Base as Fundo;
-use NFe\Entity\Imposto\Fundo\Retido;
-use NFe\Entity\Imposto\Fundo\Substituido;
+use DFe\Entity\Imposto;
+use DFe\Common\Util;
+use DFe\Entity\Imposto\Fundo\Base as Fundo;
+use DFe\Entity\Imposto\Fundo\Retido;
+use DFe\Entity\Imposto\Fundo\Substituido;
 
 /**
  * Classe base do ICMS
@@ -112,7 +112,7 @@ abstract class Base extends Imposto
 
     /**
      * Fundo de Combate à Probreza
-     * @return \NFe\Entity\Imposto\Fundo\Base|null Base do fundo de combate à pobreza
+     * @return \DFe\Entity\Imposto\Fundo\Base|null Base do fundo de combate à pobreza
      */
     public function getFundo()
     {

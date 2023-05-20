@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity\Imposto\PIS;
+namespace DFe\Entity\Imposto\PIS;
 
 class IsentoTest extends \PHPUnit\Framework\TestCase
 {

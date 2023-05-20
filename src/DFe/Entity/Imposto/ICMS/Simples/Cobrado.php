@@ -27,10 +27,10 @@
  *
  */
 
-namespace NFe\Entity\Imposto\ICMS\Simples;
+namespace DFe\Entity\Imposto\ICMS\Simples;
 
-use NFe\Common\Util;
-use NFe\Entity\Imposto\Fundo\Retido;
+use DFe\Common\Util;
+use DFe\Entity\Imposto\Fundo\Retido;
 
 /**
  * ICMS cobrado anteriormente por substituição tributária (substituído) ou

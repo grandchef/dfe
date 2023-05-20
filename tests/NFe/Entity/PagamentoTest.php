@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
 class PagamentoTest extends \PHPUnit\Framework\TestCase
 {

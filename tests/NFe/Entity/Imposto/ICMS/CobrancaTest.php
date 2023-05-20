@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity\Imposto\ICMS;
+namespace DFe\Entity\Imposto\ICMS;
 
 class CobrancaTest extends \PHPUnit\Framework\TestCase
 {
@@ -14,10 +14,10 @@ class CobrancaTest extends \PHPUnit\Framework\TestCase
     public function testCobrancaXML()
     {
         $icms_cobranca = new Cobranca();
-        $icms_cobranca->getNormal()->setModalidade(\NFe\Entity\Imposto\ICMS\Normal::MODALIDADE_OPERACAO);
+        $icms_cobranca->getNormal()->setModalidade(\DFe\Entity\Imposto\ICMS\Normal::MODALIDADE_OPERACAO);
         $icms_cobranca->getNormal()->setBase(100.00);
         $icms_cobranca->getNormal()->setAliquota(18.00);
-        $icms_cobranca->setModalidade(\NFe\Entity\Imposto\ICMS\Parcial::MODALIDADE_AGREGADO);
+        $icms_cobranca->setModalidade(\DFe\Entity\Imposto\ICMS\Parcial::MODALIDADE_AGREGADO);
         $icms_cobranca->setBase(135.00);
         $icms_cobranca->setMargem(50.00);
         $icms_cobranca->setReducao(10.00);

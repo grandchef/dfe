@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
 class LacreTest extends \PHPUnit\Framework\TestCase
 {
@@ -10,7 +10,7 @@ class LacreTest extends \PHPUnit\Framework\TestCase
 
     public function testLacre()
     {
-        $lacre = new \NFe\Entity\Lacre();
+        $lacre = new \DFe\Entity\Lacre();
         $lacre->setNumero(123);
         $lacre->fromArray($lacre);
         $lacre->fromArray($lacre->toArray());

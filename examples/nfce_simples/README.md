@@ -1,4 +1,4 @@
-### Nessa página será abordado como estruturar seu projeto para emitir nota fiscal usando a bilioteca NFe-API
+### Nessa página será abordado como estruturar seu projeto para emitir nota fiscal usando a bilioteca DFe-API
 
 - Informações necessárias para emissão de notas
 1. Certificado digital A1 e a senha do mesmo
@@ -9,7 +9,7 @@
 Essa biblioteca usa o conceito de eventos para executar ações, logo terá evento para nota autorizada, cancelada e outros.
 Em cada evento você poderá salvar o XML e atualizar o status da nota no banco de dados.
 
-Há dois tipos de objetos processados pela biblioteca, a Nota e a Tarefa. As notas devem ser criadas nos eventos ```\NFe\Database\Estatico::getNotasAbertas``` e ```\NFe\Database\Estatico::getNotasPendentes```, já as tarefas devem ser criadas no evento ```\NFe\Database\Estatico::getNotasTarefas``` e são responsáveis por inutilizar numerações, realizar cancelamento e consultar notas.
+Há dois tipos de objetos processados pela biblioteca, a Nota e a Tarefa. As notas devem ser criadas nos eventos ```\DFe\Database\Estatico::getNotasAbertas``` e ```\DFe\Database\Estatico::getNotasPendentes```, já as tarefas devem ser criadas no evento ```\DFe\Database\Estatico::getNotasTarefas``` e são responsáveis por inutilizar numerações, realizar cancelamento e consultar notas.
 
 ### Emitindo uma NFC-e
 Para emitir uma NFC-e, iremos usar o exemplo da pasta [examples/nfce_simples](/mazinsw/nfe-api/tree/master/examples/nfce_simples)

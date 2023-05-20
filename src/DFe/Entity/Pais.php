@@ -27,7 +27,7 @@
  *
  */
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
 class Pais
 {

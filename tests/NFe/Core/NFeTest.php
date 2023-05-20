@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Core;
+namespace DFe\Core;
 
 class NFeTest extends \PHPUnit\Framework\TestCase
 {
@@ -24,16 +24,16 @@ class NFeTest extends \PHPUnit\Framework\TestCase
         $nfe->addInformacao('RegimeEspecial', '123456');
 
         /* Emitente */
-        $emitente = new \NFe\Entity\Emitente();
+        $emitente = new \DFe\Entity\Emitente();
         $emitente->setRazaoSocial('Empresa LTDA');
         $emitente->setFantasia('Minha Empresa');
         $emitente->setCNPJ('08380787000176');
         $emitente->setTelefone('11955886644');
         $emitente->setIE('123456789');
         $emitente->setIM('98765');
-        $emitente->setRegime(\NFe\Entity\Emitente::REGIME_SIMPLES);
+        $emitente->setRegime(\DFe\Entity\Emitente::REGIME_SIMPLES);
 
-        $endereco = new \NFe\Entity\Endereco();
+        $endereco = new \DFe\Entity\Endereco();
         $endereco->setCEP('01122500');
         $endereco->getMunicipio()
                  ->setNome('Paranavaí')
@@ -54,13 +54,13 @@ class NFeTest extends \PHPUnit\Framework\TestCase
         $nfe->setEmitente($emitente);
 
         /* Destinatário */
-        $destinatario = new \NFe\Entity\Destinatario();
+        $destinatario = new \DFe\Entity\Destinatario();
         $destinatario->setNome('Fulano da Silva');
         $destinatario->setCPF('12345678912');
         $destinatario->setEmail('fulano@site.com.br');
         $destinatario->setTelefone('11988220055');
 
-        $endereco = new \NFe\Entity\Endereco();
+        $endereco = new \DFe\Entity\Endereco();
         $endereco->setCEP('01122500');
         $endereco->getMunicipio()
                  ->setNome('Paranavaí')
@@ -80,7 +80,7 @@ class NFeTest extends \PHPUnit\Framework\TestCase
         $nfe->setDestinatario($destinatario);
 
         /* Responsável */
-        $responsavel = new \NFe\Entity\Responsavel();
+        $responsavel = new \DFe\Entity\Responsavel();
         $responsavel->setCNPJ('12345678000123');
         $responsavel->setContato('Empresa LTDA');
         $responsavel->setEmail('contato@empresa.com.br');
@@ -94,11 +94,11 @@ class NFeTest extends \PHPUnit\Framework\TestCase
         $nfe->setResponsavel($responsavel);
 
         /* Produtos */
-        $produto = new \NFe\Entity\Produto();
+        $produto = new \DFe\Entity\Produto();
         $produto->setCodigo(123456);
         $produto->setCodigoBarras('7894900011531');
         $produto->setDescricao('REFRIGERANTE COCA-COLA 2L');
-        $produto->setUnidade(\NFe\Entity\Produto::UNIDADE_UNIDADE);
+        $produto->setUnidade(\DFe\Entity\Produto::UNIDADE_UNIDADE);
         $produto->setPreco(4.99);
         $produto->setQuantidade(1);
         $produto->setNCM('22021000');
@@ -107,22 +107,22 @@ class NFeTest extends \PHPUnit\Framework\TestCase
         $nfe->addProduto($produto);
 
         /* Impostos */
-        $imposto = new \NFe\Entity\Imposto\ICMS\Cobrado();
+        $imposto = new \DFe\Entity\Imposto\ICMS\Cobrado();
         $imposto->fromArray($imposto);
         $imposto->fromArray($imposto->toArray());
         $imposto->fromArray(null);
         $produto->addImposto($imposto);
 
-        $imposto = new \NFe\Entity\Imposto\PIS\Aliquota();
-        $imposto->setTributacao(\NFe\Entity\Imposto\PIS\Aliquota::TRIBUTACAO_NORMAL);
+        $imposto = new \DFe\Entity\Imposto\PIS\Aliquota();
+        $imposto->setTributacao(\DFe\Entity\Imposto\PIS\Aliquota::TRIBUTACAO_NORMAL);
         $imposto->setAliquota(0.65);
         $imposto->fromArray($imposto);
         $imposto->fromArray($imposto->toArray());
         $imposto->fromArray(null);
         $produto->addImposto($imposto);
 
-        $imposto = new \NFe\Entity\Imposto\COFINS\Aliquota();
-        $imposto->setTributacao(\NFe\Entity\Imposto\COFINS\Aliquota::TRIBUTACAO_NORMAL);
+        $imposto = new \DFe\Entity\Imposto\COFINS\Aliquota();
+        $imposto->setTributacao(\DFe\Entity\Imposto\COFINS\Aliquota::TRIBUTACAO_NORMAL);
         $imposto->setAliquota(3.00);
         $imposto->fromArray($imposto);
         $imposto->fromArray($imposto->toArray());
@@ -132,11 +132,11 @@ class NFeTest extends \PHPUnit\Framework\TestCase
         $produto->fromArray($produto->toArray());
         $produto->fromArray(null);
 
-        $produto = new \NFe\Entity\Produto();
+        $produto = new \DFe\Entity\Produto();
         $produto->setCodigo(123456);
         $produto->setCodigoBarras('7894900011523');
         $produto->setDescricao('REFRIGERANTE FANTA LARANJA 2L');
-        $produto->setUnidade(\NFe\Entity\Produto::UNIDADE_UNIDADE);
+        $produto->setUnidade(\DFe\Entity\Produto::UNIDADE_UNIDADE);
         $produto->setPreco(9.00);
         $produto->setQuantidade(2);
         $produto->setDesconto(2.20);
@@ -146,23 +146,23 @@ class NFeTest extends \PHPUnit\Framework\TestCase
         $nfe->addProduto($produto);
 
         /* Impostos */
-        $imposto = new \NFe\Entity\Imposto\ICMS\Cobrado();
+        $imposto = new \DFe\Entity\Imposto\ICMS\Cobrado();
         $imposto->setBase(0.00);
         $imposto->fromArray($imposto);
         $imposto->fromArray($imposto->toArray());
         $imposto->fromArray(null);
         $produto->addImposto($imposto);
 
-        $imposto = new \NFe\Entity\Imposto\PIS\Aliquota();
-        $imposto->setTributacao(\NFe\Entity\Imposto\PIS\Aliquota::TRIBUTACAO_NORMAL);
+        $imposto = new \DFe\Entity\Imposto\PIS\Aliquota();
+        $imposto->setTributacao(\DFe\Entity\Imposto\PIS\Aliquota::TRIBUTACAO_NORMAL);
         $imposto->setAliquota(0.65);
         $imposto->fromArray($imposto);
         $imposto->fromArray($imposto->toArray());
         $imposto->fromArray(null);
         $produto->addImposto($imposto);
 
-        $imposto = new \NFe\Entity\Imposto\COFINS\Aliquota();
-        $imposto->setTributacao(\NFe\Entity\Imposto\COFINS\Aliquota::TRIBUTACAO_NORMAL);
+        $imposto = new \DFe\Entity\Imposto\COFINS\Aliquota();
+        $imposto->setTributacao(\DFe\Entity\Imposto\COFINS\Aliquota::TRIBUTACAO_NORMAL);
         $imposto->setAliquota(3.00);
         $imposto->fromArray($imposto);
         $imposto->fromArray($imposto->toArray());

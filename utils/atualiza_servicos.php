@@ -2,7 +2,7 @@
 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-use NFe\Core\Nota;
+use DFe\Core\Nota;
 use Curl\Curl;
 
 function downloadServicesNFe($url)

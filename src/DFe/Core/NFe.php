@@ -27,7 +27,7 @@
  *
  */
 
-namespace NFe\Core;
+namespace DFe\Core;
 
 /**
  * Classe para validação da nota fiscal eletrônica

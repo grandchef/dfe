@@ -27,11 +27,11 @@
  *
  */
 
-namespace NFe\Task;
+namespace DFe\Task;
 
-use NFe\Core\Nota;
-use NFe\Common\Util;
-use NFe\Exception\ValidationException;
+use DFe\Core\Nota;
+use DFe\Common\Util;
+use DFe\Exception\ValidationException;
 
 class Recibo extends Retorno
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace NFe\Database;
+namespace DFe\Database;
 
-use NFe\Core\Nota;
-use NFe\Task\Envio;
-use NFe\Core\NFCe;
-use NFe\Common\Util;
+use DFe\Core\Nota;
+use DFe\Task\Envio;
+use DFe\Core\NFCe;
+use DFe\Common\Util;
 
 class BancoTest extends \PHPUnit\Framework\TestCase
 {
@@ -13,7 +13,7 @@ class BancoTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $sefaz = \NFe\Core\SEFAZ::getInstance(true);
+        $sefaz = \DFe\Core\SEFAZ::getInstance(true);
         $this->banco = $sefaz->getConfiguracao()->getBanco();
     }
 
@@ -221,7 +221,7 @@ class BancoTest extends \PHPUnit\Framework\TestCase
     {
         global $app;
 
-        $sefaz = \NFe\Core\SEFAZTest::createSEFAZ();
+        $sefaz = \DFe\Core\SEFAZTest::createSEFAZ();
         $sefaz->getConfiguracao()->getCertificado()
             ->setArquivoChavePublica(dirname(dirname(dirname(__DIR__))) . '/docs/certs/public.pem')
             ->setArquivoChavePrivada(dirname(dirname(dirname(__DIR__))) . '/docs/certs/private.pem');

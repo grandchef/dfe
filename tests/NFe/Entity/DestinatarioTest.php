@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
 class DestinatarioTest extends \PHPUnit\Framework\TestCase
 {
@@ -8,18 +8,18 @@ class DestinatarioTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->sefaz = \NFe\Core\SEFAZ::getInstance(true);
+        $this->sefaz = \DFe\Core\SEFAZ::getInstance(true);
     }
 
     public function testDestinatarioFisicoXML()
     {
-        $destinatario = new \NFe\Entity\Destinatario();
+        $destinatario = new \DFe\Entity\Destinatario();
         $destinatario->setNome('Fulano da Silva');
         $destinatario->setCPF('12345678912');
         $destinatario->setEmail('fulano@site.com.br');
         $destinatario->setTelefone('11988220055');
 
-        $endereco = new \NFe\Entity\Endereco();
+        $endereco = new \DFe\Entity\Endereco();
         $endereco->setCEP('01122500');
         $endereco->getMunicipio()
                  ->setNome('Paranavaí')
@@ -62,7 +62,7 @@ class DestinatarioTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/destinatario/testDestinatarioFisicoXML.xml');
 
-        $destinatario = new \NFe\Entity\Destinatario();
+        $destinatario = new \DFe\Entity\Destinatario();
         $destinatario->loadNode($dom_cmp->documentElement);
 
         $xml = $destinatario->getNode();
@@ -74,13 +74,13 @@ class DestinatarioTest extends \PHPUnit\Framework\TestCase
 
     public function testDestinatarioJuridicoXML()
     {
-        $destinatario = new \NFe\Entity\Destinatario();
+        $destinatario = new \DFe\Entity\Destinatario();
         $destinatario->setRazaoSocial('Empresa LTDA');
         $destinatario->setCNPJ('12345678000123');
         $destinatario->setEmail('contato@empresa.com.br');
         $destinatario->setIE('123456789');
 
-        $endereco = new \NFe\Entity\Endereco();
+        $endereco = new \DFe\Entity\Endereco();
         $endereco->setCEP('01122500');
         $endereco->getMunicipio()
                  ->setNome('Paranavaí')
@@ -123,7 +123,7 @@ class DestinatarioTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/destinatario/testDestinatarioJuridicoXML.xml');
 
-        $destinatario = new \NFe\Entity\Destinatario();
+        $destinatario = new \DFe\Entity\Destinatario();
         $destinatario->loadNode($dom_cmp->documentElement);
 
         $xml = $destinatario->getNode();
@@ -135,7 +135,7 @@ class DestinatarioTest extends \PHPUnit\Framework\TestCase
 
     public function testDestinatarioCPFnaNotaXML()
     {
-        $destinatario = new \NFe\Entity\Destinatario();
+        $destinatario = new \DFe\Entity\Destinatario();
         $destinatario->setCPF('12345678912');
         $destinatario->setEndereco(null);
         $destinatario->fromArray($destinatario);
@@ -166,7 +166,7 @@ class DestinatarioTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/destinatario/testDestinatarioCPFnaNotaXML.xml');
 
-        $destinatario = new \NFe\Entity\Destinatario();
+        $destinatario = new \DFe\Entity\Destinatario();
         $destinatario->loadNode($dom_cmp->documentElement);
 
         $xml = $destinatario->getNode();

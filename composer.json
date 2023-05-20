@@ -33,7 +33,7 @@
     },
     "autoload": {
         "psr-4": {
-            "NFe\\": "src/NFe"
+            "DFe\\": "src/DFe"
         },
         "classmap": [
             "src/util"
@@ -41,7 +41,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "NFe\\": "tests/NFe"
+            "DFe\\": "tests/DFe"
         }
     },
     "scripts": {
@@ -52,10 +52,10 @@
             "phpunit --coverage-html storage/coverage"
         ],
         "psr-fix": [
-            "phpcbf --standard=PSR12 src/NFe/ tests/"
+            "phpcbf --standard=PSR12 src/DFe/ tests/"
         ],
         "check-style": [
-            "phpcs --colors --standard=PSR12 src/NFe/ tests/"
+            "phpcs --colors --standard=PSR12 src/DFe/ tests/"
         ],
         "analysis": [
             "phpstan analyse src/"

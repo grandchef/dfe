@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Common;
+namespace DFe\Common;
 
 class CurlSoapTest extends \PHPUnit\Framework\TestCase
 {
@@ -8,7 +8,7 @@ class CurlSoapTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->config = \NFe\Core\SEFAZ::getInstance(true)->getConfiguracao();
+        $this->config = \DFe\Core\SEFAZ::getInstance(true)->getConfiguracao();
     }
 
     public static function assertPostFunction($test, $soap, $data, $xml_name, $resp_name)
@@ -23,24 +23,24 @@ class CurlSoapTest extends \PHPUnit\Framework\TestCase
         $dom->loadXML($data);
 
         // idLote auto gerado, copia para testar
-        if (\NFe\Common\Util::nodeExists($dom_cmp, 'idLote')) {
-            $node_cmp = \NFe\Common\Util::findNode($dom_cmp, 'idLote');
-            $node = \NFe\Common\Util::findNode($dom, 'idLote');
+        if (\DFe\Common\Util::nodeExists($dom_cmp, 'idLote')) {
+            $node_cmp = \DFe\Common\Util::findNode($dom_cmp, 'idLote');
+            $node = \DFe\Common\Util::findNode($dom, 'idLote');
             $node_cmp->nodeValue = $node->nodeValue;
         }
 
         // dhRegEvento auto gerado, copia para testar
-        if (\NFe\Common\Util::nodeExists($dom_cmp, 'dhEvento')) {
-            $node_cmp = \NFe\Common\Util::findNode($dom_cmp, 'dhEvento');
-            $node = \NFe\Common\Util::findNode($dom, 'dhEvento');
+        if (\DFe\Common\Util::nodeExists($dom_cmp, 'dhEvento')) {
+            $node_cmp = \DFe\Common\Util::findNode($dom_cmp, 'dhEvento');
+            $node = \DFe\Common\Util::findNode($dom, 'dhEvento');
             $node_cmp->nodeValue = $node->nodeValue;
             // quando a data do evento muda, a assinatura muda também
-            $node_cmp = \NFe\Common\Util::findNode($dom_cmp, 'DigestValue');
-            $node = \NFe\Common\Util::findNode($dom, 'DigestValue');
+            $node_cmp = \DFe\Common\Util::findNode($dom_cmp, 'DigestValue');
+            $node = \DFe\Common\Util::findNode($dom, 'DigestValue');
             $node_cmp->nodeValue = $node->nodeValue;
             // quando a data do evento muda, a assinatura muda também
-            $node_cmp = \NFe\Common\Util::findNode($dom_cmp, 'SignatureValue');
-            $node = \NFe\Common\Util::findNode($dom, 'SignatureValue');
+            $node_cmp = \DFe\Common\Util::findNode($dom_cmp, 'SignatureValue');
+            $node = \DFe\Common\Util::findNode($dom, 'SignatureValue');
             $node_cmp->nodeValue = $node->nodeValue;
         }
 
@@ -69,7 +69,7 @@ class CurlSoapTest extends \PHPUnit\Framework\TestCase
     public function testHookSendFunction()
     {
         CurlSoap::setPostFunction([$this, 'errorPostFunction']);
-        $this->expectException('\NFe\Exception\NetworkException');
+        $this->expectException('\DFe\Exception\NetworkException');
         $soap = new CurlSoap();
         $soap->send('invalid URL', new \DOMDocument());
         CurlSoap::setPostFunction(null);

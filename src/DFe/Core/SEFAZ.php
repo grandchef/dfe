@@ -27,17 +27,17 @@
  *
  */
 
-namespace NFe\Core;
+namespace DFe\Core;
 
-use NFe\Logger\Log;
-use NFe\Task\Tarefa;
-use NFe\Task\Recibo;
-use NFe\Task\Retorno;
-use NFe\Common\Ajuste;
-use NFe\Task\Autorizacao;
-use NFe\Task\Evento;
-use NFe\Task\Inutilizacao;
-use NFe\Task\Protocolo;
+use DFe\Logger\Log;
+use DFe\Task\Tarefa;
+use DFe\Task\Recibo;
+use DFe\Task\Retorno;
+use DFe\Common\Ajuste;
+use DFe\Task\Autorizacao;
+use DFe\Task\Evento;
+use DFe\Task\Inutilizacao;
+use DFe\Task\Protocolo;
 
 /**
  * Classe que envia uma ou mais notas fiscais para os servidores da sefaz
@@ -52,7 +52,7 @@ class SEFAZ
 
     /**
      * Configurações a serem usadas
-     * @var \NFe\Common\Configuracao
+     * @var \DFe\Common\Configuracao
      */
     private $configuracao;
 
@@ -117,7 +117,7 @@ class SEFAZ
 
     /**
      * Configuração usada atualmente
-     * @return \NFe\Common\Configuracao|null
+     * @return \DFe\Common\Configuracao|null
      */
     public function getConfiguracao()
     {
@@ -126,7 +126,7 @@ class SEFAZ
 
     /**
      * Informa a nova configuração a ser usada
-     * @param \NFe\Common\Configuracao $configuracao
+     * @param \DFe\Common\Configuracao $configuracao
      * @return self
      */
     public function setConfiguracao($configuracao)
@@ -246,7 +246,7 @@ class SEFAZ
                     try {
                         $retorno = $autorizacao->envia($nota, $dom);
                     } catch (\Exception $e) {
-                        $partial_response = $e instanceof \NFe\Exception\IncompleteRequestException;
+                        $partial_response = $e instanceof \DFe\Exception\IncompleteRequestException;
                         if ($partial_response) {
                             $evento->onNotaPendente($nota, $dom, $e);
                         }
@@ -347,7 +347,7 @@ class SEFAZ
     /**
      * Inutiliza um intervalo de números de notas fiscais e insere o resultado no
      * próprio objeto de inutilização
-     * @param \NFe\Task\Inutilizacao $inutilizacao tarefa a ser inutilizada
+     * @param \DFe\Task\Inutilizacao $inutilizacao tarefa a ser inutilizada
      * @return bool se a inutilização foi realizada com sucesso
      */
     public function inutiliza($inutilizacao)

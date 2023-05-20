@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Exception;
+namespace DFe\Exception;
 
 class ValidationExceptionTest extends \PHPUnit\Framework\TestCase
 {

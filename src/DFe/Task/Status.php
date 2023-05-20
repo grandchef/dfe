@@ -27,12 +27,12 @@
  *
  */
 
-namespace NFe\Task;
+namespace DFe\Task;
 
-use NFe\Core\Nota;
-use NFe\Common\Util;
-use NFe\Common\Node;
-use NFe\Entity\Estado;
+use DFe\Core\Nota;
+use DFe\Common\Util;
+use DFe\Common\Node;
+use DFe\Entity\Estado;
 
 /**
  * Status das respostas de envios para os servidores da SEFAZ

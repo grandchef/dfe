@@ -1,6 +1,6 @@
 <?php
 
-namespace NFe\Task;
+namespace DFe\Task;
 
 class TarefaTest extends \PHPUnit\Framework\TestCase
 {
@@ -8,7 +8,7 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->sefaz = \NFe\Core\SEFAZTest::createSEFAZ();
+        $this->sefaz = \DFe\Core\SEFAZTest::createSEFAZ();
     }
 
     public function emptyPostFunction($soap_curl)
@@ -18,7 +18,7 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
 
     public function inutilizadoPostFunction($soap_curl, $url, $data)
     {
-        \NFe\Common\CurlSoapTest::assertPostFunction(
+        \DFe\Common\CurlSoapTest::assertPostFunction(
             $this,
             $soap_curl,
             $data,
@@ -29,7 +29,7 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
 
     public function situacaoPostFunction($soap_curl, $url, $data)
     {
-        \NFe\Common\CurlSoapTest::assertPostFunction(
+        \DFe\Common\CurlSoapTest::assertPostFunction(
             $this,
             $soap_curl,
             $data,
@@ -40,7 +40,7 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
 
     public function canceladoPostFunction($soap_curl, $url, $data)
     {
-        \NFe\Common\CurlSoapTest::assertPostFunction(
+        \DFe\Common\CurlSoapTest::assertPostFunction(
             $this,
             $soap_curl,
             $data,
@@ -51,7 +51,7 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
 
     public function reciboPostFunction($soap_curl, $url, $data)
     {
-        \NFe\Common\CurlSoapTest::assertPostFunction(
+        \DFe\Common\CurlSoapTest::assertPostFunction(
             $this,
             $soap_curl,
             $data,
@@ -62,7 +62,7 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
 
     public function cancelarPostFunction($soap_curl, $url, $data)
     {
-        \NFe\Common\CurlSoapTest::assertPostFunction(
+        \DFe\Common\CurlSoapTest::assertPostFunction(
             $this,
             $soap_curl,
             $data,
@@ -73,7 +73,7 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
 
     public function testTarefaInutilizacao()
     {
-        $data = \NFe\Core\NFCeTest::loadNFCeValidada();
+        $data = \DFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
         $nota->setJustificativa('TESTE DO SISTEMA');
 
@@ -86,17 +86,17 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         $tarefa->setNota($nota);
         $tarefa->setAgente($inutilizacao);
 
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'inutilizadoPostFunction']);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'inutilizadoPostFunction']);
         try {
             $retorno = $tarefa->executa();
             $tarefa->fromArray($tarefa);
             $tarefa->fromArray($tarefa->toArray());
             $tarefa->fromArray(null);
         } catch (\Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
+        \DFe\Common\CurlSoap::setPostFunction(null);
         $inutilizacao = $tarefa->getAgente();
         $this->assertEquals('102', $inutilizacao->getStatus());
         $this->assertEquals('141170000156683', $inutilizacao->getNumero());
@@ -128,7 +128,7 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
 
     public function testTarefaSemInutilizacao()
     {
-        $data = \NFe\Core\NFCeTest::loadNFCeValidada();
+        $data = \DFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
         $nota->setJustificativa('TESTE DO SISTEMA');
 
@@ -136,12 +136,12 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         $tarefa->setAcao(Tarefa::ACAO_INUTILIZAR);
         $tarefa->setNota($nota);
 
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'emptyPostFunction']);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'emptyPostFunction']);
         $this->expectException('\Exception');
         try {
             $tarefa->executa();
         } finally {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
         }
     }
 
@@ -150,15 +150,15 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         $tarefa = new Tarefa();
         $tarefa->setAcao(Tarefa::ACAO_INUTILIZAR);
 
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'inutilizadoPostFunction']);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'inutilizadoPostFunction']);
         try {
             $this->expectException('\Exception');
             $tarefa->executa();
         } catch (\Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
+        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testTarefaInutilizacaoInvalida()
@@ -167,56 +167,56 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         $tarefa->setAcao(Tarefa::ACAO_INUTILIZAR);
         $tarefa->setAgente(new Recibo());
 
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'inutilizadoPostFunction']);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'inutilizadoPostFunction']);
         try {
             $this->expectException('\Exception');
             $tarefa->executa();
         } catch (\Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
+        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testTarefaConsultaSituacao()
     {
-        $data = \NFe\Core\NFCeTest::loadNFCeValidada();
+        $data = \DFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
         $tarefa = new Tarefa();
         $tarefa->setAcao(Tarefa::ACAO_CONSULTAR);
         $tarefa->setNota($nota);
 
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'situacaoPostFunction']);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'situacaoPostFunction']);
         try {
             $retorno = $tarefa->executa();
         } catch (\Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
+        \DFe\Common\CurlSoap::setPostFunction(null);
         $tarefa->toArray(true);
-        $this->assertInstanceOf('\\NFe\\Task\\Protocolo', $nota->getProtocolo());
+        $this->assertInstanceOf('\\DFe\\Task\\Protocolo', $nota->getProtocolo());
         $this->assertEquals('100', $retorno->getStatus());
         $this->assertEquals($nota->getID(), $retorno->getChave());
     }
 
     public function testTarefaConsultaSituacaoCancelado()
     {
-        $data = \NFe\Core\NFCeTest::loadNFCeValidada();
+        $data = \DFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
         $tarefa = new Tarefa();
         $tarefa->setAcao(Tarefa::ACAO_CONSULTAR);
         $tarefa->setNota($nota);
 
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'canceladoPostFunction']);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'canceladoPostFunction']);
         try {
             $retorno = $tarefa->executa();
         } catch (\Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
-        $this->assertInstanceOf('\\NFe\\Task\\Evento', $retorno);
+        \DFe\Common\CurlSoap::setPostFunction(null);
+        $this->assertInstanceOf('\\DFe\\Task\\Evento', $retorno);
         $this->assertEquals('135', $retorno->getStatus());
         $this->assertTrue($retorno->isCancelado());
         $dom = $tarefa->getDocumento();
@@ -235,7 +235,7 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
 
     public function testTarefaConsultaRecibo()
     {
-        $data = \NFe\Core\NFCeTest::loadNFCeValidada();
+        $data = \DFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
         $recibo = new Recibo();
         $recibo->setNumero('411000002567074');
@@ -244,15 +244,15 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         $tarefa->setAgente($recibo);
         $tarefa->setNota($nota);
 
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'reciboPostFunction']);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'reciboPostFunction']);
         try {
             $retorno = $tarefa->executa();
         } catch (\Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
-        $this->assertInstanceOf('\\NFe\\Task\\Protocolo', $nota->getProtocolo());
+        \DFe\Common\CurlSoap::setPostFunction(null);
+        $this->assertInstanceOf('\\DFe\\Task\\Protocolo', $nota->getProtocolo());
         $this->assertEquals('100', $retorno->getStatus());
         $this->assertEquals($nota->getID(), $retorno->getChave());
     }
@@ -262,15 +262,15 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         $tarefa = new Tarefa();
         $tarefa->setAcao(Tarefa::ACAO_CONSULTAR);
 
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'situacaoPostFunction']);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'situacaoPostFunction']);
         try {
             $this->expectException('\Exception');
             $retorno = $tarefa->executa();
         } catch (\Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
+        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testTarefaConsultaInvalida()
@@ -279,35 +279,35 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         $tarefa->setAcao(Tarefa::ACAO_CONSULTAR);
         $tarefa->setAgente(new Inutilizacao());
 
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'situacaoPostFunction']);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'situacaoPostFunction']);
         try {
             $this->expectException('\Exception');
             $retorno = $tarefa->executa();
         } catch (\Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
+        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testTarefaCancelar()
     {
-        $data = \NFe\Core\NFCeTest::loadNFCeAutorizada();
+        $data = \DFe\Core\NFCeTest::loadNFCeAutorizada();
         $nota = $data['nota'];
         $nota->setJustificativa('CANCELAMENTO DE PEDIDO');
         $tarefa = new Tarefa();
         $tarefa->setAcao(Tarefa::ACAO_CANCELAR);
         $tarefa->setNota($nota);
 
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'cancelarPostFunction']);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'cancelarPostFunction']);
         try {
             $retorno = $tarefa->executa();
         } catch (\Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
-        $this->assertInstanceOf('\\NFe\\Task\\Evento', $retorno);
+        \DFe\Common\CurlSoap::setPostFunction(null);
+        $this->assertInstanceOf('\\DFe\\Task\\Evento', $retorno);
         $this->assertEquals('135', $retorno->getStatus());
         $this->assertEquals($nota->getID(), $retorno->getChave());
 
@@ -320,16 +320,16 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         $dom = $tarefa->getDocumento();
 
         // dhRegEvento auto gerado, copia para testar
-        $node_cmp = \NFe\Common\Util::findNode($dom_cmp, 'dhEvento');
-        $node = \NFe\Common\Util::findNode($dom, 'dhEvento');
+        $node_cmp = \DFe\Common\Util::findNode($dom_cmp, 'dhEvento');
+        $node = \DFe\Common\Util::findNode($dom, 'dhEvento');
         $node_cmp->nodeValue = $node->nodeValue;
         // quando a data do evento muda, a assinatura muda também
-        $node_cmp = \NFe\Common\Util::findNode($dom_cmp, 'DigestValue');
-        $node = \NFe\Common\Util::findNode($dom, 'DigestValue');
+        $node_cmp = \DFe\Common\Util::findNode($dom_cmp, 'DigestValue');
+        $node = \DFe\Common\Util::findNode($dom, 'DigestValue');
         $node_cmp->nodeValue = $node->nodeValue;
         // quando a data do evento muda, a assinatura muda também
-        $node_cmp = \NFe\Common\Util::findNode($dom_cmp, 'SignatureValue');
-        $node = \NFe\Common\Util::findNode($dom, 'SignatureValue');
+        $node_cmp = \DFe\Common\Util::findNode($dom_cmp, 'SignatureValue');
+        $node = \DFe\Common\Util::findNode($dom, 'SignatureValue');
         $node_cmp->nodeValue = $node->nodeValue;
 
         if (getenv('TEST_MODE') == 'external') {
@@ -345,35 +345,35 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         $tarefa = new Tarefa();
         $tarefa->setAcao(Tarefa::ACAO_CANCELAR);
 
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'cancelarPostFunction']);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'cancelarPostFunction']);
         try {
             $this->expectException('\Exception');
             $retorno = $tarefa->executa();
         } catch (\Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
+        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testTarefaCancelarNotaNaoAutorizada()
     {
-        $data = \NFe\Core\NFCeTest::loadNFCeValidada();
+        $data = \DFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
         $nota->setJustificativa('CANCELAMENTO DE PEDIDO');
         $tarefa = new Tarefa();
         $tarefa->setAcao(Tarefa::ACAO_CANCELAR);
         $tarefa->setNota($nota);
 
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'cancelarPostFunction']);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'cancelarPostFunction']);
         try {
             $this->expectException('\Exception');
             $retorno = $tarefa->executa();
         } catch (\Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
+        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testTarefaCancelarInvalido()
@@ -382,14 +382,14 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         $tarefa->setAcao(Tarefa::ACAO_CANCELAR);
         $tarefa->setAgente(new Recibo());
 
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'cancelarPostFunction']);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'cancelarPostFunction']);
         try {
             $this->expectException('\Exception');
             $retorno = $tarefa->executa();
         } catch (\Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
+        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 }

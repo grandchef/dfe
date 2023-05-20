@@ -27,10 +27,10 @@
  *
  */
 
-namespace NFe\Database;
+namespace DFe\Database;
 
 use Curl\Curl;
-use NFe\Logger\Log;
+use DFe\Logger\Log;
 
 class IBPT
 {

@@ -27,10 +27,10 @@
  *
  */
 
-namespace NFe\Entity\Imposto\PIS;
+namespace DFe\Entity\Imposto\PIS;
 
-use NFe\Common\Util;
-use NFe\Entity\Imposto;
+use DFe\Common\Util;
+use DFe\Entity\Imposto;
 
 class Aliquota extends Imposto
 {

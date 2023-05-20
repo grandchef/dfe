@@ -27,10 +27,10 @@
  *
  */
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
-use NFe\Common\Node;
-use NFe\Common\Util;
+use DFe\Common\Node;
+use DFe\Common\Util;
 
 class Pagamento implements Node
 {

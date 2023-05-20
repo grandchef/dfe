@@ -27,9 +27,9 @@
  *
  */
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
-use NFe\Common\Util;
+use DFe\Common\Util;
 
 /**
  * Cliente pessoa física ou jurídica que está comprando os produtos e irá

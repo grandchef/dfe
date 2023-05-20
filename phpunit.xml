@@ -10,7 +10,7 @@
 >
   <coverage>
     <include>
-      <directory suffix=".php">src/NFe</directory>
+      <directory suffix=".php">src/DFe</directory>
     </include>
     <report>
       <clover outputFile="build/logs/clover.xml"/>
@@ -18,8 +18,8 @@
     </report>
   </coverage>
   <testsuites>
-    <testsuite name="NFe-API Test Suite">
-      <directory>tests/NFe/</directory>
+    <testsuite name="DFe-API Test Suite">
+      <directory>tests/DFe/</directory>
     </testsuite>
   </testsuites>
   <php>

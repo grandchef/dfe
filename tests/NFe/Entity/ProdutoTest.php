@@ -1,26 +1,26 @@
 <?php
 
-namespace NFe\Entity;
+namespace DFe\Entity;
 
 class ProdutoTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp(): void
     {
-        $sefaz = \NFe\Core\SEFAZ::getInstance(true);
+        $sefaz = \DFe\Core\SEFAZ::getInstance(true);
         $sefaz->getConfiguracao()->getEmitente()->getEndereco()
                          ->getMunicipio()->getEstado()->setUF('PR');
     }
 
     public function testProdutoXML()
     {
-        $produto = new \NFe\Entity\Produto();
+        $produto = new \DFe\Entity\Produto();
         $produto->setItem(1);
         $produto->setPedido(123);
         $produto->setCodigo(123456);
         $produto->setCodigoBarras('7894900011517');
         $produto->setCodigoTributario('7894900011517');
         $produto->setDescricao('REFRIGERANTE COCA-COLA 2L');
-        $produto->setUnidade(\NFe\Entity\Produto::UNIDADE_UNIDADE);
+        $produto->setUnidade(\DFe\Entity\Produto::UNIDADE_UNIDADE);
         $produto->setMultiplicador(1);
         $produto->setPreco(4.50);
         $produto->setQuantidade(2);
@@ -32,7 +32,7 @@ class ProdutoTest extends \PHPUnit\Framework\TestCase
         $produto->setNCM('22021000');
         $produto->setCEST('0300700');
         /* Impostos */
-        $imposto = new \NFe\Entity\Imposto\ICMS\Simples\Cobrado();
+        $imposto = new \DFe\Entity\Imposto\ICMS\Simples\Cobrado();
         $imposto->fromArray($imposto);
         $imposto->fromArray($imposto->toArray());
         $imposto->fromArray(null);
@@ -64,7 +64,7 @@ class ProdutoTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/produto/testProdutoXML.xml');
 
-        $produto = new \NFe\Entity\Produto();
+        $produto = new \DFe\Entity\Produto();
         $produto->loadNode($dom_cmp->documentElement);
 
         $xml = $produto->getNode();
@@ -80,7 +80,7 @@ class ProdutoTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->preserveWhiteSpace = false;
         $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/produto/testProdutoXML.xml');
 
-        $produto = new \NFe\Entity\Produto();
+        $produto = new \DFe\Entity\Produto();
         $produto->loadNode($dom_cmp->documentElement);
         $produto->setNCM('00000009');
 

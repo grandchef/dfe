@@ -27,10 +27,10 @@
  *
  */
 
-namespace NFe\Entity\Transporte;
+namespace DFe\Entity\Transporte;
 
-use NFe\Common\Util;
-use NFe\Entity\Destinatario;
+use DFe\Common\Util;
+use DFe\Entity\Destinatario;
 
 /**
  * Dados da transportadora
@@ -132,7 +132,7 @@ class Transportador extends Destinatario
             $this->setEndereco(null);
             return $element;
         }
-        $endereco = new \NFe\Entity\Endereco();
+        $endereco = new \DFe\Entity\Endereco();
         $endereco->parseDescricao($descricao);
         $endereco->getMunicipio()->setNome(
             Util::loadNode(

@@ -27,16 +27,16 @@
  *
  */
 
-namespace NFe\Entity\Imposto\COFINS\ST;
+namespace DFe\Entity\Imposto\COFINS\ST;
 
-use NFe\Common\Util;
+use DFe\Common\Util;
 
 /**
  * Este grupo só deve ser informado se o produto for sujeito a COFINS por
  * ST, CST = 05, a informação deste grupo não desobriga a informação do
  * grupo COFINS.
  */
-class Aliquota extends \NFe\Entity\Imposto\COFINS\Aliquota
+class Aliquota extends \DFe\Entity\Imposto\COFINS\Aliquota
 {
     public function __construct($aliquota = [])
     {

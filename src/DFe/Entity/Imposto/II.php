@@ -27,10 +27,10 @@
  *
  */
 
-namespace NFe\Entity\Imposto;
+namespace DFe\Entity\Imposto;
 
-use NFe\Common\Util;
-use NFe\Entity\Imposto;
+use DFe\Common\Util;
+use DFe\Entity\Imposto;
 
 /**
  * Funcionalidade para gerar as informações do II do item de produto da

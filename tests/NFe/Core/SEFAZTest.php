@@ -1,13 +1,13 @@
 <?php
 
-namespace NFe\Core;
+namespace DFe\Core;
 
-use NFe\Database\Estatico;
-use NFe\Logger\Log;
-use NFe\Task\Inutilizacao;
-use NFe\Task\Tarefa;
+use DFe\Database\Estatico;
+use DFe\Logger\Log;
+use DFe\Task\Inutilizacao;
+use DFe\Task\Tarefa;
 
-class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Evento
+class SEFAZTest extends \PHPUnit\Framework\TestCase implements \DFe\Common\Evento
 {
     protected function setUp(): void
     {
@@ -20,7 +20,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
     }
 
     /**
-     * @return \NFe\Core\SEFAZ default instance
+     * @return \DFe\Core\SEFAZ default instance
      */
     public static function createSEFAZ()
     {
@@ -32,7 +32,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
         SEFAZ::getInstance()->getConfiguracao()->setCertificado(null);
         SEFAZ::getInstance()->setConfiguracao(null);
         gc_collect_cycles();
-        $emitente = \NFe\Entity\EmitenteTest::createEmitente();
+        $emitente = \DFe\Entity\EmitenteTest::createEmitente();
         $sefaz = SEFAZ::getInstance(true);
         $sefaz->getConfiguracao()
             ->getCertificado()
@@ -64,7 +64,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
 
     public function autorizadoPostFunction($soap_curl, $url, $data)
     {
-        \NFe\Task\AutorizacaoTest::processaPostFunction(
+        \DFe\Task\AutorizacaoTest::processaPostFunction(
             $this,
             $soap_curl,
             $url,
@@ -78,41 +78,41 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
     {
         $sefaz = self::createSEFAZ();
         $sefaz->getConfiguracao()->setEvento($this);
-        $nota = \NFe\Core\NFCeTest::createNFCe($sefaz);
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'autorizadoPostFunction']);
+        $nota = \DFe\Core\NFCeTest::createNFCe($sefaz);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'autorizadoPostFunction']);
         try {
             $sefaz->setNotas([]);
             $sefaz->addNota($nota);
             $this->assertEquals(1, $sefaz->autoriza());
         } catch (Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
+        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function networkErrorPostFunction($soap_curl, $url, $data)
     {
-        throw new \NFe\Exception\IncompleteRequestException('Suposta falha parcial de rede', 500);
+        throw new \DFe\Exception\IncompleteRequestException('Suposta falha parcial de rede', 500);
     }
 
     public function testAutorizaContingencia()
     {
         $sefaz = self::createSEFAZ();
         $sefaz->getConfiguracao()->setEvento($this);
-        $nota = \NFe\Core\NFCeTest::createNFCe($sefaz);
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'networkErrorPostFunction']);
+        $nota = \DFe\Core\NFCeTest::createNFCe($sefaz);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'networkErrorPostFunction']);
         try {
             $sefaz->setNotas([]);
             $sefaz->addNota($nota);
             $this->assertEquals(1, $sefaz->autoriza());
         } catch (Exception $e) {
             $sefaz->getConfiguracao()->setOffline(null);
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
         $sefaz->getConfiguracao()->setOffline(null);
-        \NFe\Common\CurlSoap::setPostFunction(null);
+        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testConsulta()
@@ -130,7 +130,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
 
     public function inutilizadoPostFunction($soap_curl, $url, $data)
     {
-        \NFe\Common\CurlSoapTest::assertPostFunction(
+        \DFe\Common\CurlSoapTest::assertPostFunction(
             $this,
             $soap_curl,
             $data,
@@ -143,15 +143,15 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
     {
         $sefaz = self::createSEFAZ();
         $sefaz->getConfiguracao()->setEvento($this);
-        $inutilizacao = \NFe\Task\InutilizacaoTest::criaInutilizacao();
-        \NFe\Common\CurlSoap::setPostFunction([$this, 'inutilizadoPostFunction']);
+        $inutilizacao = \DFe\Task\InutilizacaoTest::criaInutilizacao();
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'inutilizadoPostFunction']);
         try {
             $this->assertTrue($sefaz->inutiliza($inutilizacao));
         } catch (Exception $e) {
-            \NFe\Common\CurlSoap::setPostFunction(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
         }
-        \NFe\Common\CurlSoap::setPostFunction(null);
+        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testProcessa()
@@ -175,7 +175,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
      */
     public function onNotaGerada($nota, $xml)
     {
-        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste = new \DFe\Common\Ajuste();
         $ajuste->onNotaGerada($nota, $xml);
     }
 
@@ -184,7 +184,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
      */
     public function onNotaAssinada($nota, $xml)
     {
-        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste = new \DFe\Common\Ajuste();
         $ajuste->onNotaAssinada($nota, $xml);
     }
 
@@ -193,7 +193,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
      */
     public function onNotaValidada($nota, $xml)
     {
-        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste = new \DFe\Common\Ajuste();
         $ajuste->onNotaValidada($nota, $xml);
     }
 
@@ -202,7 +202,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
      */
     public function onNotaEnviando($nota, $xml)
     {
-        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste = new \DFe\Common\Ajuste();
         $ajuste->onNotaEnviando($nota, $xml);
     }
 
@@ -213,7 +213,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
      */
     public function onNotaContingencia($nota, $offline, $exception)
     {
-        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste = new \DFe\Common\Ajuste();
         $ajuste->onNotaContingencia($nota, $offline, $exception);
     }
 
@@ -222,7 +222,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
      */
     public function onNotaAutorizada($nota, $xml, $retorno)
     {
-        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste = new \DFe\Common\Ajuste();
         $ajuste->onNotaAutorizada($nota, $xml, $retorno);
     }
 
@@ -232,7 +232,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
      */
     public function onNotaCompleto($nota, $xml)
     {
-        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste = new \DFe\Common\Ajuste();
         $ajuste->onNotaCompleto($nota, $xml);
     }
 
@@ -242,7 +242,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
      */
     public function onNotaRejeitada($nota, $xml, $retorno)
     {
-        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste = new \DFe\Common\Ajuste();
         $ajuste->onNotaRejeitada($nota, $xml, $retorno);
     }
 
@@ -252,7 +252,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
      */
     public function onNotaDenegada($nota, $xml, $retorno)
     {
-        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste = new \DFe\Common\Ajuste();
         $ajuste->onNotaDenegada($nota, $xml, $retorno);
     }
 
@@ -263,7 +263,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
      */
     public function onNotaPendente($nota, $xml, $exception)
     {
-        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste = new \DFe\Common\Ajuste();
         $ajuste->onNotaPendente($nota, $xml, $exception);
     }
 
@@ -273,7 +273,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
      */
     public function onNotaProcessando($nota, $xml, $retorno)
     {
-        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste = new \DFe\Common\Ajuste();
         $ajuste->onNotaProcessando($nota, $xml, $retorno);
     }
 
@@ -282,7 +282,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
      */
     public function onNotaCancelada($nota, $xml, $retorno)
     {
-        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste = new \DFe\Common\Ajuste();
         $ajuste->onNotaCancelada($nota, $xml, $retorno);
     }
 
@@ -291,7 +291,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
      */
     public function onNotaErro($nota, $exception)
     {
-        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste = new \DFe\Common\Ajuste();
         $ajuste->onNotaErro($nota, $exception);
     }
 
@@ -300,7 +300,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
      */
     public function onInutilizado($inutilizacao, $xml)
     {
-        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste = new \DFe\Common\Ajuste();
         $ajuste->onInutilizado($inutilizacao, $xml);
 
         $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/task/testInutilizaInutilizadoProtocolo.xml';
@@ -315,7 +315,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
      */
     public function onTarefaExecutada($tarefa, $retorno)
     {
-        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste = new \DFe\Common\Ajuste();
         $ajuste->onTarefaExecutada($tarefa, $retorno);
 
         if ($tarefa->getAcao() == Tarefa::ACAO_INUTILIZAR) {
@@ -333,7 +333,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \NFe\Common\Event
      */
     public function onTarefaErro($tarefa, $exception)
     {
-        $ajuste = new \NFe\Common\Ajuste();
+        $ajuste = new \DFe\Common\Ajuste();
         $ajuste->onTarefaErro($tarefa, $exception);
         throw $exception;
     }

@@ -27,12 +27,12 @@
  *
  */
 
-namespace NFe\Task;
+namespace DFe\Task;
 
 use DOMElement;
 use DOMDocument;
-use NFe\Core\Nota;
-use NFe\Common\Util;
+use DFe\Core\Nota;
+use DFe\Common\Util;
 
 /**
  * Protocolo de autorização da nota, é retornado pela autorização, recibo
