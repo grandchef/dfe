@@ -2176,9 +2176,9 @@ abstract class Nota implements Node
         $dom->loadXML($dom->saveXML());
         $xsd_path = __DIR__ . '/schema';
         if (is_null($this->getProtocolo())) {
-            $xsd_file = $xsd_path . '/nfe_v' . self::VERSAO . '.xsd';
+            $xsd_file = $xsd_path . '/NFe/v4.0.0/nfe_v' . self::VERSAO . '.xsd';
         } else {
-            $xsd_file = $xsd_path . '/procNFe_v' . self::VERSAO . '.xsd';
+            $xsd_file = $xsd_path . '/NFe/v4.0.0/procNFe_v' . self::VERSAO . '.xsd';
         }
         if (!file_exists($xsd_file)) {
             throw new \Exception(sprintf('O arquivo "%s" de esquema XSD não existe!', $xsd_file), 404);

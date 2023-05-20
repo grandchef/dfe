@@ -283,7 +283,7 @@ class Recibo extends Retorno
     {
         $dom->loadXML($dom->saveXML());
         $xsd_path = dirname(__DIR__) . '/Core/schema';
-        $xsd_file = $xsd_path . '/consReciNFe_v' . $this->getVersao() . '.xsd';
+        $xsd_file = $xsd_path . '/NFe/v4.0.0/consReciNFe_v' . $this->getVersao() . '.xsd';
         if (!file_exists($xsd_file)) {
             throw new \Exception(sprintf('O arquivo "%s" de esquema XSD não existe!', $xsd_file), 404);
         }

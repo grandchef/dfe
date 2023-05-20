@@ -791,7 +791,7 @@ class Evento extends Retorno
     {
         $dom->loadXML($dom->saveXML());
         $xsd_path = dirname(__DIR__) . '/Core/schema';
-        $xsd_file = $xsd_path . '/cancelamento/eventoCancNFe_v1.00.xsd';
+        $xsd_file = $xsd_path . '/NFe/Cancelamento/v1.0.0/eventoCancNFe_v1.00.xsd';
         if (!file_exists($xsd_file)) {
             throw new \Exception(sprintf('O arquivo "%s" de esquema XSD não existe!', $xsd_file), 404);
         }
