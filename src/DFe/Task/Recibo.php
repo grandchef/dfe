@@ -5,7 +5,7 @@
  *
  * Copyright (c) 2016 GrandChef Desenvolvimento de Sistemas LTDA
  *
- * @author Francimar Alves <mazinsw@gmail.com>
+ * @author Equipe GrandChef <desenvolvimento@grandchef.com.br>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal

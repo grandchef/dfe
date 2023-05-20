@@ -1,5 +1,5 @@
-# DFe-API
-## Bliblioteca para geração, transmissão e tratamento de eventos de notas fiscais eletrônicas
+# DFe
+## Framework para geração, transmissão e tratamento de eventos de notas fiscais eletrônicas
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Build Status][ico-travis]][link-travis]
@@ -7,7 +7,7 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-###### Essa biblioteca permite a geração, transmissão e tratamento de eventos de notas fiscais eletrônicas do Brasil
+###### Essa bilioteca permite a geração, transmissão e tratamento de eventos de notas fiscais eletrônicas do Brasil
 
 ## Vantagens
 - Código bem estruturado e bem reaproveitado que permite a fácil manutenção
@@ -29,7 +29,7 @@ Você precisará do [Composer][link-composer] para instalar essa biblioteca.
 Execute o comando abaixo na pasta do seu projeto
 
 ```sh
-composer require mazinsw/nfe-api
+composer require grandchef/dfe
 ```
 
 ## Manutenção
@@ -66,15 +66,15 @@ Caso tenha problemas ao utilizar a biblioteca, acesse o grupo no Discord: https:
 ## Licença
 Por favor veja o [arquivo de licença](/LICENSE.txt) para mais informações.
 
-[ico-version]: https://poser.pugx.org/mazinsw/nfe-api/version
-[ico-travis]: https://api.travis-ci.org/mazinsw/nfe-api.svg
-[ico-scrutinizer]: https://scrutinizer-ci.com/g/mazinsw/nfe-api/badges/coverage.png
-[ico-code-quality]: https://scrutinizer-ci.com/g/mazinsw/nfe-api/badges/quality-score.png
-[ico-downloads]: https://poser.pugx.org/mazinsw/nfe-api/d/total.svg
+[ico-version]: https://poser.pugx.org/grandchef/dfe/version
+[ico-travis]: https://api.travis-ci.org/grandchef/dfe.svg
+[ico-scrutinizer]: https://scrutinizer-ci.com/g/grandchef/dfe/badges/coverage.png
+[ico-code-quality]: https://scrutinizer-ci.com/g/grandchef/dfe/badges/quality-score.png
+[ico-downloads]: https://poser.pugx.org/grandchef/dfe/d/total.svg
 
-[link-packagist]: https://packagist.org/packages/mazinsw/nfe-api
-[link-travis]: https://travis-ci.org/mazinsw/nfe-api
-[link-scrutinizer]: https://scrutinizer-ci.com/g/mazinsw/nfe-api/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/mazinsw/nfe-api
-[link-downloads]: https://packagist.org/packages/mazinsw/nfe-api
+[link-packagist]: https://packagist.org/packages/grandchef/dfe
+[link-travis]: https://travis-ci.org/grandchef/dfe
+[link-scrutinizer]: https://scrutinizer-ci.com/g/grandchef/dfe/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/grandchef/dfe
+[link-downloads]: https://packagist.org/packages/grandchef/dfe
 [link-composer]: https://getcomposer.org

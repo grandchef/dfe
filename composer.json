@@ -1,15 +1,15 @@
 {
-    "name": "mazinsw/nfe-api",
+    "name": "grandchef/dfe",
     "type": "library",
-    "description": "API para geração e envio de notas fiscais eletrônicas brasileiras",
-    "keywords": ["nfe","nfce"],
-    "homepage": "https://github.com/mazinsw/nfe-api",
+    "description": "Framework para geração e envio de notas fiscais eletrônicas brasileiras",
+    "keywords": ["nfe","nfce", "cfe"],
+    "homepage": "https://github.com/grandchef/dfe",
     "license": "MIT",
     "authors": [
         {
-            "name": "Francimar Alves",
-            "email": "mazinsw@gmail.com",
-            "homepage": "https://www.facebook.com/mazinsw",
+            "name": "Equipe GrandChef",
+            "email": "desenvolvimento@grandchef.com.br",
+            "homepage": "https://www.grandchef.com.br",
             "role": "Developer"
         }
     ],

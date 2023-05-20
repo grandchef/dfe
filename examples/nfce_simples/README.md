@@ -12,8 +12,8 @@ Em cada evento você poderá salvar o XML e atualizar o status da nota no banco 
 Há dois tipos de objetos processados pela biblioteca, a Nota e a Tarefa. As notas devem ser criadas nos eventos ```\DFe\Database\Estatico::getNotasAbertas``` e ```\DFe\Database\Estatico::getNotasPendentes```, já as tarefas devem ser criadas no evento ```\DFe\Database\Estatico::getNotasTarefas``` e são responsáveis por inutilizar numerações, realizar cancelamento e consultar notas.
 
 ### Emitindo uma NFC-e
-Para emitir uma NFC-e, iremos usar o exemplo da pasta [examples/nfce_simples](/mazinsw/nfe-api/tree/master/examples/nfce_simples)
-1. Faça o clone dessa biblioteca pelo comando ```git clone https://github.com/mazinsw/nfe-api.git``` ou baixe o ZIP e faça a descompactação.
+Para emitir uma NFC-e, iremos usar o exemplo da pasta [examples/nfce_simples](/grandchef/dfe/tree/master/examples/nfce_simples)
+1. Faça o clone dessa biblioteca pelo comando ```git clone https://github.com/grandchef/dfe.git``` ou baixe o ZIP e faça a descompactação.
 2. Entre na pasta clonada ou descompactada e rode o comando ```composer install```
 3. Crie a pasta ```storage/certs``` e cole seu certificado nela com o nome ```certificado.pfx```
 4. Entre na pasta ```examples/nfce_simples``` e altere o arquivo ```index.php``` preenchendo os campos ```$senha_certificado```, ```$contribuinte```, ```$endereco```, ```$emitente``` e salve o arquivo.
