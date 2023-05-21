@@ -30,7 +30,7 @@ class Util
      */
     public static function toCurrency($value, $places = 2)
     {
-        return number_format($value, $places, '.', '');
+        return number_format($value ?: 0, $places, '.', '');
     }
 
     /**
@@ -42,7 +42,7 @@ class Util
      */
     public static function toFloat($value, $places = 4)
     {
-        return number_format($value, $places, '.', '');
+        return number_format($value ?: 0, $places, '.', '');
     }
 
     /**
@@ -262,7 +262,7 @@ class Util
         } else {
             $node = $element->insertBefore($dom->createElement($name), $before);
         }
-        $node->appendChild($dom->createTextNode($text));
+        $node->appendChild($dom->createTextNode($text ?? ''));
         return $node;
     }
 
@@ -292,7 +292,7 @@ class Util
         return ($list->length > 0) || ($element->nodeName == $name);
     }
 
-    public static function findNode($element, $name, $exception = null)
+    public static function findNode(\DOMElement $element, string $name, ?string $exception = null): \DOMElement
     {
         if ($element->nodeName == $name) {
             return $element;
@@ -300,7 +300,7 @@ class Util
         $list = $element->getElementsByTagName($name);
         if ($list->length == 0) {
             if (is_null($exception)) {
-                $exception = 'Node "' . $name . '" not found on element "' . $element->nodeName . '"';
+                $exception = 'Tag "' . $name . '" não encontrada no bloco "' . $element->nodeName . '"';
             }
             throw new \Exception($exception, 404);
         }

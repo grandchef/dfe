@@ -56,6 +56,6 @@ class CertificadoTest extends \PHPUnit\Framework\TestCase
         } catch (\Exception $e) {
         }
         $this->expectException('\Exception');
-        $certificado->loadNode(null);
+        $certificado->loadNode($certificado->getNode());
     }
 }

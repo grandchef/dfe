@@ -81,7 +81,7 @@ class Cobrado extends Generico
         return $this;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $element = parent::getNode(is_null($name) ? 'ICMSSN500' : $name);
         $dom = $element->ownerDocument;
@@ -93,9 +93,9 @@ class Cobrado extends Generico
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'ICMSSN500' : $name;
+        $name ??= 'ICMSSN500';
         $element = parent::loadNode($element, $name);
         $this->setBase(Util::loadNode($element, 'vBCSTRet'));
         $this->setValor(Util::loadNode($element, 'vICMSSTRet'));

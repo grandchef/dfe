@@ -24,23 +24,23 @@ class CurlSoapTest extends \PHPUnit\Framework\TestCase
 
         // idLote auto gerado, copia para testar
         if (\DFe\Common\Util::nodeExists($dom_cmp, 'idLote')) {
-            $node_cmp = \DFe\Common\Util::findNode($dom_cmp, 'idLote');
-            $node = \DFe\Common\Util::findNode($dom, 'idLote');
+            $node_cmp = \DFe\Common\Util::findNode($dom_cmp->documentElement, 'idLote');
+            $node = \DFe\Common\Util::findNode($dom->documentElement, 'idLote');
             $node_cmp->nodeValue = $node->nodeValue;
         }
 
         // dhRegEvento auto gerado, copia para testar
         if (\DFe\Common\Util::nodeExists($dom_cmp, 'dhEvento')) {
-            $node_cmp = \DFe\Common\Util::findNode($dom_cmp, 'dhEvento');
-            $node = \DFe\Common\Util::findNode($dom, 'dhEvento');
+            $node_cmp = \DFe\Common\Util::findNode($dom_cmp->documentElement, 'dhEvento');
+            $node = \DFe\Common\Util::findNode($dom->documentElement, 'dhEvento');
             $node_cmp->nodeValue = $node->nodeValue;
             // quando a data do evento muda, a assinatura muda também
-            $node_cmp = \DFe\Common\Util::findNode($dom_cmp, 'DigestValue');
-            $node = \DFe\Common\Util::findNode($dom, 'DigestValue');
+            $node_cmp = \DFe\Common\Util::findNode($dom_cmp->documentElement, 'DigestValue');
+            $node = \DFe\Common\Util::findNode($dom->documentElement, 'DigestValue');
             $node_cmp->nodeValue = $node->nodeValue;
             // quando a data do evento muda, a assinatura muda também
-            $node_cmp = \DFe\Common\Util::findNode($dom_cmp, 'SignatureValue');
-            $node = \DFe\Common\Util::findNode($dom, 'SignatureValue');
+            $node_cmp = \DFe\Common\Util::findNode($dom_cmp->documentElement, 'SignatureValue');
+            $node = \DFe\Common\Util::findNode($dom->documentElement, 'SignatureValue');
             $node_cmp->nodeValue = $node->nodeValue;
         }
 

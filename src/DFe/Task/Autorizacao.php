@@ -74,10 +74,10 @@ class Autorizacao extends Retorno
         $dom_lote = $this->validar($xml_content);
         $envio->setConteudo($dom_lote);
         $resp = $envio->envia();
-        $this->loadNode($resp);
+        $this->loadNode($resp->documentElement);
         if ($this->isProcessado()) {
             $protocolo = new Protocolo();
-            $protocolo->loadNode($resp);
+            $protocolo->loadNode($resp->documentElement);
             if ($protocolo->isAutorizado()) {
                 $nota->setProtocolo($protocolo);
             }
@@ -85,7 +85,7 @@ class Autorizacao extends Retorno
         } elseif ($this->isRecebido()) {
             $recibo = new Recibo($this->toArray());
             $recibo->setModelo($nota->getModelo());
-            $recibo->loadNode($resp, Recibo::INFO_TAGNAME);
+            $recibo->loadNode($resp->documentElement, Recibo::INFO_TAGNAME);
             return $recibo;
         } elseif ($this->isParalisado()) {
             $config = SEFAZ::getInstance()->getConfiguracao();
@@ -95,7 +95,7 @@ class Autorizacao extends Retorno
         return $this;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
         $tag = is_null($name) ? 'retEnviNFe' : $name;
         $element = parent::loadNode($element, $tag);

@@ -46,7 +46,7 @@ class Substituto extends Cobrado
         return $this;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $element = parent::getNode(is_null($name) ? 'ICMSST' : $name);
         $dom = $element->ownerDocument;
@@ -55,9 +55,9 @@ class Substituto extends Cobrado
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'ICMSST' : $name;
+        $name ??= 'ICMSST';
         $element = parent::loadNode($element, $name);
         $this->getNormal()->setBase(
             Util::loadNode(

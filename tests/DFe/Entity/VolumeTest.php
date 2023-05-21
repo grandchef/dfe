@@ -68,12 +68,12 @@ class VolumeTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/volume/testVolumeSemPesoXML.xml');
 
         $volume = new \DFe\Entity\Volume();
-        $element = $volume->loadNode($dom_cmp->documentElement);
+        $volume->loadNode($dom_cmp->documentElement);
 
         $xml = $volume->getNode();
         $dom = $xml->ownerDocument;
 
-        $xml_cmp = $dom_cmp->saveXML($element);
+        $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
         $this->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($xml));
     }
 
@@ -85,6 +85,6 @@ class VolumeTest extends \PHPUnit\Framework\TestCase
 
         $volume = new \DFe\Entity\Volume();
         $this->expectException('\Exception');
-        $element = $volume->loadNode($dom_cmp->documentElement);
+        $volume->loadNode($dom_cmp->documentElement);
     }
 }

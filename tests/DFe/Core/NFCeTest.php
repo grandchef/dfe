@@ -445,7 +445,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $dom_cmp = self::loadNFCeXML();
 
         $nfce = new \DFe\Core\NFCe();
-        $nfce->loadNode($dom_cmp);
+        $nfce->loadNode($dom_cmp->documentElement);
 
         $xml = $nfce->getNode();
         $dom = $xml->ownerDocument;

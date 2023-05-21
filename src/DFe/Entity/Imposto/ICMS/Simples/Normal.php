@@ -43,7 +43,7 @@ class Normal extends \DFe\Entity\Imposto\ICMS\Normal
         return $this;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name) ? 'ICMSSN101' : $name);
@@ -54,16 +54,10 @@ class Normal extends \DFe\Entity\Imposto\ICMS\Normal
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'ICMSSN101' : $name;
-        if ($element->nodeName != $name) {
-            $_fields = $element->getElementsByTagName($name);
-            if ($_fields->length == 0) {
-                throw new \Exception('Tag "' . $name . '" não encontrada', 404);
-            }
-            $element = $_fields->item(0);
-        }
+        $name ??= 'ICMSSN101';
+        $element = Util::findNode($element, $name);
         $this->setOrigem(
             Util::loadNode(
                 $element,

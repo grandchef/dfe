@@ -103,7 +103,7 @@ class Tributo extends Imposto
         return $this;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name) ? 'retTransp' : $name);
@@ -122,16 +122,10 @@ class Tributo extends Imposto
     }
 
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'retTransp' : $name;
-        if ($element->nodeName != $name) {
-            $_fields = $element->getElementsByTagName($name);
-            if ($_fields->length == 0) {
-                throw new \Exception('Tag "' . $name . '" do Tributo não encontrada', 404);
-            }
-            $element = $_fields->item(0);
-        }
+        $name ??= 'retTransp';
+        $element = Util::findNode($element, $name);
         $this->setServico(
             Util::loadNode(
                 $element,

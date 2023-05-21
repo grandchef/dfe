@@ -159,23 +159,23 @@ $[field.each(option)]
 $[field.end]
         }
 $[field.else.if(integer)]
-        if (trim($$[field.unix]) != '') {
+        if (!empty($$[field.unix])) {
             $$[field.unix] = intval($$[field.unix]);
         }
 $[field.else.if(currency)]
-        if (trim($$[field.unix]) != '') {
+        if (!empty($$[field.unix])) {
             $$[field.unix] = floatval($$[field.unix]);
         }
 $[field.else.if(float|double)]
-        if (trim($$[field.unix]) != '') {
+        if (!empty($$[field.unix])) {
             $$[field.unix] = floatval($$[field.unix]);
         }
 $[field.else.if(datetime)]
-        if ($[field.if(null)]trim($$[field.unix]) != '' && $[field.end]!is_numeric($$[field.unix])) {
+        if ($[field.if(null)]!empty($$[field.unix]) && $[field.end]!is_numeric($$[field.unix])) {
             $$[field.unix] = strtotime($$[field.unix]);
         }
 $[field.else.if(boolean)]
-        if ($[field.if(null)]trim($$[field.unix]) != '' && $[field.end]is_bool($$[field.unix])) {
+        if ($[field.if(null)]!empty($$[field.unix]) && $[field.end]is_bool($$[field.unix])) {
             $$[field.unix] = $$[field.unix] ? 'Y' : 'N';
         }
 $[field.end]
@@ -274,7 +274,7 @@ $[field.end]
      * @param string $name Nome do nó que será criado
      * @return DOMElement Nó que contém todos os campos da classe
      */
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
 $[table.if(inherited)]
         $element = parent::getNode(is_null($name) ? '$[tAble.style]' : $name);
@@ -316,19 +316,13 @@ $[field.end]
      * @param string $name Nome do nó que será carregado
      * @return DOMElement Instância do nó que foi carregado
      */
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? '$[tAble.style]' : $name;
+        $name ??= '$[tAble.style]';
 $[table.if(inherited)]
         $element = parent::loadNode($element, $name);
 $[table.else]
-        if ($element->nodeName != $name) {
-            $_fields = $element->getElementsByTagName($name);
-            if ($_fields->length == 0) {
-                throw new \Exception("Tag \"$name\" d$[table.gender] $[Table.norm] não encontrada", 404);
-            }
-            $element = $_fields->item(0);
-        }
+        $element = Util::findNode($element, $name);
 $[table.end]
 $[field.each(all)]
 $[field.if(descriptor)]

@@ -43,7 +43,7 @@ class Aliquota extends \DFe\Entity\Imposto\COFINS\Aliquota
         return $this;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $element = parent::getNode(is_null($name) ? 'COFINSST' : $name);
         $item = $element->getElementsByTagName('CST')->item(0);
@@ -51,16 +51,10 @@ class Aliquota extends \DFe\Entity\Imposto\COFINS\Aliquota
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'COFINSST' : $name;
-        if ($element->nodeName != $name) {
-            $_fields = $element->getElementsByTagName($name);
-            if ($_fields->length == 0) {
-                throw new \Exception('Tag "' . $name . '" não encontrada', 404);
-            }
-            $element = $_fields->item(0);
-        }
+        $name ??= 'COFINSST';
+        $element = Util::findNode($element, $name);
         $this->setBase(
             Util::loadNode(
                 $element,

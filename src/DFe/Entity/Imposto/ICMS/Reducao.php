@@ -37,7 +37,7 @@ class Reducao extends Normal
 
     public function setReducao($reducao)
     {
-        if (trim($reducao) != '') {
+        if (!empty($reducao)) {
             $reducao = floatval($reducao);
         }
         $this->reducao = $reducao;
@@ -81,7 +81,7 @@ class Reducao extends Normal
         return $this;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $element = parent::getNode(is_null($name) ? 'ICMS20' : $name);
         $dom = $element->ownerDocument;
@@ -89,9 +89,9 @@ class Reducao extends Normal
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'ICMS20' : $name;
+        $name ??= 'ICMS20';
         $element = parent::loadNode($element, $name);
         $this->setReducao(
             Util::loadNode(

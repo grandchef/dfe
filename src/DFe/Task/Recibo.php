@@ -195,12 +195,12 @@ class Recibo extends Retorno
         $dom = $this->validar($dom);
         $envio->setConteudo($dom);
         $resp = $envio->envia();
-        $this->loadNode($resp);
+        $this->loadNode($resp->documentElement);
         if (!$this->isProcessado()) {
             return $this;
         }
         $protocolo = new Protocolo();
-        $protocolo->loadNode($resp);
+        $protocolo->loadNode($resp->documentElement);
         return $protocolo;
     }
 
@@ -218,7 +218,7 @@ class Recibo extends Retorno
         return $retorno;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name) ? 'consReciNFe' : $name);
@@ -233,9 +233,9 @@ class Recibo extends Retorno
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'retConsReciNFe' : $name;
+        $name ??= 'retConsReciNFe';
         if ($name == self::INFO_TAGNAME) {
             $_fields = $element->getElementsByTagName($name);
             if ($_fields->length == 0) {

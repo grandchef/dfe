@@ -340,7 +340,7 @@ class Envio
      * @param  string $name Nome do nó que será criado
      * @return DOMElement|DOMDocument   Nó que contém todos os campos da classe
      */
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name) ? 'nfeDadosMsg' : $name);
@@ -361,7 +361,7 @@ class Envio
         }
         $xml = str_replace('<Conteudo>0</Conteudo>', $xml, $dom->saveXML($dom->documentElement));
         $dom->loadXML($xml);
-        return $dom;
+        return $dom->documentElement;
     }
 
     /**
@@ -384,7 +384,7 @@ class Envio
         $soap->setTimeout(ceil($config->getTempoLimite() * 1.5));
         $soap->setCertificate($config->getArquivoChavePublica());
         $soap->setPrivateKey($config->getArquivoChavePrivada());
-        $dom = $this->getNode();
+        $dom = $this->getNode()->ownerDocument;
         try {
             $response = $soap->send($url, $dom);
             return $response;

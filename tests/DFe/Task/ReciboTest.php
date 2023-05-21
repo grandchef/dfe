@@ -3,6 +3,7 @@
 namespace DFe\Task;
 
 use DFe\Core\Nota;
+use DFe\Exception\ValidationException;
 
 class ReciboTest extends \PHPUnit\Framework\TestCase
 {
@@ -78,11 +79,9 @@ class ReciboTest extends \PHPUnit\Framework\TestCase
             $recibo->fromArray($recibo);
             $recibo->fromArray($recibo->toArray());
             $recibo->fromArray(null);
-        } catch (Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
 
         if (getenv('TEST_MODE') == 'override') {
             $dom = $nota->addProtocolo($dom);
@@ -105,11 +104,9 @@ class ReciboTest extends \PHPUnit\Framework\TestCase
             $recibo = new Recibo();
             $recibo->setNumero('411000002567074');
             $retorno = $recibo->consulta($nota);
-        } catch (Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
         $this->assertInstanceOf('\\DFe\\Task\\Protocolo', $retorno);
         $this->assertEquals('785', $retorno->getStatus());
     }
@@ -123,11 +120,9 @@ class ReciboTest extends \PHPUnit\Framework\TestCase
             $recibo = new Recibo();
             $recibo->setNumero('411000002567074');
             $retorno = $recibo->consulta($nota);
-        } catch (Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
         $this->assertInstanceOf('\\DFe\\Task\\Recibo', $retorno);
         $this->assertEquals('105', $retorno->getStatus());
     }
@@ -150,17 +145,17 @@ class ReciboTest extends \PHPUnit\Framework\TestCase
         // evita de enviar para a SEFAZ em caso de falha
         \DFe\Common\CurlSoap::setPostFunction([$this, 'rejeitadoPostFunction']);
         try {
-            $this->expectException('\\DFe\\Exception\\ValidationException');
+            $this->expectException(ValidationException::class);
             $recibo->consulta($nota);
-        } catch (Exception $e) {
+        } finally {
+            \DFe\Common\CurlSoap::setPostFunction(null);
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testReciboLoadInvalidXML()
     {
         $recibo = new Recibo();
         $this->expectException('\Exception');
-        $recibo->loadNode(new \DOMDocument(), Recibo::INFO_TAGNAME);
+        $recibo->loadNode((new \DOMDocument())->createElement('aa'), Recibo::INFO_TAGNAME);
     }
 }

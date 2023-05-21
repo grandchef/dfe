@@ -98,7 +98,7 @@ class Partilha extends Mista
         return $this;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $element = parent::getNode(is_null($name) ? 'ICMSPart' : $name);
         $dom = $element->ownerDocument;
@@ -107,9 +107,9 @@ class Partilha extends Mista
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'ICMSPart' : $name;
+        $name ??= 'ICMSPart';
         $element = parent::loadNode($element, $name);
         $this->setOperacao(
             Util::loadNode(

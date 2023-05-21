@@ -74,11 +74,9 @@ class EventoTest extends \PHPUnit\Framework\TestCase
             $evento->fromArray(null);
             $evento->fromArray($evento->toArray());
             $dom = $evento->addInformacao($dom);
-        } catch (Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
         $this->assertInstanceOf('\\DFe\\Task\\Evento', $retorno);
         $this->assertEquals('135', $retorno->getStatus());
         $this->assertEquals($nota->getID(), $retorno->getChave());
@@ -104,11 +102,9 @@ class EventoTest extends \PHPUnit\Framework\TestCase
             $dom = $evento->assinar($dom);
             $dom = $evento->validar($dom);
             $retorno = $evento->envia($dom);
-        } catch (Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
         $this->assertInstanceOf('\\DFe\\Task\\Evento', $retorno);
         $this->assertEquals('573', $retorno->getStatus());
     }

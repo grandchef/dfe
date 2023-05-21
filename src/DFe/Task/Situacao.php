@@ -125,15 +125,15 @@ class Situacao extends Retorno
         $dom = $this->validar($dom);
         $envio->setConteudo($dom);
         $resp = $envio->envia();
-        $this->loadNode($resp);
+        $this->loadNode($resp->documentElement);
         if ($this->isAutorizado()) {
             $protocolo = new Protocolo();
-            $protocolo->loadNode($resp);
+            $protocolo->loadNode($resp->documentElement);
             return $protocolo;
         } elseif ($this->isCancelado()) {
             $evento = new Evento();
-            $evento->loadStatusNode($resp, self::TAG_RETORNO);
-            $evento->loadNode($resp);
+            $evento->loadStatusNode($resp->documentElement, self::TAG_RETORNO);
+            $evento->loadNode($resp->documentElement);
             return $evento;
         }
         return $this;
@@ -154,7 +154,7 @@ class Situacao extends Retorno
         return $retorno;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name) ? 'consSitNFe' : $name);
@@ -170,7 +170,7 @@ class Situacao extends Retorno
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
         $name = is_null($name) ? self::TAG_RETORNO : $name;
         $element = parent::loadNode($element, $name);

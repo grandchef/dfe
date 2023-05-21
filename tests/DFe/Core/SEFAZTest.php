@@ -84,11 +84,9 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \DFe\Common\Event
             $sefaz->setNotas([]);
             $sefaz->addNota($nota);
             $this->assertEquals(1, $sefaz->autoriza());
-        } catch (Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function networkErrorPostFunction($soap_curl, $url, $data)
@@ -106,7 +104,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \DFe\Common\Event
             $sefaz->setNotas([]);
             $sefaz->addNota($nota);
             $this->assertEquals(1, $sefaz->autoriza());
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $sefaz->getConfiguracao()->setOffline(null);
             \DFe\Common\CurlSoap::setPostFunction(null);
             throw $e;
@@ -147,11 +145,9 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \DFe\Common\Event
         \DFe\Common\CurlSoap::setPostFunction([$this, 'inutilizadoPostFunction']);
         try {
             $this->assertTrue($sefaz->inutiliza($inutilizacao));
-        } catch (Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testProcessa()

@@ -86,7 +86,7 @@ class Isento extends Generico
 
     public function setDesoneracao($desoneracao)
     {
-        if (trim($desoneracao) != '') {
+        if (!empty($desoneracao)) {
             $desoneracao = floatval($desoneracao);
         }
         $this->desoneracao = $desoneracao;
@@ -182,7 +182,7 @@ class Isento extends Generico
         return $this;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $element = parent::getNode(is_null($name) ? 'ICMS40' : $name);
         $dom = $element->ownerDocument;
@@ -195,9 +195,9 @@ class Isento extends Generico
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'ICMS40' : $name;
+        $name ??= 'ICMS40';
         $element = parent::loadNode($element, $name);
         $this->setDesoneracao(Util::loadNode($element, 'vICMSDeson'));
         $this->setMotivo(Util::loadNode($element, 'motDesICMS'));

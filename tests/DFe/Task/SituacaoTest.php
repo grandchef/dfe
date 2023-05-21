@@ -70,11 +70,9 @@ class SituacaoTest extends \PHPUnit\Framework\TestCase
             $situacao->fromArray($situacao);
             $situacao->fromArray($situacao->toArray());
             $situacao->fromArray(null);
-        } catch (Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
         $this->assertInstanceOf('\\DFe\\Task\\Protocolo', $nota->getProtocolo());
         $this->assertEquals('100', $retorno->getStatus());
         $this->assertEquals($nota->getID(), $retorno->getChave());
@@ -88,11 +86,9 @@ class SituacaoTest extends \PHPUnit\Framework\TestCase
         try {
             $situacao = new Situacao();
             $retorno = $situacao->consulta($nota);
-        } catch (Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
         $this->assertInstanceOf('\\DFe\\Task\\Situacao', $retorno);
         $this->assertEquals('785', $retorno->getStatus());
     }
@@ -105,11 +101,9 @@ class SituacaoTest extends \PHPUnit\Framework\TestCase
         try {
             $situacao = new Situacao();
             $retorno = $situacao->consulta($nota);
-        } catch (Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
         $this->assertTrue($situacao->isCancelado());
         $this->assertInstanceOf('\\DFe\\Task\\Evento', $retorno);
         // TODO: carregar assinatura do XML para evitar usar outro certificado
@@ -151,10 +145,8 @@ class SituacaoTest extends \PHPUnit\Framework\TestCase
         $this->expectException('\Exception');
         try {
             $retorno = $situacao->consulta($nota);
-        } catch (Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 }

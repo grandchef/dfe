@@ -99,7 +99,7 @@ class PagamentoTest extends \PHPUnit\Framework\TestCase
         $dom_cmp->load(dirname(dirname(__DIR__)) . '/resources/xml/pagamento/testPagamentoTrocoXML.xml');
 
         $pagamento = new Pagamento();
-        $pagamento->loadNode($dom_cmp, 'vTroco');
+        $pagamento->loadNode($dom_cmp->documentElement, 'vTroco');
 
         $xml = $pagamento->getNode();
         $dom = $xml->ownerDocument;

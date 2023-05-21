@@ -143,7 +143,7 @@ class Certificado implements Node
     public function setArquivoChavePublica($arquivo_chave_publica)
     {
         $this->arquivo_chave_publica = $arquivo_chave_publica;
-        if (file_exists($arquivo_chave_publica ?: '')) {
+        if (file_exists($arquivo_chave_publica ?? '')) {
             $this->setChavePublica(file_get_contents($arquivo_chave_publica));
         }
         return $this;
@@ -166,7 +166,7 @@ class Certificado implements Node
     public function setArquivoChavePrivada($arquivo_chave_privada)
     {
         $this->arquivo_chave_privada = $arquivo_chave_privada;
-        if (file_exists($arquivo_chave_privada ?: '')) {
+        if (file_exists($arquivo_chave_privada ?? '')) {
             $this->setChavePrivada(file_get_contents($arquivo_chave_privada));
         }
         return $this;
@@ -271,7 +271,7 @@ class Certificado implements Node
      * @param string $name nome da tag raiz do XML
      * @return \DOMElement
      */
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         throw new \Exception('Não implementado', 500);
     }
@@ -282,7 +282,7 @@ class Certificado implements Node
      * @param string $name nome da tag raiz do XML
      * @return \DOMElement elemento que foi carregado
      */
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
         throw new \Exception('Não implementado', 500);
     }

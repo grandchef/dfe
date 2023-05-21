@@ -13,7 +13,9 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
 
     public function emptyPostFunction($soap_curl)
     {
-        $soap_curl->response = new \DOMDocument();
+        $dom = new \DOMDocument();
+        $dom->appendChild($dom->createElement('empty'));
+        $soap_curl->response = $dom;
     }
 
     public function inutilizadoPostFunction($soap_curl, $url, $data)
@@ -92,11 +94,9 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
             $tarefa->fromArray($tarefa);
             $tarefa->fromArray($tarefa->toArray());
             $tarefa->fromArray(null);
-        } catch (\Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
         $inutilizacao = $tarefa->getAgente();
         $this->assertEquals('102', $inutilizacao->getStatus());
         $this->assertEquals('141170000156683', $inutilizacao->getNumero());
@@ -154,11 +154,9 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         try {
             $this->expectException('\Exception');
             $tarefa->executa();
-        } catch (\Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testTarefaInutilizacaoInvalida()
@@ -171,11 +169,9 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         try {
             $this->expectException('\Exception');
             $tarefa->executa();
-        } catch (\Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testTarefaConsultaSituacao()
@@ -189,11 +185,9 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         \DFe\Common\CurlSoap::setPostFunction([$this, 'situacaoPostFunction']);
         try {
             $retorno = $tarefa->executa();
-        } catch (\Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
         $tarefa->toArray(true);
         $this->assertInstanceOf('\\DFe\\Task\\Protocolo', $nota->getProtocolo());
         $this->assertEquals('100', $retorno->getStatus());
@@ -211,11 +205,9 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         \DFe\Common\CurlSoap::setPostFunction([$this, 'canceladoPostFunction']);
         try {
             $retorno = $tarefa->executa();
-        } catch (\Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
         $this->assertInstanceOf('\\DFe\\Task\\Evento', $retorno);
         $this->assertEquals('135', $retorno->getStatus());
         $this->assertTrue($retorno->isCancelado());
@@ -247,11 +239,9 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         \DFe\Common\CurlSoap::setPostFunction([$this, 'reciboPostFunction']);
         try {
             $retorno = $tarefa->executa();
-        } catch (\Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
         $this->assertInstanceOf('\\DFe\\Task\\Protocolo', $nota->getProtocolo());
         $this->assertEquals('100', $retorno->getStatus());
         $this->assertEquals($nota->getID(), $retorno->getChave());
@@ -266,11 +256,9 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         try {
             $this->expectException('\Exception');
             $retorno = $tarefa->executa();
-        } catch (\Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testTarefaConsultaInvalida()
@@ -283,11 +271,9 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         try {
             $this->expectException('\Exception');
             $retorno = $tarefa->executa();
-        } catch (\Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testTarefaCancelar()
@@ -302,11 +288,9 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         \DFe\Common\CurlSoap::setPostFunction([$this, 'cancelarPostFunction']);
         try {
             $retorno = $tarefa->executa();
-        } catch (\Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
         $this->assertInstanceOf('\\DFe\\Task\\Evento', $retorno);
         $this->assertEquals('135', $retorno->getStatus());
         $this->assertEquals($nota->getID(), $retorno->getChave());
@@ -320,16 +304,16 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         $dom = $tarefa->getDocumento();
 
         // dhRegEvento auto gerado, copia para testar
-        $node_cmp = \DFe\Common\Util::findNode($dom_cmp, 'dhEvento');
-        $node = \DFe\Common\Util::findNode($dom, 'dhEvento');
+        $node_cmp = \DFe\Common\Util::findNode($dom_cmp->documentElement, 'dhEvento');
+        $node = \DFe\Common\Util::findNode($dom->documentElement, 'dhEvento');
         $node_cmp->nodeValue = $node->nodeValue;
         // quando a data do evento muda, a assinatura muda também
-        $node_cmp = \DFe\Common\Util::findNode($dom_cmp, 'DigestValue');
-        $node = \DFe\Common\Util::findNode($dom, 'DigestValue');
+        $node_cmp = \DFe\Common\Util::findNode($dom_cmp->documentElement, 'DigestValue');
+        $node = \DFe\Common\Util::findNode($dom->documentElement, 'DigestValue');
         $node_cmp->nodeValue = $node->nodeValue;
         // quando a data do evento muda, a assinatura muda também
-        $node_cmp = \DFe\Common\Util::findNode($dom_cmp, 'SignatureValue');
-        $node = \DFe\Common\Util::findNode($dom, 'SignatureValue');
+        $node_cmp = \DFe\Common\Util::findNode($dom_cmp->documentElement, 'SignatureValue');
+        $node = \DFe\Common\Util::findNode($dom->documentElement, 'SignatureValue');
         $node_cmp->nodeValue = $node->nodeValue;
 
         if (getenv('TEST_MODE') == 'external') {
@@ -349,11 +333,9 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         try {
             $this->expectException('\Exception');
             $retorno = $tarefa->executa();
-        } catch (\Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testTarefaCancelarNotaNaoAutorizada()
@@ -369,11 +351,9 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         try {
             $this->expectException('\Exception');
             $retorno = $tarefa->executa();
-        } catch (\Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 
     public function testTarefaCancelarInvalido()
@@ -386,10 +366,8 @@ class TarefaTest extends \PHPUnit\Framework\TestCase
         try {
             $this->expectException('\Exception');
             $retorno = $tarefa->executa();
-        } catch (\Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
     }
 }

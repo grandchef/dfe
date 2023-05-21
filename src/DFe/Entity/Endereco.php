@@ -215,7 +215,7 @@ class Endereco implements Node
         $this->getMunicipio()->getEstado()->checkCodigos();
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $this->checkCodigos();
@@ -236,16 +236,10 @@ class Endereco implements Node
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'enderEmit' : $name;
-        if ($element->nodeName != $name) {
-            $_fields = $element->getElementsByTagName($name);
-            if ($_fields->length == 0) {
-                throw new \Exception('Tag "' . $name . '" não encontrada', 404);
-            }
-            $element = $_fields->item(0);
-        }
+        $name ??= 'enderEmit';
+        $element = Util::findNode($element, $name);
         $this->setLogradouro(
             Util::loadNode(
                 $element,

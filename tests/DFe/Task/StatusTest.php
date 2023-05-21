@@ -38,6 +38,6 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     {
         $status = self::createStatus();
         $this->expectException('\Exception');
-        $status->loadNode(new \DOMDocument());
+        $status->loadNode((new \DOMDocument())->createElement('aa'));
     }
 }

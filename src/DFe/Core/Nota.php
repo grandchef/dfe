@@ -1610,12 +1610,12 @@ abstract class Nota implements Node
                 continue;
             }
             $imposto_info = $_produto->getImpostoInfo();
-            $total['produtos'] += round($_produto->getPreco(), 2);
-            $total['desconto'] += round($_produto->getDesconto(), 2);
-            $total['frete'] += round($_produto->getFrete(), 2);
-            $total['seguro'] += round($_produto->getSeguro(), 2);
-            $total['despesas'] += round($_produto->getDespesas(), 2);
-            $total['tributos'] += round($imposto_info['total'], 2);
+            $total['produtos'] += round($_produto->getPreco() ?: 0, 2);
+            $total['desconto'] += round($_produto->getDesconto() ?: 0, 2);
+            $total['frete'] += round($_produto->getFrete() ?: 0, 2);
+            $total['seguro'] += round($_produto->getSeguro() ?: 0, 2);
+            $total['despesas'] += round($_produto->getDespesas() ?: 0, 2);
+            $total['tributos'] += round($imposto_info['total'] ?: 0, 2);
             $_impostos = $_produto->getImpostos();
             foreach ($_impostos as $_imposto) {
                 switch ($_imposto->getGrupo()) {
@@ -1624,35 +1624,35 @@ abstract class Nota implements Node
                             ($_imposto instanceof \DFe\Entity\Imposto\ICMS\Cobranca)
                             || ($_imposto instanceof \DFe\Entity\Imposto\ICMS\Simples\Cobranca)
                         ) {
-                            $total[$_imposto->getGrupo()] += round($_imposto->getNormal()->getValor(), 2);
-                            $total['base'] += round($_imposto->getNormal()->getBase(), 2);
+                            $total[$_imposto->getGrupo()] += round($_imposto->getNormal()->getValor() ?: 0, 2);
+                            $total['base'] += round($_imposto->getNormal()->getBase() ?: 0, 2);
                         }
                         if ($_imposto instanceof \DFe\Entity\Imposto\ICMS\Parcial) {
-                            $total['icms.st'] += round($_imposto->getValor(), 2);
-                            $total['base.st'] += round($_imposto->getBase(), 2);
+                            $total['icms.st'] += round($_imposto->getValor() ?: 0, 2);
+                            $total['base.st'] += round($_imposto->getBase() ?: 0, 2);
                         } else {
-                            $total[$_imposto->getGrupo()] += round($_imposto->getValor(), 2);
-                            $total['base'] += round($_imposto->getBase(), 2);
+                            $total[$_imposto->getGrupo()] += round($_imposto->getValor() ?: 0, 2);
+                            $total['base'] += round($_imposto->getBase() ?: 0, 2);
                         }
                         $fundo = $_imposto->getFundo();
                         // a ordem de comparação importa pois uma classe estende da outra
                         if ($fundo instanceof \DFe\Entity\Imposto\Fundo\Retido) {
-                            $total['fundo.retido.st'] += round($fundo->getTotal(), 2);
+                            $total['fundo.retido.st'] += round($fundo->getTotal() ?: 0, 2);
                         } elseif ($fundo instanceof \DFe\Entity\Imposto\Fundo\Substituido) {
-                            $total['fundo.st'] += round($fundo->getTotal(), 2);
+                            $total['fundo.st'] += round($fundo->getTotal() ?: 0, 2);
                         } elseif ($fundo instanceof \DFe\Entity\Imposto\Fundo\Base) {
-                            $total['fundo'] += round($fundo->getTotal(), 2);
+                            $total['fundo'] += round($fundo->getTotal() ?: 0, 2);
                         }
                         break;
                     default:
-                        $total[$_imposto->getGrupo()] += round($_imposto->getValor(), 2);
+                        $total[$_imposto->getGrupo()] += round($_imposto->getValor() ?: 0, 2);
                 }
             }
         }
-        $produtos = round($total['produtos'], 2) - round($total['desconto'], 2);
-        $servicos = round($total['frete'], 2) + round($total['seguro'], 2) + round($total['despesas'], 2);
-        $impostos = round($total['ii'], 2) + round($total['ipi'], 2) + round($total['icms.st'], 2);
-        $impostos = $impostos - round($total['desoneracao'], 2);
+        $produtos = round($total['produtos'] ?: 0, 2) - round($total['desconto'] ?: 0, 2);
+        $servicos = round($total['frete'] ?: 0, 2) + round($total['seguro'], 2) + round($total['despesas'] ?: 0, 2);
+        $impostos = round($total['ii'] ?: 0, 2) + round($total['ipi'], 2) + round($total['icms.st'] ?: 0, 2);
+        $impostos = $impostos - round($total['desoneracao'] ?: 0, 2);
         $total['nota'] = $produtos + $servicos + $impostos;
         return $total;
     }
@@ -1695,7 +1695,7 @@ abstract class Nota implements Node
         return $element;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $this->getEmitente()->getEndereco()->checkCodigos();
         $this->setID($this->gerarID());
@@ -1846,22 +1846,17 @@ abstract class Nota implements Node
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
         if (is_null($element)) {
             throw new \Exception("Nota com XML mal formado ou vazio", 500);
         }
         $root = $element;
-        $name = is_null($name) ? 'NFe' : $name;
-        if ($element->nodeName != $name) {
-            $_fields = $element->getElementsByTagName($name);
-            if ($_fields->length == 0) {
-                throw new \Exception('Tag "' . $name . '" não encontrada', 404);
-            }
-            $element = $_fields->item(0);
-        }
+        $name ??= 'NFe';
+        $element = Util::findNode($element, $name);
         $_fields = $element->getElementsByTagName('infNFe');
         if ($_fields->length > 0) {
+            /** @var \DOMElement */
             $info = $_fields->item(0);
         } else {
             throw new \Exception('Tag "infNFe" não encontrada', 404);

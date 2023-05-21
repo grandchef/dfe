@@ -266,9 +266,9 @@ class Protocolo extends Retorno
      * @param string $name Nome do nó que será carregado
      * @return DOMElement Instância do nó que foi carregado
      */
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'infProt' : $name;
+        $name ??= 'infProt';
         $element = parent::loadNode($element, $name);
         $this->setChave(
             Util::loadNode(
@@ -289,7 +289,7 @@ class Protocolo extends Retorno
      * @param string $name Nome do nó que será criado
      * @return DOMElement Nó que contém todos os campos da classe
      */
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $old_uf = $this->getUF();
         $this->setUF(null);

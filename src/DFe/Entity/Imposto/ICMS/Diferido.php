@@ -105,7 +105,7 @@ class Diferido extends Reducao
         return $this;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         if (is_null($this->getDiferimento())) {
             $dom = new \DOMDocument('1.0', 'UTF-8');
@@ -130,16 +130,10 @@ class Diferido extends Reducao
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'ICMS51' : $name;
-        if ($element->nodeName != $name) {
-            $_fields = $element->getElementsByTagName($name);
-            if ($_fields->length == 0) {
-                throw new \Exception('Tag "' . $name . '" não encontrada', 404);
-            }
-            $element = $_fields->item(0);
-        }
+        $name ??= 'ICMS51';
+        $element = Util::findNode($element, $name);
         $dom = $element->ownerDocument;
         $element = $dom->importNode($element, true);
         $_dif = $element->getElementsByTagName('pDif');

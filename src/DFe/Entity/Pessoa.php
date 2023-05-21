@@ -194,16 +194,10 @@ abstract class Pessoa implements Node
         return $this;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'emit' : $name;
-        if ($element->nodeName != $name) {
-            $_fields = $element->getElementsByTagName($name);
-            if ($_fields->length == 0) {
-                throw new \Exception('Tag "' . $name . '" não encontrada', 404);
-            }
-            $element = $_fields->item(0);
-        }
+        $name ??= 'emit';
+        $element = Util::findNode($element, $name);
         $razao_social = Util::loadNode($element, 'xNome');
         if (is_null($razao_social) && $this instanceof Emitente) {
             throw new \Exception('Tag "xNome" do campo "RazaoSocial" não encontrada', 404);

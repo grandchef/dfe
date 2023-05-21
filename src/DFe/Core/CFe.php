@@ -228,7 +228,7 @@ class CFe extends Nota
      * @param  string $name        Nome do nó que será carregado
      * @return DOMElement          Instância do nó que foi carregado
      */
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
         $element = parent::loadNode($element, $name);
         $qrcode_url = Util::loadNode($element, 'qrCode');

@@ -132,7 +132,7 @@ class Evento extends Retorno
     public function setData($data)
     {
         if (!is_numeric($data)) {
-            $data = strtotime($data);
+            $data = strtotime($data ?? '');
         }
         $this->data = $data;
         return $this;
@@ -302,7 +302,7 @@ class Evento extends Retorno
      */
     public function isCNPJ()
     {
-        return strlen($this->getIdentificador()) == 14;
+        return strlen($this->getIdentificador() ?? '') == 14;
     }
 
     /**
@@ -431,7 +431,7 @@ class Evento extends Retorno
         return $id;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $this->setID($this->gerarID());
 
@@ -476,11 +476,11 @@ class Evento extends Retorno
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
         $root = $element;
         $element = Util::findNode($element, 'evento');
-        $name = is_null($name) ? 'infEvento' : $name;
+        $name ??= 'infEvento';
         $element = Util::findNode($element, $name);
         $this->setOrgao(
             Util::loadNode(
@@ -572,7 +572,7 @@ class Evento extends Retorno
         return $element;
     }
 
-    public function loadResponse($resp)
+    public function loadResponse(\DOMElement $resp)
     {
         $retorno = new Evento();
         $retorno->loadReturnNode($resp);
@@ -580,7 +580,7 @@ class Evento extends Retorno
         return $retorno;
     }
 
-    public function loadStatusNode($element, $name = null)
+    public function loadStatusNode(\DOMElement $element, $name = null)
     {
         $name = is_null($name) ? self::TAG_RETORNO_ENVIO : $name;
         $element = parent::loadNode($element, $name);
@@ -639,10 +639,10 @@ class Evento extends Retorno
         return $element;
     }
 
-    public function loadReturnNode($element, $name = null)
+    public function loadReturnNode(\DOMElement $element, $name = null)
     {
         $element = Util::findNode($element, Evento::TAG_RETORNO);
-        $name = is_null($name) ? 'infEvento' : $name;
+        $name ??= 'infEvento';
         $element = parent::loadNode($element, $name);
         $this->setOrgao(
             Util::loadNode(
@@ -704,11 +704,11 @@ class Evento extends Retorno
         $dom = $this->validar($dom);
         $envio->setConteudo($this->getConteudo($dom));
         $resp = $envio->envia();
-        $this->loadStatusNode($resp);
+        $this->loadStatusNode($resp->documentElement);
         if (!$this->isProcessado()) {
             throw new \Exception($this->getMotivo(), $this->getStatus());
         }
-        return $this->loadResponse($resp);
+        return $this->loadResponse($resp->documentElement);
     }
 
     /**

@@ -168,7 +168,7 @@ class Destinatario extends Pessoa
         return $this;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name) ? 'dest' : $name);
@@ -198,9 +198,9 @@ class Destinatario extends Pessoa
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'dest' : $name;
+        $name ??= 'dest';
         $element = parent::loadNode($element, $name);
         $cpf = Util::loadNode($element, 'CPF');
         if (is_null($cpf) && is_null($this->getCNPJ())) {

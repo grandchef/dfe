@@ -87,7 +87,7 @@ class Total implements Node
      */
     public function setProdutos($produtos)
     {
-        if (trim($produtos ?: '') != '') {
+        if (!empty($produtos)) {
             $produtos = floatval($produtos);
         }
         $this->produtos = $produtos;
@@ -114,7 +114,7 @@ class Total implements Node
      */
     public function setDesconto($desconto)
     {
-        if (trim($desconto ?: '') != '') {
+        if (!empty($desconto)) {
             $desconto = floatval($desconto);
         }
         $this->desconto = $desconto;
@@ -142,7 +142,7 @@ class Total implements Node
      */
     public function setSeguro($seguro)
     {
-        if (trim($seguro ?: '') != '') {
+        if (!empty($seguro)) {
             $seguro = floatval($seguro);
         }
         $this->seguro = $seguro;
@@ -170,7 +170,7 @@ class Total implements Node
      */
     public function setFrete($frete)
     {
-        if (trim($frete ?: '') != '') {
+        if (!empty($frete)) {
             $frete = floatval($frete);
         }
         $this->frete = $frete;
@@ -198,7 +198,7 @@ class Total implements Node
      */
     public function setDespesas($despesas)
     {
-        if (trim($despesas ?: '') != '') {
+        if (!empty($despesas)) {
             $despesas = floatval($despesas);
         }
         $this->despesas = $despesas;
@@ -225,7 +225,7 @@ class Total implements Node
      */
     public function setTributos($tributos)
     {
-        if (trim($tributos ?: '') != '') {
+        if (!empty($tributos)) {
             $tributos = floatval($tributos);
         }
         $this->tributos = $tributos;
@@ -328,7 +328,7 @@ class Total implements Node
      * @param  string $name Nome do nó que será criado
      * @return DOMElement   Nó que contém todos os campos da classe
      */
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name) ? 'prod' : $name);
@@ -360,16 +360,10 @@ class Total implements Node
      * @param  string $name        Nome do nó que será carregado
      * @return DOMElement          Instância do nó que foi carregado
      */
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'prod' : $name;
-        if ($element->nodeName != $name) {
-            $_fields = $element->getElementsByTagName($name);
-            if ($_fields->length == 0) {
-                throw new \Exception('Tag "' . $name . '" do Total ou Produto não encontrada', 404);
-            }
-            $element = $_fields->item(0);
-        }
+        $name ??= 'prod';
+        $element = Util::findNode($element, $name);
         $this->setProdutos(
             Util::loadNode(
                 $element,

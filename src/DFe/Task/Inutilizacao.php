@@ -292,7 +292,7 @@ class Inutilizacao extends Retorno
         return $id;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $this->setID($this->gerarID());
 
@@ -354,9 +354,9 @@ class Inutilizacao extends Retorno
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'infInut' : $name;
+        $name ??= 'infInut';
         $element = parent::loadNode($element, $name);
         if (!$this->isInutilizado()) {
             return $element;
@@ -382,7 +382,7 @@ class Inutilizacao extends Retorno
         $dom = $this->validar($dom);
         $envio->setConteudo($dom);
         $resp = $envio->envia();
-        $this->loadNode($resp);
+        $this->loadNode($resp->documentElement);
         if (!$this->isInutilizado()) {
             throw new \Exception($this->getMotivo(), $this->getStatus());
         }

@@ -74,7 +74,7 @@ class Integral extends Normal
         return $this;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $element = parent::getNode(is_null($name) ? 'ICMS00' : $name);
         if (Util::nodeExists($element, 'vBCFCP')) {
@@ -84,9 +84,9 @@ class Integral extends Normal
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'ICMS00' : $name;
+        $name ??= 'ICMS00';
         $element = parent::loadNode($element, $name);
         return $element;
     }

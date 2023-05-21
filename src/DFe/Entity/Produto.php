@@ -66,7 +66,7 @@ class Produto extends Total
 
     public function setItem($item)
     {
-        if (trim($item ?: '') != '') {
+        if (!empty($item)) {
             $item = intval($item);
         }
         $this->item = $item;
@@ -221,7 +221,7 @@ class Produto extends Total
 
     public function setMultiplicador($multiplicador)
     {
-        if (trim($multiplicador) != '') {
+        if (!empty($multiplicador)) {
             $multiplicador = intval($multiplicador);
         }
         $this->multiplicador = $multiplicador;
@@ -262,7 +262,7 @@ class Produto extends Total
 
     public function setQuantidade($quantidade)
     {
-        if (trim($quantidade ?: '') != '') {
+        if (!empty($quantidade)) {
             $quantidade = floatval($quantidade);
         }
         $this->quantidade = $quantidade;
@@ -282,7 +282,7 @@ class Produto extends Total
 
     public function setTributada($tributada)
     {
-        if (trim($tributada ?: '') != '') {
+        if (!empty($tributada)) {
             $tributada = floatval($tributada);
         }
         $this->tributada = $tributada;
@@ -327,7 +327,7 @@ class Produto extends Total
 
     public function setCFOP($cfop)
     {
-        if (trim($cfop ?: '') != '') {
+        if (!empty($cfop)) {
             $cfop = intval($cfop);
         }
         $this->cfop = $cfop;
@@ -618,7 +618,7 @@ class Produto extends Total
         return $texto;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name) ? 'det' : $name);
@@ -697,16 +697,10 @@ class Produto extends Total
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'det' : $name;
-        if ($element->nodeName != $name) {
-            $_fields = $element->getElementsByTagName($name);
-            if ($_fields->length == 0) {
-                throw new \Exception('Tag "' . $name . '" do Produto não encontrada', 404);
-            }
-            $element = $_fields->item(0);
-        }
+        $name ??= 'det';
+        $element = Util::findNode($element, $name);
         $root = $element;
         $element = parent::loadNode($element, $name);
         $this->setItem(Util::loadNode($element, 'nItemPed'));

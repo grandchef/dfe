@@ -62,11 +62,9 @@ class InutilizacaoTest extends \PHPUnit\Framework\TestCase
             $inutilizacao->fromArray($inutilizacao);
             $inutilizacao->fromArray($inutilizacao->toArray());
             $inutilizacao->fromArray(null);
-        } catch (\Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
         $this->assertEquals('102', $inutilizacao->getStatus());
         $this->assertEquals('141170000156683', $inutilizacao->getNumero());
         $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/task/testInutilizaInutilizadoProtocolo.xml';

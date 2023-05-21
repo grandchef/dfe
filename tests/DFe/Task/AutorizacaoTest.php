@@ -25,8 +25,8 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
         $dom->loadXML($data);
 
         // idLote auto gerado, copia para testar
-        $node_cmp = \DFe\Common\Util::findNode($dom_cmp, 'idLote');
-        $node = \DFe\Common\Util::findNode($dom, 'idLote');
+        $node_cmp = \DFe\Common\Util::findNode($dom_cmp->documentElement, 'idLote');
+        $node = \DFe\Common\Util::findNode($dom->documentElement, 'idLote');
         $node_cmp->nodeValue = $node->nodeValue;
 
         if (getenv('TEST_MODE') == 'override') {
@@ -93,11 +93,9 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
             $autorizacao->fromArray($autorizacao);
             $autorizacao->fromArray($autorizacao->toArray());
             $autorizacao->fromArray(null);
-        } catch (\Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
         $this->assertInstanceOf('\\DFe\\Task\\Protocolo', $retorno);
         $this->assertEquals('100', $retorno->getStatus());
         $this->assertEquals($nota->getID(), $retorno->getChave());
@@ -112,11 +110,9 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
         try {
             $autorizacao = new Autorizacao();
             $retorno = $autorizacao->envia($nota, $dom);
-        } catch (\Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
         $this->assertInstanceOf('\\DFe\\Task\\Autorizacao', $retorno);
         $this->assertEquals('785', $retorno->getStatus());
     }
@@ -130,11 +126,9 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
         try {
             $autorizacao = new Autorizacao();
             $retorno = $autorizacao->envia($nota, $dom);
-        } catch (\Exception $e) {
+        } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
-            throw $e;
         }
-        \DFe\Common\CurlSoap::setPostFunction(null);
         $this->assertInstanceOf('\\DFe\\Task\\Recibo', $retorno);
         $this->assertEquals('103', $retorno->getStatus());
     }

@@ -13,6 +13,6 @@ namespace DFe\Common;
 
 interface Node
 {
-    public function getNode($name = null);
-    public function loadNode($element, $name = null);
+    public function getNode(?string $name = null): \DOMElement;
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement;
 }

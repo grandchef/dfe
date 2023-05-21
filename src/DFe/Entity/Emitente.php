@@ -111,7 +111,7 @@ class Emitente extends Pessoa
         return $this;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement(is_null($name) ? 'emit' : $name);
@@ -134,9 +134,9 @@ class Emitente extends Pessoa
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'emit' : $name;
+        $name ??= 'emit';
         $element = parent::loadNode($element, $name);
         $this->setFantasia(Util::loadNode($element, 'xFant'));
         $this->setRegime(

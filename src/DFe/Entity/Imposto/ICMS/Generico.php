@@ -45,7 +45,7 @@ class Generico extends Mista
         return $this;
     }
 
-    public function getNode($name = null)
+    public function getNode(?string $name = null): \DOMElement
     {
         if (is_null($this->getModalidade()) && is_null($this->getNormal()->getModalidade())) {
             $dom = new \DOMDocument('1.0', 'UTF-8');
@@ -59,16 +59,10 @@ class Generico extends Mista
         return $element;
     }
 
-    public function loadNode($element, $name = null)
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $name = is_null($name) ? 'ICMS90' : $name;
-        if ($element->nodeName != $name) {
-            $_fields = $element->getElementsByTagName($name);
-            if ($_fields->length == 0) {
-                throw new \Exception('Tag "' . $name . '" não encontrada', 404);
-            }
-            $element = $_fields->item(0);
-        }
+        $name ??= 'ICMS90';
+        $element = Util::findNode($element, $name);
         $_mod = $element->getElementsByTagName('modBC');
         $_mod_st = $element->getElementsByTagName('modBCST');
         if ($_mod->length > 0 || $_mod_st->length > 0) {
