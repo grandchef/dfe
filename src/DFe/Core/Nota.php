@@ -12,10 +12,10 @@
 namespace DFe\Core;
 
 use DOMDocument;
-use DFe\Common\Util;
 use DFe\Common\Node;
-use DFe\Task\Protocolo;
 use DFe\Entity\Total;
+use DFe\Common\Loader;
+use DFe\Task\Protocolo;
 use DFe\Entity\Imposto;
 use DFe\Entity\Produto;
 use DFe\Entity\Emitente;
@@ -26,6 +26,7 @@ use DFe\Entity\Destinatario;
 use DFe\Entity\Intermediador;
 use DFe\Util\AdapterInterface;
 use DFe\Util\XmlseclibsAdapter;
+use DFe\Loader\NFe\V4\NotaLoader;
 use DFe\Exception\ValidationException;
 
 /**
@@ -328,15 +329,12 @@ abstract class Nota implements Node
 
     /**
      * Chave da nota fiscal
-     * @param boolean $normalize informa se o id deve estar no formato do XML
+     *
      * @return mixed id da Nota
      */
-    public function getID($normalize = false)
+    public function getID()
     {
-        if (!$normalize) {
-            return $this->id;
-        }
-        return 'NFe' . $this->id;
+        return $this->id;
     }
 
     /**
@@ -352,14 +350,11 @@ abstract class Nota implements Node
 
     /**
      * Número do Documento Fiscal
-     * @param boolean $normalize informa se o numero deve estar no formato do XML
+     *
      * @return mixed numero da Nota
      */
-    public function getNumero($normalize = false)
+    public function getNumero()
     {
-        if (!$normalize) {
-            return $this->numero;
-        }
         return $this->numero;
     }
 
@@ -543,15 +538,12 @@ abstract class Nota implements Node
 
     /**
      * Data e Hora da saída ou de entrada da mercadoria / produto
-     * @param boolean $normalize informa se a data_movimentacao deve estar no formato do XML
+     *
      * @return mixed data_movimentacao da Nota
      */
-    public function getDataMovimentacao($normalize = false)
+    public function getDataMovimentacao()
     {
-        if (!$normalize || is_null($this->data_movimentacao)) {
-            return $this->data_movimentacao;
-        }
-        return Util::toDateTime($this->data_movimentacao);
+        return $this->data_movimentacao;
     }
 
     /**
@@ -561,24 +553,18 @@ abstract class Nota implements Node
      */
     public function setDataMovimentacao($data_movimentacao)
     {
-        if (!is_null($data_movimentacao) && !is_numeric($data_movimentacao)) {
-            $data_movimentacao = strtotime($data_movimentacao);
-        }
         $this->data_movimentacao = $data_movimentacao;
         return $this;
     }
 
     /**
      * Informar a data e hora de entrada em contingência
-     * @param boolean $normalize informa se a data_contingencia deve estar no formato do XML
+     *
      * @return mixed data_contingencia da Nota
      */
-    public function getDataContingencia($normalize = false)
+    public function getDataContingencia()
     {
-        if (!$normalize || is_null($this->data_contingencia)) {
-            return $this->data_contingencia;
-        }
-        return Util::toDateTime($this->data_contingencia);
+        return $this->data_contingencia;
     }
 
     /**
@@ -588,23 +574,17 @@ abstract class Nota implements Node
      */
     public function setDataContingencia($data_contingencia)
     {
-        if (!is_null($data_contingencia) && !is_numeric($data_contingencia)) {
-            $data_contingencia = strtotime($data_contingencia);
-        }
         $this->data_contingencia = $data_contingencia;
         return $this;
     }
 
     /**
      * Informar a Justificativa da entrada em contingência
-     * @param boolean $normalize informa se a justificativa deve estar no formato do XML
+     *
      * @return mixed justificativa da Nota
      */
-    public function getJustificativa($normalize = false)
+    public function getJustificativa()
     {
-        if (!$normalize) {
-            return $this->justificativa;
-        }
         return $this->justificativa;
     }
 
@@ -621,20 +601,11 @@ abstract class Nota implements Node
 
     /**
      * Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.
-     * @param boolean $normalize informa se o modelo deve estar no formato do XML
+     *
      * @return mixed modelo da Nota
      */
-    public function getModelo($normalize = false)
+    public function getModelo()
     {
-        if (!$normalize) {
-            return $this->modelo;
-        }
-        switch ($this->modelo) {
-            case self::MODELO_NFE:
-                return '55';
-            case self::MODELO_NFCE:
-                return '65';
-        }
         return $this->modelo;
     }
 
@@ -645,34 +616,17 @@ abstract class Nota implements Node
      */
     public function setModelo($modelo)
     {
-        switch ($modelo) {
-            case '55':
-                $modelo = self::MODELO_NFE;
-                break;
-            case '65':
-                $modelo = self::MODELO_NFCE;
-                break;
-        }
         $this->modelo = $modelo;
         return $this;
     }
 
     /**
      * Tipo do Documento Fiscal (0 - entrada; 1 - saída)
-     * @param boolean $normalize informa se o tipo deve estar no formato do XML
+     *
      * @return mixed tipo da Nota
      */
-    public function getTipo($normalize = false)
+    public function getTipo()
     {
-        if (!$normalize) {
-            return $this->tipo;
-        }
-        switch ($this->tipo) {
-            case self::TIPO_ENTRADA:
-                return '0';
-            case self::TIPO_SAIDA:
-                return '1';
-        }
         return $this->tipo;
     }
 
@@ -683,14 +637,6 @@ abstract class Nota implements Node
      */
     public function setTipo($tipo)
     {
-        switch ($tipo) {
-            case '0':
-                $tipo = self::TIPO_ENTRADA;
-                break;
-            case '1':
-                $tipo = self::TIPO_SAIDA;
-                break;
-        }
         $this->tipo = $tipo;
         return $this;
     }
@@ -698,22 +644,11 @@ abstract class Nota implements Node
     /**
      * Identificador de Local de destino da operação
      * (1-Interna;2-Interestadual;3-Exterior)
-     * @param boolean $normalize informa se o destino deve estar no formato do XML
+     *
      * @return mixed destino da Nota
      */
-    public function getDestino($normalize = false)
+    public function getDestino()
     {
-        if (!$normalize) {
-            return $this->destino;
-        }
-        switch ($this->destino) {
-            case self::DESTINO_INTERNA:
-                return '1';
-            case self::DESTINO_INTERESTADUAL:
-                return '2';
-            case self::DESTINO_EXTERIOR:
-                return '3';
-        }
         return $this->destino;
     }
 
@@ -724,31 +659,17 @@ abstract class Nota implements Node
      */
     public function setDestino($destino)
     {
-        switch ($destino) {
-            case '1':
-                $destino = self::DESTINO_INTERNA;
-                break;
-            case '2':
-                $destino = self::DESTINO_INTERESTADUAL;
-                break;
-            case '3':
-                $destino = self::DESTINO_EXTERIOR;
-                break;
-        }
         $this->destino = $destino;
         return $this;
     }
 
     /**
      * Descrição da Natureza da Operação
-     * @param boolean $normalize informa se a natureza deve estar no formato do XML
+     *
      * @return mixed natureza da Nota
      */
-    public function getNatureza($normalize = false)
+    public function getNatureza()
     {
-        if (!$normalize) {
-            return $this->natureza;
-        }
         return $this->natureza;
     }
 
@@ -766,15 +687,12 @@ abstract class Nota implements Node
     /**
      * Código numérico que compõe a Chave de Acesso. Número aleatório gerado
      * pelo emitente para cada NF-e.
-     * @param boolean $normalize informa se o codigo deve estar no formato do XML
+     *
      * @return mixed codigo da Nota
      */
-    public function getCodigo($normalize = false)
+    public function getCodigo()
     {
-        if (!$normalize) {
-            return $this->codigo;
-        }
-        return Util::padDigit(strval($this->codigo % 100000000), 8);
+        return $this->codigo;
     }
 
     /**
@@ -790,27 +708,23 @@ abstract class Nota implements Node
 
     /**
      * Data e Hora de emissão do Documento Fiscal
-     * @param boolean $normalize informa se o data_emissao deve estar no formato do XML
-     * @return mixed data_emissao da Nota
+     *
+     * @return int|null
      */
-    public function getDataEmissao($normalize = false)
+    public function getDataEmissao()
     {
-        if (!$normalize) {
-            return $this->data_emissao;
-        }
-        return Util::toDateTime($this->data_emissao);
+        return $this->data_emissao;
     }
 
     /**
      * Altera o valor do DataEmissao para o informado no parâmetro
-     * @param mixed $data_emissao novo valor para DataEmissao
+     *
+     * @param int|null $data_emissao novo valor para DataEmissao
+     *
      * @return self
      */
     public function setDataEmissao($data_emissao)
     {
-        if (!is_numeric($data_emissao) && ! is_null($data_emissao)) {
-            $data_emissao = strtotime($data_emissao);
-        }
         $this->data_emissao = $data_emissao;
         return $this;
     }
@@ -818,14 +732,11 @@ abstract class Nota implements Node
     /**
      * Série do Documento Fiscal: série normal 0-889, Avulsa Fisco 890-899,
      * SCAN 900-999
-     * @param boolean $normalize informa se o serie deve estar no formato do XML
+     *
      * @return mixed serie da Nota
      */
-    public function getSerie($normalize = false)
+    public function getSerie()
     {
-        if (!$normalize) {
-            return $this->serie;
-        }
         return $this->serie;
     }
 
@@ -844,28 +755,11 @@ abstract class Nota implements Node
      * Formato de impressão do DANFE (0-sem DANFE;1-DANFe Retrato; 2-DANFe
      * Paisagem;3-DANFe Simplificado;4-DANFe NFC-e;5-DANFe NFC-e em mensagem
      * eletrônica)
-     * @param boolean $normalize informa se o formato deve estar no formato do XML
+     *
      * @return mixed formato da Nota
      */
-    public function getFormato($normalize = false)
+    public function getFormato()
     {
-        if (!$normalize) {
-            return $this->formato;
-        }
-        switch ($this->formato) {
-            case self::FORMATO_NENHUMA:
-                return '0';
-            case self::FORMATO_RETRATO:
-                return '1';
-            case self::FORMATO_PAISAGEM:
-                return '2';
-            case self::FORMATO_SIMPLIFICADO:
-                return '3';
-            case self::FORMATO_CONSUMIDOR:
-                return '4';
-            case self::FORMATO_MENSAGEM:
-                return '5';
-        }
         return $this->formato;
     }
 
@@ -876,46 +770,17 @@ abstract class Nota implements Node
      */
     public function setFormato($formato)
     {
-        switch ($formato) {
-            case '0':
-                $formato = self::FORMATO_NENHUMA;
-                break;
-            case '1':
-                $formato = self::FORMATO_RETRATO;
-                break;
-            case '2':
-                $formato = self::FORMATO_PAISAGEM;
-                break;
-            case '3':
-                $formato = self::FORMATO_SIMPLIFICADO;
-                break;
-            case '4':
-                $formato = self::FORMATO_CONSUMIDOR;
-                break;
-            case '5':
-                $formato = self::FORMATO_MENSAGEM;
-                break;
-        }
         $this->formato = $formato;
         return $this;
     }
 
     /**
      * Forma de emissão da NF-e
-     * @param boolean $normalize informa se o emissao deve estar no formato do XML
+     *
      * @return mixed emissao da Nota
      */
-    public function getEmissao($normalize = false)
+    public function getEmissao()
     {
-        if (!$normalize) {
-            return $this->emissao;
-        }
-        switch ($this->emissao) {
-            case self::EMISSAO_NORMAL:
-                return '1';
-            case self::EMISSAO_CONTINGENCIA:
-                return '9';
-        }
         return $this->emissao;
     }
 
@@ -926,28 +791,17 @@ abstract class Nota implements Node
      */
     public function setEmissao($emissao)
     {
-        switch ($emissao) {
-            case '1':
-                $emissao = self::EMISSAO_NORMAL;
-                break;
-            case '9':
-                $emissao = self::EMISSAO_CONTINGENCIA;
-                break;
-        }
         $this->emissao = $emissao;
         return $this;
     }
 
     /**
      * Digito Verificador da Chave de Acesso da NF-e
-     * @param boolean $normalize informa se o digito_verificador deve estar no formato do XML
+     *
      * @return mixed digito_verificador da Nota
      */
-    public function getDigitoVerificador($normalize = false)
+    public function getDigitoVerificador()
     {
-        if (!$normalize) {
-            return $this->digito_verificador;
-        }
         return $this->digito_verificador;
     }
 
@@ -964,20 +818,11 @@ abstract class Nota implements Node
 
     /**
      * Identificação do Ambiente: 1 - Produção, 2 - Homologação
-     * @param boolean $normalize informa se o ambiente deve estar no formato do XML
+     *
      * @return mixed ambiente da Nota
      */
-    public function getAmbiente($normalize = false)
+    public function getAmbiente()
     {
-        if (!$normalize) {
-            return $this->ambiente;
-        }
-        switch ($this->ambiente) {
-            case self::AMBIENTE_PRODUCAO:
-                return '1';
-            case self::AMBIENTE_HOMOLOGACAO:
-                return '2';
-        }
         return $this->ambiente;
     }
 
@@ -988,14 +833,6 @@ abstract class Nota implements Node
      */
     public function setAmbiente($ambiente)
     {
-        switch ($ambiente) {
-            case '1':
-                $ambiente = self::AMBIENTE_PRODUCAO;
-                break;
-            case '2':
-                $ambiente = self::AMBIENTE_HOMOLOGACAO;
-                break;
-        }
         $this->ambiente = $ambiente;
         return $this;
     }
@@ -1003,24 +840,11 @@ abstract class Nota implements Node
     /**
      * Finalidade da emissão da NF-e: 1 - NFe normal, 2 - NFe complementar, 3 -
      * NFe de ajuste, 4 - Devolução/Retorno
-     * @param boolean $normalize informa se a finalidade deve estar no formato do XML
+     *
      * @return mixed finalidade da Nota
      */
-    public function getFinalidade($normalize = false)
+    public function getFinalidade()
     {
-        if (!$normalize) {
-            return $this->finalidade;
-        }
-        switch ($this->finalidade) {
-            case self::FINALIDADE_NORMAL:
-                return '1';
-            case self::FINALIDADE_COMPLEMENTAR:
-                return '2';
-            case self::FINALIDADE_AJUSTE:
-                return '3';
-            case self::FINALIDADE_RETORNO:
-                return '4';
-        }
         return $this->finalidade;
     }
 
@@ -1031,40 +855,17 @@ abstract class Nota implements Node
      */
     public function setFinalidade($finalidade)
     {
-        switch ($finalidade) {
-            case '1':
-                $finalidade = self::FINALIDADE_NORMAL;
-                break;
-            case '2':
-                $finalidade = self::FINALIDADE_COMPLEMENTAR;
-                break;
-            case '3':
-                $finalidade = self::FINALIDADE_AJUSTE;
-                break;
-            case '4':
-                $finalidade = self::FINALIDADE_RETORNO;
-                break;
-        }
         $this->finalidade = $finalidade;
         return $this;
     }
 
     /**
      * Indica operação com consumidor final (0-Não;1-Consumidor Final)
-     * @param boolean $normalize informa se o consumidor_final deve estar no formato do XML
+     *
      * @return mixed consumidor_final da Nota
      */
-    public function getConsumidorFinal($normalize = false)
+    public function getConsumidorFinal()
     {
-        if (!$normalize) {
-            return $this->consumidor_final;
-        }
-        switch ($this->consumidor_final) {
-            case 'N':
-                return '0';
-            case 'Y':
-                return '1';
-        }
         return $this->consumidor_final;
     }
 
@@ -1084,9 +885,6 @@ abstract class Nota implements Node
      */
     public function setConsumidorFinal($consumidor_final)
     {
-        if (is_bool($consumidor_final)) {
-            $consumidor_final = $consumidor_final ? 'Y' : 'N';
-        }
         $this->consumidor_final = $consumidor_final;
         return $this;
     }
@@ -1097,30 +895,11 @@ abstract class Nota implements Node
      * de ajuste;1-Operação presencial;2-Não presencial, internet;
      * 3-Não presencial, teleatendimento;4-NFC-e entrega em domicílio;
      * 5-Operação presencial, fora do estabelecimento;9-Não presencial, outros)
-     * @param boolean $normalize informa se a presenca deve estar no formato do XML
+     *
      * @return mixed presenca da Nota
      */
-    public function getPresenca($normalize = false)
+    public function getPresenca()
     {
-        if (!$normalize) {
-            return $this->presenca;
-        }
-        switch ($this->presenca) {
-            case self::PRESENCA_NENHUM:
-                return '0';
-            case self::PRESENCA_PRESENCIAL:
-                return '1';
-            case self::PRESENCA_INTERNET:
-                return '2';
-            case self::PRESENCA_TELEATENDIMENTO:
-                return '3';
-            case self::PRESENCA_ENTREGA:
-                return '4';
-            case self::PRESENCA_AMBULANTE:
-                return '5';
-            case self::PRESENCA_OUTROS:
-                return '9';
-        }
         return $this->presenca;
     }
 
@@ -1131,29 +910,6 @@ abstract class Nota implements Node
      */
     public function setPresenca($presenca)
     {
-        switch ($presenca) {
-            case '0':
-                $presenca = self::PRESENCA_NENHUM;
-                break;
-            case '1':
-                $presenca = self::PRESENCA_PRESENCIAL;
-                break;
-            case '2':
-                $presenca = self::PRESENCA_INTERNET;
-                break;
-            case '3':
-                $presenca = self::PRESENCA_TELEATENDIMENTO;
-                break;
-            case '4':
-                $presenca = self::PRESENCA_ENTREGA;
-                break;
-            case '5':
-                $presenca = self::PRESENCA_AMBULANTE;
-                break;
-            case '9':
-                $presenca = self::PRESENCA_OUTROS;
-                break;
-        }
         $this->presenca = $presenca;
         return $this;
     }
@@ -1163,21 +919,10 @@ abstract class Nota implements Node
      * site ou plataforma própria) 1=Operação em site ou plataforma de
      * terceiros (intermediadores/marketplace)
      *
-     * @param boolean $normalize informa se a intermediacao deve estar no formato do XML
-     *
      * @return string|null intermediacao of Nota
      */
-    public function getIntermediacao($normalize = false)
+    public function getIntermediacao()
     {
-        if (!$normalize) {
-            return $this->intermediacao;
-        }
-        switch ($this->intermediacao) {
-            case self::INTERMEDIACAO_NENHUM:
-                return '0';
-            case self::INTERMEDIACAO_TERCEIROS:
-                return '1';
-        }
         return $this->intermediacao;
     }
 
@@ -1190,14 +935,6 @@ abstract class Nota implements Node
      */
     public function setIntermediacao($intermediacao)
     {
-        switch ($intermediacao) {
-            case '0':
-                $intermediacao = self::INTERMEDIACAO_NENHUM;
-                break;
-            case '1':
-                $intermediacao = self::INTERMEDIACAO_TERCEIROS;
-                break;
-        }
         $this->intermediacao = $intermediacao;
         return $this;
     }
@@ -1224,14 +961,11 @@ abstract class Nota implements Node
 
     /**
      * Informações adicionais de interesse do Fisco
-     * @param boolean $normalize informa se a adicionais deve estar no formato do XML
+     *
      * @return mixed adicionais da Nota
      */
-    public function getAdicionais($normalize = false)
+    public function getAdicionais()
     {
-        if (!$normalize) {
-            return $this->adicionais;
-        }
         return $this->adicionais;
     }
 
@@ -1563,25 +1297,6 @@ abstract class Nota implements Node
         return $this;
     }
 
-    public function gerarID()
-    {
-        $estado = $this->getEmitente()->getEndereco()->getMunicipio()->getEstado();
-        $estado->checkCodigos();
-        $id = sprintf(
-            '%02d%02d%02d%s%02d%03d%09d%01d%08d',
-            $estado->getCodigo(),
-            date('y', $this->getDataEmissao()), // Ano 2 dígitos
-            date('m', $this->getDataEmissao()), // Mês 2 dígitos
-            $this->getEmitente()->getCNPJ(),
-            $this->getModelo(true),
-            $this->getSerie(),
-            $this->getNumero(),
-            $this->getEmissao(true),
-            $this->getCodigo()
-        );
-        return $id . Util::getDAC($id, 11);
-    }
-
     public function getTotais()
     {
         $total = [];
@@ -1657,452 +1372,21 @@ abstract class Nota implements Node
         return $total;
     }
 
-    private function getNodeTotal($name = null)
+    public function getLoader(): Loader
     {
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'total' : $name);
-
-        // Totais referentes ao ICMS
-        $total = $this->getTotais();
-        $icms = $dom->createElement('ICMSTot');
-        Util::appendNode($icms, 'vBC', Util::toCurrency($total['base']));
-        Util::appendNode($icms, 'vICMS', Util::toCurrency($total['icms']));
-        Util::appendNode($icms, 'vICMSDeson', Util::toCurrency($total['desoneracao']));
-        Util::appendNode($icms, 'vFCP', Util::toCurrency($total['fundo']));
-        Util::appendNode($icms, 'vBCST', Util::toCurrency($total['base.st']));
-        Util::appendNode($icms, 'vST', Util::toCurrency($total['icms.st']));
-        Util::appendNode($icms, 'vFCPST', Util::toCurrency($total['fundo.st']));
-        Util::appendNode($icms, 'vFCPSTRet', Util::toCurrency($total['fundo.retido.st']));
-        Util::appendNode($icms, 'vProd', Util::toCurrency($total['produtos']));
-        Util::appendNode($icms, 'vFrete', Util::toCurrency($total['frete']));
-        Util::appendNode($icms, 'vSeg', Util::toCurrency($total['seguro']));
-        Util::appendNode($icms, 'vDesc', Util::toCurrency($total['desconto']));
-        Util::appendNode($icms, 'vII', Util::toCurrency($total['ii']));
-        Util::appendNode($icms, 'vIPI', Util::toCurrency($total['ipi']));
-        Util::appendNode($icms, 'vIPIDevol', Util::toCurrency($total['ipi.devolvido']));
-        Util::appendNode($icms, 'vPIS', Util::toCurrency($total['pis']));
-        Util::appendNode($icms, 'vCOFINS', Util::toCurrency($total['cofins']));
-        Util::appendNode($icms, 'vOutro', Util::toCurrency($total['despesas']));
-        Util::appendNode($icms, 'vNF', Util::toCurrency($total['nota']));
-        Util::appendNode($icms, 'vTotTrib', Util::toCurrency($total['tributos']));
-        $element->appendChild($icms);
-        $this->setTotal(new Total($total));
-        $this->getTotal()->setProdutos($total['produtos']);
-
-        // TODO: Totais referentes ao ISSQN
-
-        // TODO: Retenção de Tributos Federais
-        return $element;
+        return new NotaLoader($this);
     }
 
     public function getNode(?string $name = null): \DOMElement
     {
-        $this->getEmitente()->getEndereco()->checkCodigos();
-        $this->setID($this->gerarID());
-        $this->setDigitoVerificador(substr($this->getID(), -1, 1));
-
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'NFe' : $name);
-        $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', self::PORTAL);
-
-        $info = $dom->createElement('infNFe');
-        $id = $dom->createAttribute('Id');
-        $id->value = $this->getID(true);
-        $info->appendChild($id);
-        $versao = $dom->createAttribute('versao');
-        $versao->value = self::VERSAO;
-        $info->appendChild($versao);
-
-        $municipio = $this->getEmitente()->getEndereco()->getMunicipio();
-        $estado = $municipio->getEstado();
-        $ident = $dom->createElement('ide');
-        Util::appendNode($ident, 'cUF', $estado->getCodigo(true));
-        Util::appendNode($ident, 'cNF', $this->getCodigo(true));
-        Util::appendNode($ident, 'natOp', $this->getNatureza(true));
-        Util::appendNode($ident, 'mod', $this->getModelo(true));
-        Util::appendNode($ident, 'serie', $this->getSerie(true));
-        Util::appendNode($ident, 'nNF', $this->getNumero(true));
-        Util::appendNode($ident, 'dhEmi', $this->getDataEmissao(true));
-        Util::appendNode($ident, 'tpNF', $this->getTipo(true));
-        Util::appendNode($ident, 'idDest', $this->getDestino(true));
-        Util::appendNode($ident, 'cMunFG', $municipio->getCodigo(true));
-        Util::appendNode($ident, 'tpImp', $this->getFormato(true));
-        Util::appendNode($ident, 'tpEmis', $this->getEmissao(true));
-        Util::appendNode($ident, 'cDV', $this->getDigitoVerificador(true));
-        Util::appendNode($ident, 'tpAmb', $this->getAmbiente(true));
-        Util::appendNode($ident, 'finNFe', $this->getFinalidade(true));
-        Util::appendNode($ident, 'indFinal', $this->getConsumidorFinal(true));
-        Util::appendNode($ident, 'indPres', $this->getPresenca(true));
-        if (!is_null($this->getIntermediacao())) {
-            Util::appendNode($ident, 'indIntermed', $this->getIntermediacao(true));
-        }
-        Util::appendNode($ident, 'procEmi', 0); // emissão de NF-e com aplicativo do contribuinte
-        Util::appendNode($ident, 'verProc', self::APP_VERSAO);
-        if (!is_null($this->getDataMovimentacao())) {
-            Util::appendNode($ident, 'dhSaiEnt', $this->getDataMovimentacao(true));
-        }
-        if ($this->getEmissao() != self::EMISSAO_NORMAL) {
-            Util::appendNode($ident, 'dhCont', $this->getDataContingencia(true));
-            Util::appendNode($ident, 'xJust', $this->getJustificativa(true));
-        }
-        $info->appendChild($ident);
-
-        $emitente = $this->getEmitente()->getNode();
-        $emitente = $dom->importNode($emitente, true);
-        $info->appendChild($emitente);
-        if ($this->getAmbiente() == self::AMBIENTE_HOMOLOGACAO && !is_null($this->getDestinatario())) {
-            $this->getDestinatario()->setNome('NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL');
-        }
-        if (!is_null($this->getDestinatario())) {
-            $destinatario = $this->getDestinatario()->getNode();
-            $destinatario = $dom->importNode($destinatario, true);
-            $info->appendChild($destinatario);
-        }
-        $item = 0;
-        $tributos = [];
-        $_produtos = $this->getProdutos();
-        foreach ($_produtos as $_produto) {
-            if (is_null($_produto->getItem())) {
-                $item += 1;
-                $_produto->setItem($item);
-            } else {
-                $item = $_produto->getItem();
-            }
-            if ($this->getAmbiente() == self::AMBIENTE_HOMOLOGACAO) {
-                $_produto->setDescricao('NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL');
-            }
-            $produto = $_produto->getNode();
-            $produto = $dom->importNode($produto, true);
-            $info->appendChild($produto);
-            // Soma os tributos aproximados dos produtos
-            $imposto_info = $_produto->getImpostoInfo();
-            $tributos['info'] = $imposto_info['info'];
-            foreach ($imposto_info as $key => $value) {
-                if (!is_numeric($value)) {
-                    continue;
-                }
-                if (!isset($tributos[$key])) {
-                    $tributos[$key] = 0.00;
-                }
-                $tributos[$key] += $value;
-            }
-        }
-        $total = $this->getNodeTotal();
-        $total = $dom->importNode($total, true);
-        $info->appendChild($total);
-        $transporte = $this->getTransporte()->getNode();
-        $transporte = $dom->importNode($transporte, true);
-        $info->appendChild($transporte);
-        // TODO: adicionar cobrança
-        $pag = $dom->createElement('pag');
-        $_pagamentos = $this->getPagamentos();
-        foreach ($_pagamentos as $_pagamento) {
-            $pagamento = $_pagamento->getNode();
-            $pagamento = $dom->importNode($pagamento, true);
-            $pag->appendChild($pagamento);
-        }
-        $info->appendChild($pag);
-        if (!is_null($this->getIntermediador())) {
-            $intermediador = $this->getIntermediador()->getNode();
-            $intermediador = $dom->importNode($intermediador, true);
-            $info->appendChild($intermediador);
-        }
-        $info_adic = $dom->createElement('infAdic');
-        if (!is_null($this->getAdicionais())) {
-            Util::appendNode($info_adic, 'infAdFisco', $this->getAdicionais(true));
-        }
-        // TODO: adicionar informações adicionais somente na NFC-e?
-        $_complemento = Produto::addNodeInformacoes($tributos, $info_adic, 'infCpl');
-        $this->getTotal()->setComplemento($_complemento);
-        if (!is_null($this->getObservacoes())) {
-            $_observacoes = $this->getObservacoes();
-            foreach ($_observacoes as $_observacao) {
-                $observacoes = $dom->createElement('obsCont');
-                Util::addAttribute($observacoes, 'xCampo', $_observacao['campo']);
-                Util::appendNode($observacoes, 'xTexto', $_observacao['valor']);
-                $info_adic->appendChild($observacoes);
-            }
-        }
-        if (!is_null($this->getInformacoes())) {
-            $_informacoes = $this->getInformacoes();
-            foreach ($_informacoes as $_informacao) {
-                $informacoes = $dom->createElement('obsFisco');
-                Util::addAttribute($informacoes, 'xCampo', $_informacao['campo']);
-                Util::appendNode($informacoes, 'xTexto', $_informacao['valor']);
-                $info_adic->appendChild($informacoes);
-            }
-        }
-        $info->appendChild($info_adic);
-        // TODO: adicionar exportação
-        // TODO: adicionar compra
-        // TODO: adicionar cana
-        if (!is_null($this->getResponsavel())) {
-            $responsavel = $this->getResponsavel()->getNode();
-            $responsavel = $dom->importNode($responsavel, true);
-            $info->appendChild($responsavel);
-        }
-        $element->appendChild($info);
-        $dom->appendChild($element);
-        return $element;
+        $loader = $this->getLoader();
+        return $loader->getNode($name);
     }
 
     public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $root = $element;
-        $name ??= 'NFe';
-        $element = Util::findNode($element, $name);
-        $_fields = $element->getElementsByTagName('infNFe');
-        if ($_fields->length > 0) {
-            /** @var \DOMElement */
-            $info = $_fields->item(0);
-        } else {
-            throw new \Exception('Tag "infNFe" não encontrada', 404);
-        }
-        $id = $info->getAttribute('Id');
-        if (strlen($id) != 47) {
-            throw new \Exception('Atributo "Id" inválido, encontrado: "' . $id . '"', 500);
-        }
-        $this->setID(substr($id, 3));
-        $_fields = $info->getElementsByTagName('ide');
-        if ($_fields->length > 0) {
-            $ident = $_fields->item(0);
-        } else {
-            throw new \Exception('Tag "ide" não encontrada', 404);
-        }
-        $emitente = new Emitente();
-        $emitente->getEndereco()->getMunicipio()->getEstado()->setCodigo(
-            Util::loadNode(
-                $ident,
-                'cUF',
-                'Tag "cUF" do campo "Codigo IBGE da UF" não encontrada'
-            )
-        );
-        $this->setCodigo(
-            Util::loadNode(
-                $ident,
-                'cNF',
-                'Tag "cNF" do campo "Codigo" não encontrada'
-            )
-        );
-        $this->setNatureza(
-            Util::loadNode(
-                $ident,
-                'natOp',
-                'Tag "natOp" do campo "Natureza" não encontrada'
-            )
-        );
-        $this->setModelo(
-            Util::loadNode(
-                $ident,
-                'mod',
-                'Tag "mod" do campo "Modelo" não encontrada'
-            )
-        );
-        $this->setSerie(
-            Util::loadNode(
-                $ident,
-                'serie',
-                'Tag "serie" do campo "Serie" não encontrada'
-            )
-        );
-        $this->setNumero(
-            Util::loadNode(
-                $ident,
-                'nNF',
-                'Tag "nNF" do campo "Numero" não encontrada'
-            )
-        );
-        $this->setDataEmissao(
-            Util::loadNode(
-                $ident,
-                'dhEmi',
-                'Tag "dhEmi" do campo "DataEmissao" não encontrada'
-            )
-        );
-        $this->setTipo(
-            Util::loadNode(
-                $ident,
-                'tpNF',
-                'Tag "tpNF" do campo "Tipo" não encontrada'
-            )
-        );
-        $this->setDestino(
-            Util::loadNode(
-                $ident,
-                'idDest',
-                'Tag "idDest" do campo "Destino" não encontrada'
-            )
-        );
-        $emitente->getEndereco()->getMunicipio()->setCodigo(
-            Util::loadNode(
-                $ident,
-                'cMunFG',
-                'Tag "cMunFG" do campo "Codigo IBGE do município" não encontrada'
-            )
-        );
-        $this->setDataMovimentacao(Util::loadNode($ident, 'dhSaiEnt'));
-        $this->setFormato(
-            Util::loadNode(
-                $ident,
-                'tpImp',
-                'Tag "tpImp" do campo "Formato" não encontrada'
-            )
-        );
-        $this->setEmissao(
-            Util::loadNode(
-                $ident,
-                'tpEmis',
-                'Tag "tpEmis" do campo "Emissao" não encontrada'
-            )
-        );
-        $this->setDigitoVerificador(
-            Util::loadNode(
-                $ident,
-                'cDV',
-                'Tag "cDV" do campo "DigitoVerificador" não encontrada'
-            )
-        );
-        $this->setAmbiente(
-            Util::loadNode(
-                $ident,
-                'tpAmb',
-                'Tag "tpAmb" do campo "Ambiente" não encontrada'
-            )
-        );
-        $this->setFinalidade(
-            Util::loadNode(
-                $ident,
-                'finNFe',
-                'Tag "finNFe" do campo "Finalidade" não encontrada'
-            )
-        );
-        $this->setConsumidorFinal(
-            Util::loadNode(
-                $ident,
-                'indFinal',
-                'Tag "indFinal" do campo "ConsumidorFinal" não encontrada'
-            )
-        );
-        $this->setPresenca(
-            Util::loadNode(
-                $ident,
-                'indPres',
-                'Tag "indPres" do campo "Presenca" não encontrada'
-            )
-        );
-        $this->setIntermediacao(Util::loadNode($ident, 'indIntermed'));
-        $this->setDataContingencia(Util::loadNode($ident, 'dhCont'));
-        $this->setJustificativa(Util::loadNode($ident, 'xJust'));
-        $emitente->loadNode(
-            Util::findNode(
-                $info,
-                'emit',
-                'Tag "emit" do objeto "Emitente" não encontrada'
-            ),
-            'emit'
-        );
-        $this->setEmitente($emitente);
-        $_fields = $info->getElementsByTagName('dest');
-        $destinatario = null;
-        if ($_fields->length > 0) {
-            $destinatario = new Destinatario();
-            $destinatario->loadNode($_fields->item(0), 'dest');
-        }
-        $this->setDestinatario($destinatario);
-        $_fields = $info->getElementsByTagName('infRespTec');
-        $responsavel = null;
-        if ($_fields->length > 0) {
-            $responsavel = new Responsavel();
-            $responsavel->loadNode($_fields->item(0), 'infRespTec');
-        }
-        $this->setResponsavel($responsavel);
-        $produtos = [];
-        $_items = $info->getElementsByTagName('det');
-        foreach ($_items as $_item) {
-            $produto = new Produto();
-            $produto->loadNode($_item, 'det');
-            $produtos[] = $produto;
-        }
-        $this->setProdutos($produtos);
-        $_fields = $info->getElementsByTagName('transp');
-        $transporte = null;
-        if ($_fields->length > 0) {
-            $transporte = new Transporte();
-            $transporte->loadNode($_fields->item(0), 'transp');
-        }
-        $this->setTransporte($transporte);
-        $pagamentos = [];
-        $_items = $info->getElementsByTagName('pag');
-        foreach ($_items as $_item) {
-            $_det_items = $_item->getElementsByTagName('detPag');
-            foreach ($_det_items as $_det_item) {
-                $pagamento = new Pagamento();
-                $pagamento->loadNode($_det_item, 'detPag');
-                $pagamentos[] = $pagamento;
-            }
-            if (Util::nodeExists($_item, 'vTroco')) {
-                $pagamento = new Pagamento();
-                $pagamento->loadNode($_item, 'vTroco');
-                if ($pagamento->getValor() < 0) {
-                    $pagamentos[] = $pagamento;
-                }
-            }
-        }
-        $this->setPagamentos($pagamentos);
-        $_fields = $info->getElementsByTagName('total');
-        if ($_fields->length > 0) {
-            $total = new Total();
-            $total->loadNode($_fields->item(0), 'total');
-            $total->setComplemento(Util::loadNode($info, 'infCpl'));
-        } else {
-            throw new \Exception('Tag "total" do objeto "Total" não encontrada na Nota', 404);
-        }
-        $this->setTotal($total);
-        $_fields = $info->getElementsByTagName('infIntermed');
-        $intermediador = null;
-        if ($_fields->length > 0) {
-            $intermediador = new Intermediador();
-            $intermediador->loadNode($_fields->item(0), 'infIntermed');
-        }
-        $this->setIntermediador($intermediador);
-        $this->setAdicionais(Util::loadNode($info, 'infAdFisco'));
-        $observacoes = [];
-        $_items = $info->getElementsByTagName('obsCont');
-        foreach ($_items as $_item) {
-            $observacao = [
-                'campo' => $_item->getAttribute('xCampo'),
-                'valor' => Util::loadNode(
-                    $_item,
-                    'xTexto',
-                    'Tag "xTexto" do campo "Observação" não encontrada'
-                )
-            ];
-            $observacoes[] = $observacao;
-        }
-        $this->setObservacoes($observacoes);
-        $informacoes = [];
-        $_items = $info->getElementsByTagName('obsFisco');
-        foreach ($_items as $_item) {
-            $informacao = [
-                'campo' => $_item->getAttribute('xCampo'),
-                'valor' => Util::loadNode(
-                    $_item,
-                    'xTexto',
-                    'Tag "xTexto" do campo "Informação" não encontrada'
-                )
-            ];
-            $informacoes[] = $informacao;
-        }
-        $this->setInformacoes($informacoes);
-
-        $_fields = $root->getElementsByTagName('protNFe');
-        $protocolo = null;
-        if ($_fields->length > 0) {
-            $protocolo = new Protocolo();
-            $protocolo->loadNode($_fields->item(0), 'infProt');
-        }
-        $this->setProtocolo($protocolo);
-        return $element;
+        $loader = $this->getLoader();
+        return $loader->loadNode($element, $name);
     }
 
     /**

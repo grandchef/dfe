@@ -14,6 +14,7 @@ namespace DFe\Core;
 use DOMElement;
 use DFe\Common\Util;
 use DFe\Entity\Imposto;
+use DFe\Loader\NFe\V4\NotaLoader;
 
 /**
  * Classe para validação da nota fiscal eletrônica do consumidor
@@ -155,13 +156,15 @@ class NFCe extends Nota
 
     private function makeUrlQuery($dom)
     {
+        /** @var NotaLoader */
+        $loader = $this->getLoader();
         $config = SEFAZ::getInstance()->getConfiguracao();
         $totais = $this->getTotais();
         if ($this->getEmissao() == self::EMISSAO_NORMAL) {
             $params = [
                 $this->getID(), // chave de acesso
                 self::QRCODE_VERSAO, // versão do QR Code
-                $this->getAmbiente(true), // Identificação do ambiente
+                $loader->getAmbiente(), // Identificação do ambiente
                 intval($config->getToken()), // Identificador do CSC (Sem zeros não significativos)
             ];
         } else { // contingência
@@ -169,7 +172,7 @@ class NFCe extends Nota
             $params = [
                 $this->getID(), // chave de acesso
                 self::QRCODE_VERSAO, // versão do QR Code
-                $this->getAmbiente(true), // Identificação do ambiente
+                $loader->getAmbiente(), // Identificação do ambiente
                 date('d', $this->getDataEmissao()), // dia da data de emissão
                 Util::toCurrency($totais['nota']), // valor total da NFC-e
                 Util::toHex($dig_val), // DigestValue da NFC-e

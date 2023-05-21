@@ -11,6 +11,8 @@
 
 namespace DFe\Common;
 
-interface Node extends Loader
+interface Loader
 {
+    public function getNode(?string $name = null): \DOMElement;
+    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement;
 }
