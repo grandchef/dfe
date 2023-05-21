@@ -337,8 +337,8 @@ class Envio
 
     /**
      * Cria um nó XML do envio de acordo com o leiaute da NFe
+     *
      * @param  string $name Nome do nó que será criado
-     * @return DOMElement|DOMDocument   Nó que contém todos os campos da classe
      */
     public function getNode(?string $name = null): \DOMElement
     {

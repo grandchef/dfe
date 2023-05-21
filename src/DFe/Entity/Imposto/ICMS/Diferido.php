@@ -135,6 +135,7 @@ class Diferido extends Reducao
         $name ??= 'ICMS51';
         $element = Util::findNode($element, $name);
         $dom = $element->ownerDocument;
+        /** @var \DOMElement */
         $element = $dom->importNode($element, true);
         $_dif = $element->getElementsByTagName('pDif');
         if ($_dif->length > 0) {

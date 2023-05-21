@@ -262,9 +262,6 @@ class Protocolo extends Retorno
 
     /**
      * Carrega as informações do nó e preenche a instância da classe
-     * @param DOMDocument|DOMElement $element Nó do xml com todos as tags dos campos
-     * @param string $name Nome do nó que será carregado
-     * @return DOMElement Instância do nó que foi carregado
      */
     public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {

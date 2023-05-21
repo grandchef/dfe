@@ -42,7 +42,7 @@ class SEFAZ
      * Instância global
      * @var self
      */
-    private static $instance;
+    private static $instance = null;
 
     /**
      * Constroi uma intência a partir de outra ou array
