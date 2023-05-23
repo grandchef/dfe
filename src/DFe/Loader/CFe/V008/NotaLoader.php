@@ -583,14 +583,6 @@ class NotaLoader implements Loader
             }
         }
         $info->appendChild($info_adic);
-        // TODO: adicionar exportação
-        // TODO: adicionar compra
-        // TODO: adicionar cana
-        if (!is_null($this->nota->getResponsavel())) {
-            $responsavel = $this->nota->getResponsavel()->getNode();
-            $responsavel = $dom->importNode($responsavel, true);
-            $info->appendChild($responsavel);
-        }
         $element->appendChild($info);
         $dom->appendChild($element);
         return $element;
@@ -864,15 +856,6 @@ class NotaLoader implements Loader
             $xml = $this->getNode();
             $dom = $xml->ownerDocument;
         }
-        $config = SEFAZ::getInstance()->getConfiguracao();
-        $config->verificaValidadeCertificado();
-
-        $adapter = new XmlseclibsAdapter();
-        $adapter->setPrivateKey($config->getCertificado()->getChavePrivada());
-        $adapter->setPublicKey($config->getCertificado()->getChavePublica());
-        $adapter->addTransform(AdapterInterface::ENVELOPED);
-        $adapter->addTransform(AdapterInterface::XML_C14N);
-        $adapter->sign($dom, 'infNFe');
         return $dom;
     }
 
@@ -881,30 +864,7 @@ class NotaLoader implements Loader
      */
     public function validar($dom)
     {
-        $dom->loadXML($dom->saveXML());
-        $xsd_path = dirname(dirname(dirname(__DIR__))) . '/Core/schema';
-        if (is_null($this->nota->getProtocolo())) {
-            $xsd_file = $xsd_path . '/NFe/v4.0.0/nfe_v' . self::VERSAO . '.xsd';
-        } else {
-            $xsd_file = $xsd_path . '/NFe/v4.0.0/procNFe_v' . self::VERSAO . '.xsd';
-        }
-        if (!file_exists($xsd_file)) {
-            throw new \Exception(sprintf('O arquivo "%s" de esquema XSD não existe!', $xsd_file), 404);
-        }
-        // Enable user error handling
-        $save = libxml_use_internal_errors();
-        if ($dom->schemaValidate($xsd_file)) {
-            libxml_use_internal_errors($save);
-            return $dom;
-        }
-        $msg = [];
-        $errors = libxml_get_errors();
-        foreach ($errors as $error) {
-            $msg[] = 'Não foi possível validar o XML: ' . $error->message;
-        }
-        libxml_clear_errors();
-        libxml_use_internal_errors($save);
-        throw new ValidationException($msg);
+        return $dom;
     }
 
     /**
@@ -912,32 +872,6 @@ class NotaLoader implements Loader
      */
     public function addProtocolo($dom)
     {
-        if (is_null($this->nota->getProtocolo())) {
-            throw new \Exception('O protocolo não foi informado na nota "' . $this->getID() . '"', 404);
-        }
-        $notae = $dom->getElementsByTagName('NFe')->item(0);
-        // Corrige xmlns:default
-        $notae_xml = $dom->saveXML($notae);
-
-        $element = $dom->createElement('nfeProc');
-        $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', self::PORTAL);
-        $versao = $dom->createAttribute('versao');
-        $versao->value = self::VERSAO;
-        $element->appendChild($versao);
-        $dom->removeChild($notae);
-        // Corrige xmlns:default
-        $notae = $dom->createElement('NFe', 0);
-
-        $element->appendChild($notae);
-        $info = $this->nota->getProtocolo()->getNode();
-        $info = $dom->importNode($info, true);
-        $element->appendChild($info);
-        $dom->appendChild($element);
-        // Corrige xmlns:default
-        $xml = $dom->saveXML();
-        $xml = str_replace('<NFe>0</NFe>', $notae_xml, $xml);
-        $dom->loadXML($xml);
-
         return $dom;
     }
 }

@@ -1,25 +1,9 @@
-<NFe xmlns="http://www.portalfiscal.inf.br/nfe">
-  <infNFe Id="NFe35160908380787000176000010000000811778821923" versao="0.08">
+<CFe>
+  <infCFe versaoDadosEnt="0.08">
     <ide>
-      <cUF>35</cUF>
-      <cNF>77882192</cNF>
-      <natOp>VENDA PARA CONSUMIDOR FINAL</natOp>
-      <mod>cfe</mod>
-      <serie>1</serie>
-      <nNF>81</nNF>
-      <dhEmi>2016-09-17T00:36:03+00:00</dhEmi>
-      <tpNF>1</tpNF>
-      <idDest>1</idDest>
-      <cMunFG>3550308</cMunFG>
-      <tpImp>4</tpImp>
-      <tpEmis>1</tpEmis>
-      <cDV>3</cDV>
-      <tpAmb>2</tpAmb>
-      <finNFe>1</finNFe>
-      <indFinal>1</indFinal>
-      <indPres>1</indPres>
-      <procEmi>0</procEmi>
-      <verProc>1.0</verProc>
+      <CNPJ>12345678000123</CNPJ>
+      <signAC>aWv6LeEM4X6u4+qBl2OYZ8grigw=</signAC>
+      <numeroCaixa/>
     </ide>
     <emit>
       <CNPJ>08380787000176</CNPJ>
@@ -185,7 +169,7 @@
     <transp>
       <modFrete>9</modFrete>
     </transp>
-    <pag>
+    <pgto>
       <detPag>
         <tPag>03</tPag>
         <vPag>4.50</vPag>
@@ -198,7 +182,7 @@
         <tPag>01</tPag>
         <vPag>9.49</vPag>
       </detPag>
-    </pag>
+    </pgto>
     <infAdic>
       <infCpl>Trib. aprox.: R$ 1,77 Federal e R$ 2,12 Estadual. Fonte: IBPT/empresometro.com.br 2C01C1</infCpl>
       <obsCont xCampo="Vendedor">
@@ -211,13 +195,5 @@
         <xTexto>123456</xTexto>
       </obsFisco>
     </infAdic>
-    <infRespTec>
-      <CNPJ>12345678000123</CNPJ>
-      <xContato>Empresa LTDA</xContato>
-      <email>contato@empresa.com.br</email>
-      <fone>11988220055</fone>
-      <idCSRT>99</idCSRT>
-      <hashCSRT>aWv6LeEM4X6u4+qBl2OYZ8grigw=</hashCSRT>
-    </infRespTec>
-  </infNFe>
-</NFe>
+  </infCFe>
+</CFe>

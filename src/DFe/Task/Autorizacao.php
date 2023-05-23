@@ -11,16 +11,29 @@
 
 namespace DFe\Task;
 
+use DOMDocument;
 use DFe\Core\Nota;
 use DFe\Core\SEFAZ;
 use DFe\Loader\NFe\V4\Task\LoteLoader;
 use DFe\Loader\CFe\V008\Task\LoteLoader as CFeLoteLoader;
+use DFe\Loader\CFe\V008\Task\AutorizacaoLoader as CFeAutorizacaoLoader;
 
 class Autorizacao extends Retorno
 {
-    public function __construct($autorizacao = [])
+    public function __construct(private Nota $nota, private DOMDocument $document)
     {
-        parent::__construct($autorizacao);
+        parent::__construct();
+    }
+
+    public function getDocument(): DOMDocument
+    {
+        return $this->document;
+    }
+
+    public function setDocument(DOMDocument $document)
+    {
+        $this->document = $document;
+        return $this;
     }
 
     public function toArray($recursive = false)
@@ -40,24 +53,24 @@ class Autorizacao extends Retorno
         return $this;
     }
 
-    public function getLoteLoader(Nota $nota, \DOMDocument $dom)
+    public function getLoteLoader()
     {
-        if ($nota->getModelo() === Nota::MODELO_CFE) {
-            return new CFeLoteLoader($dom);
+        if ($this->nota->getModelo() === Nota::MODELO_CFE) {
+            return new CFeLoteLoader($this);
         }
-        return new LoteLoader($dom);
+        return new LoteLoader($this);
     }
 
-    public function envia($nota, $dom)
+    public function envia()
     {
         $envio = new Envio();
         $envio->setServico(Envio::SERVICO_AUTORIZACAO);
-        $envio->setAmbiente($nota->getAmbiente());
-        $envio->setModelo($nota->getModelo());
-        $envio->setEmissao($nota->getEmissao());
+        $envio->setAmbiente($this->nota->getAmbiente());
+        $envio->setModelo($this->nota->getModelo());
+        $envio->setEmissao($this->nota->getEmissao());
         $this->setVersao($envio->getVersao());
 
-        $loader = $this->getLoteLoader($nota, $dom);
+        $loader = $this->getLoteLoader();
         $dom_lote = $loader->getNode()->ownerDocument;
         $envio->setConteudo($dom_lote);
         $resp = $envio->envia();
@@ -66,12 +79,12 @@ class Autorizacao extends Retorno
             $protocolo = new Protocolo();
             $protocolo->loadNode($resp->documentElement);
             if ($protocolo->isAutorizado()) {
-                $nota->setProtocolo($protocolo);
+                $this->nota->setProtocolo($protocolo);
             }
             return $protocolo;
         } elseif ($this->isRecebido()) {
             $recibo = new Recibo($this->toArray());
-            $recibo->setModelo($nota->getModelo());
+            $recibo->setModelo($this->nota->getModelo());
             $recibo->loadNode($resp->documentElement, Recibo::INFO_TAGNAME);
             return $recibo;
         } elseif ($this->isParalisado()) {
@@ -84,6 +97,10 @@ class Autorizacao extends Retorno
 
     public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
+        if ($this->nota->getModelo() === Nota::MODELO_CFE) {
+            $loader =  new CFeAutorizacaoLoader($this);
+            return $loader->loadNode($element);
+        }
         $tag = $name ?? 'retEnviNFe';
         $element = parent::loadNode($element, $tag);
         return $element;

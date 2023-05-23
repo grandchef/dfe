@@ -117,8 +117,8 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
         $dom = $data['dom'];
         \DFe\Common\CurlSoap::setPostFunction([$this, 'autorizadoPostFunction']);
         try {
-            $autorizacao = new Autorizacao();
-            $retorno = $autorizacao->envia($nota, $dom);
+            $autorizacao = new Autorizacao($nota, $dom);
+            $retorno = $autorizacao->envia();
             $autorizacao->fromArray($autorizacao);
             $autorizacao->fromArray($autorizacao->toArray());
             $autorizacao->fromArray(null);
@@ -137,8 +137,8 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
         $dom = $data['dom'];
         \DFe\Common\CurlSoap::setPostFunction([$this, 'rejeitadoPostFunction']);
         try {
-            $autorizacao = new Autorizacao();
-            $retorno = $autorizacao->envia($nota, $dom);
+            $autorizacao = new Autorizacao($nota, $dom);
+            $retorno = $autorizacao->envia();
         } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
         }
@@ -153,8 +153,8 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
         $dom = $data['dom'];
         \DFe\Common\CurlSoap::setPostFunction([$this, 'processamentoPostFunction']);
         try {
-            $autorizacao = new Autorizacao();
-            $retorno = $autorizacao->envia($nota, $dom);
+            $autorizacao = new Autorizacao($nota, $dom);
+            $retorno = $autorizacao->envia();
         } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
         }
@@ -164,11 +164,11 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
 
     public function testNaoValidado()
     {
-        $autorizacao = new Autorizacao();
-        $autorizacao->setVersao(Nota::VERSAO);
-        $this->expectException('\DFe\Exception\ValidationException');
         $dom = new DOMDocument();
         $dom->appendChild($dom->createElement('schema'));
-        $autorizacao->getLoteLoader(new NFCe(), $dom)->getNode();
+        $autorizacao = new Autorizacao(new NFCe(), $dom);
+        $autorizacao->setVersao(Nota::VERSAO);
+        $this->expectException('\DFe\Exception\ValidationException');
+        $autorizacao->getLoteLoader()->getNode();
     }
 }

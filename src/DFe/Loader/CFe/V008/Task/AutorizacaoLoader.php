@@ -14,7 +14,7 @@ namespace DFe\Loader\CFe\V008\Task;
 use DFe\Common\Loader;
 use DFe\Task\Autorizacao;
 
-class LoteLoader implements Loader
+class AutorizacaoLoader implements Loader
 {
     public function __construct(private Autorizacao $autorizacao) {}
 
@@ -25,6 +25,9 @@ class LoteLoader implements Loader
 
     public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
+        $this->autorizacao->setDocument($element->ownerDocument);
+        $this->autorizacao->setStatus('100');
+        $this->autorizacao->setMotivo('Autorizado o uso da CF-e');
         return $element;
     }
 }

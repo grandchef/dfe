@@ -1,4 +1,7 @@
 {
     "phpunit.command": "XDEBUG_MODE=debug",
-    "phpunit.args": ["--testdox", "--colors=always", " --no-coverage"]
+    "phpunit.args": ["--testdox", "--colors=always", " --no-coverage"],
+    "[php]": {
+        "editor.formatOnSave": true
+    }
 }

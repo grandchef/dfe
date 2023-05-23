@@ -250,4 +250,9 @@ class CFe extends Nota
     {
         return $dom;
     }
+
+    public function addProtocolo($dom)
+    {
+        return $dom;
+    }
 }

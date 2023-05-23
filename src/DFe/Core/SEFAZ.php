@@ -179,7 +179,11 @@ class SEFAZ
             }
             $evento->onNotaProcessando($nota, $dom, $retorno);
         } elseif ($retorno->isAutorizado()) {
-            $dom = $nota->addProtocolo($dom);
+            if ($retorno instanceof Autorizacao && $nota->getModelo() === Nota::MODELO_CFE) {
+                $dom = $retorno->getDocument();
+            } else {
+                $dom = $nota->addProtocolo($dom);
+            }
             if (
                 $retorno instanceof Recibo
                 || $retorno instanceof Protocolo
@@ -216,17 +220,19 @@ class SEFAZ
                 do {
                     $dom = $nota->getNode()->ownerDocument;
                     $evento->onNotaGerada($nota, $dom);
-                    $dom = $nota->assinar($dom);
-                    $evento->onNotaAssinada($nota, $dom);
-                    $dom = $nota->validar($dom); // valida o XML da nota
-                    $evento->onNotaValidada($nota, $dom);
+                    if ($nota->getModelo() !== Nota::MODELO_CFE) {
+                        $dom = $nota->assinar($dom);
+                        $evento->onNotaAssinada($nota, $dom);
+                        $dom = $nota->validar($dom); // valida o XML da nota
+                        $evento->onNotaValidada($nota, $dom);
+                    }
                     if (!$envia) {
                         break;
                     }
                     $evento->onNotaEnviando($nota, $dom);
-                    $autorizacao = new Autorizacao();
+                    $autorizacao = new Autorizacao($nota, $dom);
                     try {
-                        $retorno = $autorizacao->envia($nota, $dom);
+                        $retorno = $autorizacao->envia();
                     } catch (\Exception $e) {
                         $partial_response = $e instanceof \DFe\Exception\IncompleteRequestException;
                         if ($partial_response) {

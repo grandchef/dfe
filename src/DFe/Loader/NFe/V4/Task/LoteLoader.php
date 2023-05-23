@@ -16,11 +16,14 @@ use DFe\Core\SEFAZ;
 use DFe\Common\Util;
 use DFe\Task\Status;
 use DFe\Common\Loader;
+use DFe\Task\Autorizacao;
 use DFe\Exception\ValidationException;
 
 class LoteLoader implements Loader
 {
-    public function __construct(private \DOMDocument $dom) {}
+    public function __construct(private Autorizacao $autorizacao)
+    {
+    }
 
     public function getNode(?string $name = null): \DOMElement
     {
@@ -36,7 +39,8 @@ class LoteLoader implements Loader
         Util::appendNode($envio, 'NFe', 0);
         $dob->appendChild($envio);
         $xml = $dob->saveXML($dob->documentElement);
-        $xml_content = str_replace('<NFe>0</NFe>', $this->dom->saveXML($this->dom->documentElement), $xml);
+        $dom = $this->autorizacao->getDocument();
+        $xml_content = str_replace('<NFe>0</NFe>', $dom->saveXML($dom->documentElement), $xml);
         $dom_lote = $this->validar($xml_content);
         return $dom_lote->documentElement;
     }
