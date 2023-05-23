@@ -44,7 +44,7 @@ class Transportador extends Destinatario
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'transporta' : $name);
+        $element = $dom->createElement($name ?? 'transporta');
         if (! empty($this->getCNPJ())) {
             Util::appendNode($element, 'CNPJ', $this->getCNPJ(true));
         } else {

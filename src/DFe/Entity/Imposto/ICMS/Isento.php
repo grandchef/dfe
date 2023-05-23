@@ -166,16 +166,8 @@ class Isento extends Generico
             return $this;
         }
         parent::fromArray($isento);
-        if (isset($isento['desoneracao'])) {
-            $this->setDesoneracao($isento['desoneracao']);
-        } else {
-            $this->setDesoneracao(null);
-        }
-        if (isset($isento['motivo'])) {
-            $this->setMotivo($isento['motivo']);
-        } else {
-            $this->setMotivo(null);
-        }
+        $this->setDesoneracao($isento['desoneracao'] ?? null);
+        $this->setMotivo($isento['motivo'] ?? null);
         if (!isset($isento['tributacao'])) {
             $this->setTributacao('40');
         }
@@ -184,7 +176,7 @@ class Isento extends Generico
 
     public function getNode(?string $name = null): \DOMElement
     {
-        $element = parent::getNode(is_null($name) ? 'ICMS40' : $name);
+        $element = parent::getNode($name ?? 'ICMS40');
         $dom = $element->ownerDocument;
         if (! is_null($this->getDesoneracao())) {
             Util::appendNode($element, 'vICMSDeson', $this->getDesoneracao(true));

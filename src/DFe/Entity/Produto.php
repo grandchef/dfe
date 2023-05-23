@@ -503,36 +503,12 @@ class Produto extends Total
             return $this;
         }
         parent::fromArray($produto);
-        if (isset($produto['item'])) {
-            $this->setItem($produto['item']);
-        } else {
-            $this->setItem(null);
-        }
-        if (isset($produto['pedido'])) {
-            $this->setPedido($produto['pedido']);
-        } else {
-            $this->setPedido(null);
-        }
-        if (isset($produto['codigo'])) {
-            $this->setCodigo($produto['codigo']);
-        } else {
-            $this->setCodigo(null);
-        }
-        if (isset($produto['codigo_tributario'])) {
-            $this->setCodigoTributario($produto['codigo_tributario']);
-        } else {
-            $this->setCodigoTributario(null);
-        }
-        if (isset($produto['codigo_barras'])) {
-            $this->setCodigoBarras($produto['codigo_barras']);
-        } else {
-            $this->setCodigoBarras(null);
-        }
-        if (isset($produto['descricao'])) {
-            $this->setDescricao($produto['descricao']);
-        } else {
-            $this->setDescricao(null);
-        }
+        $this->setItem($produto['item'] ?? null);
+        $this->setPedido($produto['pedido'] ?? null);
+        $this->setCodigo($produto['codigo'] ?? null);
+        $this->setCodigoTributario($produto['codigo_tributario'] ?? null);
+        $this->setCodigoBarras($produto['codigo_barras'] ?? null);
+        $this->setDescricao($produto['descricao'] ?? null);
         if (!isset($produto['unidade'])) {
             $this->setUnidade(self::UNIDADE_UNIDADE);
         } else {
@@ -543,42 +519,14 @@ class Produto extends Total
         } else {
             $this->setMultiplicador($produto['multiplicador']);
         }
-        if (isset($produto['preco'])) {
-            $this->setPreco($produto['preco']);
-        } else {
-            $this->setPreco(null);
-        }
-        if (isset($produto['quantidade'])) {
-            $this->setQuantidade($produto['quantidade']);
-        } else {
-            $this->setQuantidade(null);
-        }
-        if (isset($produto['tributada'])) {
-            $this->setTributada($produto['tributada']);
-        } else {
-            $this->setTributada(null);
-        }
+        $this->setPreco($produto['preco'] ?? null);
+        $this->setQuantidade($produto['quantidade'] ?? null);
+        $this->setTributada($produto['tributada'] ?? null);
         $this->setPeso(new Peso(isset($produto['peso']) ? $produto['peso'] : []));
-        if (isset($produto['excecao'])) {
-            $this->setExcecao($produto['excecao']);
-        } else {
-            $this->setExcecao(null);
-        }
-        if (isset($produto['cfop'])) {
-            $this->setCFOP($produto['cfop']);
-        } else {
-            $this->setCFOP(null);
-        }
-        if (isset($produto['ncm'])) {
-            $this->setNCM($produto['ncm']);
-        } else {
-            $this->setNCM(null);
-        }
-        if (isset($produto['cest'])) {
-            $this->setCEST($produto['cest']);
-        } else {
-            $this->setCEST(null);
-        }
+        $this->setExcecao($produto['excecao'] ?? null);
+        $this->setCFOP($produto['cfop'] ?? null);
+        $this->setNCM($produto['ncm'] ?? null);
+        $this->setCEST($produto['cest'] ?? null);
         if (!isset($produto['impostos'])) {
             $this->setImpostos([]);
         } else {
@@ -614,14 +562,14 @@ class Produto extends Total
             $ultimo = ' e ' . array_pop($detalhes);
         }
         $texto = 'Trib. aprox.: ' . implode(', ', $detalhes) . $ultimo . '. ' . $fonte;
-        Util::appendNode($element, is_null($name) ? 'infAdProd' : $name, $texto);
+        Util::appendNode($element, $name ?? 'infAdProd', $texto);
         return $texto;
     }
 
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'det' : $name);
+        $element = $dom->createElement($name ?? 'det');
         $attr = $dom->createAttribute('nItem');
         $attr->value = $this->getItem(true);
         $element->appendChild($attr);

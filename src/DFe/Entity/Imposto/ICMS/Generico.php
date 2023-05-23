@@ -49,12 +49,12 @@ class Generico extends Mista
     {
         if (is_null($this->getModalidade()) && is_null($this->getNormal()->getModalidade())) {
             $dom = new \DOMDocument('1.0', 'UTF-8');
-            $element = $dom->createElement(is_null($name) ? 'ICMS90' : $name);
+            $element = $dom->createElement($name ?? 'ICMS90');
             Util::appendNode($element, 'orig', $this->getOrigem(true));
             Util::appendNode($element, 'CST', $this->getTributacao(true));
             return $element;
         }
-        $element = parent::getNode(is_null($name) ? 'ICMS90' : $name);
+        $element = parent::getNode($name ?? 'ICMS90');
         $dom = $element->ownerDocument;
         return $element;
     }

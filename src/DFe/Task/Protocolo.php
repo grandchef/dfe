@@ -293,7 +293,7 @@ class Protocolo extends Retorno
         $info = parent::getNode('infProt');
         $this->setUF($old_uf);
         $dom = $info->ownerDocument;
-        $element = $dom->createElement(is_null($name) ? 'protNFe' : $name);
+        $element = $dom->createElement($name ?? 'protNFe');
         $versao = $dom->createAttribute('versao');
         $versao->value = Nota::VERSAO;
         $element->appendChild($versao);

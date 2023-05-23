@@ -84,7 +84,7 @@ class Autorizacao extends Retorno
 
     public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
     {
-        $tag = is_null($name) ? 'retEnviNFe' : $name;
+        $tag = $name ?? 'retEnviNFe';
         $element = parent::loadNode($element, $tag);
         return $element;
     }

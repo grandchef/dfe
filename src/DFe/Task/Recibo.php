@@ -156,31 +156,11 @@ class Recibo extends Retorno
             return $this;
         }
         parent::fromArray($recibo);
-        if (isset($recibo['numero'])) {
-            $this->setNumero($recibo['numero']);
-        } else {
-            $this->setNumero(null);
-        }
-        if (isset($recibo['tempo_medio'])) {
-            $this->setTempoMedio($recibo['tempo_medio']);
-        } else {
-            $this->setTempoMedio(null);
-        }
-        if (isset($recibo['codigo'])) {
-            $this->setCodigo($recibo['codigo']);
-        } else {
-            $this->setCodigo(null);
-        }
-        if (isset($recibo['mensagem'])) {
-            $this->setMensagem($recibo['mensagem']);
-        } else {
-            $this->setMensagem(null);
-        }
-        if (isset($recibo['modelo'])) {
-            $this->setModelo($recibo['modelo']);
-        } else {
-            $this->setModelo(null);
-        }
+        $this->setNumero($recibo['numero'] ?? null);
+        $this->setTempoMedio($recibo['tempo_medio'] ?? null);
+        $this->setCodigo($recibo['codigo'] ?? null);
+        $this->setMensagem($recibo['mensagem'] ?? null);
+        $this->setModelo($recibo['modelo'] ?? null);
         return $this;
     }
 
@@ -221,7 +201,7 @@ class Recibo extends Retorno
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'consReciNFe' : $name);
+        $element = $dom->createElement($name ?? 'consReciNFe');
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', Nota::PORTAL);
         $versao = $dom->createAttribute('versao');
         $versao->value = Nota::VERSAO;

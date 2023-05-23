@@ -134,21 +134,9 @@ class Parcial extends Base
             return $this;
         }
         parent::fromArray($parcial);
-        if (isset($parcial['modalidade'])) {
-            $this->setModalidade($parcial['modalidade']);
-        } else {
-            $this->setModalidade(null);
-        }
-        if (isset($parcial['margem'])) {
-            $this->setMargem($parcial['margem']);
-        } else {
-            $this->setMargem(null);
-        }
-        if (isset($parcial['reducao'])) {
-            $this->setReducao($parcial['reducao']);
-        } else {
-            $this->setReducao(null);
-        }
+        $this->setModalidade($parcial['modalidade'] ?? null);
+        $this->setMargem($parcial['margem'] ?? null);
+        $this->setReducao($parcial['reducao'] ?? null);
         if (!isset($parcial['fundo']) || !($this->getFundo() instanceof Substituido)) {
             $this->setFundo(new Substituido());
         }
@@ -161,7 +149,7 @@ class Parcial extends Base
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'ICMS30' : $name);
+        $element = $dom->createElement($name ?? 'ICMS30');
         Util::appendNode($element, 'orig', $this->getOrigem(true));
         Util::appendNode($element, 'CST', $this->getTributacao(true));
         Util::appendNode($element, 'modBCST', $this->getModalidade(true));

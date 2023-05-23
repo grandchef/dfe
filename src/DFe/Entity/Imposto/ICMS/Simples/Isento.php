@@ -56,7 +56,7 @@ class Isento extends Generico
 
     public function getNode(?string $name = null): \DOMElement
     {
-        $element = parent::getNode(is_null($name) ? 'ICMSSN102' : $name);
+        $element = parent::getNode($name ?? 'ICMSSN102');
         return $element;
     }
 

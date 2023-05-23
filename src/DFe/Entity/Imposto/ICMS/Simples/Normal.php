@@ -46,7 +46,7 @@ class Normal extends \DFe\Entity\Imposto\ICMS\Normal
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'ICMSSN101' : $name);
+        $element = $dom->createElement($name ?? 'ICMSSN101');
         Util::appendNode($element, 'orig', $this->getOrigem(true));
         Util::appendNode($element, 'CSOSN', $this->getTributacao(true));
         Util::appendNode($element, 'pCredSN', $this->getAliquota(true));

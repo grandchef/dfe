@@ -185,32 +185,12 @@ class Endereco implements Node
             return $this;
         }
         $this->setPais(new Pais(isset($endereco['pais']) ? $endereco['pais'] : ['codigo' => 1058, 'nome' => 'Brasil']));
-        if (isset($endereco['cep'])) {
-            $this->setCEP($endereco['cep']);
-        } else {
-            $this->setCEP(null);
-        }
+        $this->setCEP($endereco['cep'] ?? null);
         $this->setMunicipio(new Municipio(isset($endereco['municipio']) ? $endereco['municipio'] : []));
-        if (isset($endereco['bairro'])) {
-            $this->setBairro($endereco['bairro']);
-        } else {
-            $this->setBairro(null);
-        }
-        if (isset($endereco['logradouro'])) {
-            $this->setLogradouro($endereco['logradouro']);
-        } else {
-            $this->setLogradouro(null);
-        }
-        if (isset($endereco['numero'])) {
-            $this->setNumero($endereco['numero']);
-        } else {
-            $this->setNumero(null);
-        }
-        if (isset($endereco['complemento'])) {
-            $this->setComplemento($endereco['complemento']);
-        } else {
-            $this->setComplemento(null);
-        }
+        $this->setBairro($endereco['bairro'] ?? null);
+        $this->setLogradouro($endereco['logradouro'] ?? null);
+        $this->setNumero($endereco['numero'] ?? null);
+        $this->setComplemento($endereco['complemento'] ?? null);
         return $this;
     }
 
@@ -224,7 +204,7 @@ class Endereco implements Node
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $this->checkCodigos();
-        $element = $dom->createElement(is_null($name) ? 'enderEmit' : $name);
+        $element = $dom->createElement($name ?? 'enderEmit');
         Util::appendNode($element, 'xLgr', $this->getLogradouro(true));
         Util::appendNode($element, 'nro', $this->getNumero(true));
         if (! empty($this->getComplemento())) {

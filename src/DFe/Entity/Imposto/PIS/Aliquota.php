@@ -62,7 +62,7 @@ class Aliquota extends Imposto
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'PISAliq' : $name);
+        $element = $dom->createElement($name ?? 'PISAliq');
         Util::appendNode($element, 'CST', $this->getTributacao(true));
         Util::appendNode($element, 'vBC', $this->getBase(true));
         Util::appendNode($element, 'pPIS', $this->getAliquota(true));

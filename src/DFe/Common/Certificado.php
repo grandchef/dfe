@@ -216,26 +216,10 @@ class Certificado implements Node
         } elseif (!is_array($certificado)) {
             return $this;
         }
-        if (isset($certificado['chave_publica'])) {
-            $this->setChavePublica($certificado['chave_publica']);
-        } else {
-            $this->setChavePublica(null);
-        }
-        if (isset($certificado['chave_privada'])) {
-            $this->setChavePrivada($certificado['chave_privada']);
-        } else {
-            $this->setChavePrivada(null);
-        }
-        if (isset($certificado['arquivo_chave_publica'])) {
-            $this->setArquivoChavePublica($certificado['arquivo_chave_publica']);
-        } else {
-            $this->setArquivoChavePublica(null);
-        }
-        if (isset($certificado['arquivo_chave_privada'])) {
-            $this->setArquivoChavePrivada($certificado['arquivo_chave_privada']);
-        } else {
-            $this->setArquivoChavePrivada(null);
-        }
+        $this->setChavePublica($certificado['chave_publica'] ?? null);
+        $this->setChavePrivada($certificado['chave_privada'] ?? null);
+        $this->setArquivoChavePublica($certificado['arquivo_chave_publica'] ?? null);
+        $this->setArquivoChavePrivada($certificado['arquivo_chave_privada'] ?? null);
         return $this;
     }
 

@@ -150,21 +150,9 @@ class Volume implements Node
         } elseif (!is_array($volume)) {
             return $this;
         }
-        if (isset($volume['quantidade'])) {
-            $this->setQuantidade($volume['quantidade']);
-        } else {
-            $this->setQuantidade(null);
-        }
-        if (isset($volume['especie'])) {
-            $this->setEspecie($volume['especie']);
-        } else {
-            $this->setEspecie(null);
-        }
-        if (isset($volume['marca'])) {
-            $this->setMarca($volume['marca']);
-        } else {
-            $this->setMarca(null);
-        }
+        $this->setQuantidade($volume['quantidade'] ?? null);
+        $this->setEspecie($volume['especie'] ?? null);
+        $this->setMarca($volume['marca'] ?? null);
         if (!isset($volume['numeracoes'])) {
             $this->setNumeracoes([]);
         } else {
@@ -182,7 +170,7 @@ class Volume implements Node
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'vol' : $name);
+        $element = $dom->createElement($name ?? 'vol');
         if (!is_null($this->getQuantidade())) {
             Util::appendNode($element, 'qVol', $this->getQuantidade(true));
         }

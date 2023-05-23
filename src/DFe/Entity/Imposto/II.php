@@ -99,28 +99,16 @@ class II extends Imposto
             return $this;
         }
         parent::fromArray($ii);
-        if (isset($ii['despesas'])) {
-            $this->setDespesas($ii['despesas']);
-        } else {
-            $this->setDespesas(null);
-        }
-        if (isset($ii['valor'])) {
-            $this->setValor($ii['valor']);
-        } else {
-            $this->setValor(null);
-        }
-        if (isset($ii['iof'])) {
-            $this->setIOF($ii['iof']);
-        } else {
-            $this->setIOF(null);
-        }
+        $this->setDespesas($ii['despesas'] ?? null);
+        $this->setValor($ii['valor'] ?? null);
+        $this->setIOF($ii['iof'] ?? null);
         return $this;
     }
 
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'II' : $name);
+        $element = $dom->createElement($name ?? 'II');
         Util::appendNode($element, 'vBC', $this->getBase(true));
         Util::appendNode($element, 'vDespAdu', $this->getDespesas(true));
         Util::appendNode($element, 'vII', $this->getValor(true));

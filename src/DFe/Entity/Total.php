@@ -331,7 +331,7 @@ class Total implements Node
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'prod' : $name);
+        $element = $dom->createElement($name ?? 'prod');
         Util::appendNode($element, 'vProd', $this->getProdutos(true));
         if (!is_null($this->getDesconto())) {
             Util::appendNode($element, 'vDesc', $this->getDesconto(true));

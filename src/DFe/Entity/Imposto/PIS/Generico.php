@@ -52,11 +52,7 @@ class Generico extends Imposto
             return $this;
         }
         parent::fromArray($generico);
-        if (isset($generico['valor'])) {
-            $this->setValor($generico['valor']);
-        } else {
-            $this->setValor(null);
-        }
+        $this->setValor($generico['valor'] ?? null);
         $this->setGrupo(self::GRUPO_PIS);
         if (!isset($generico['tributacao'])) {
             $this->setTributacao('99');
@@ -67,7 +63,7 @@ class Generico extends Imposto
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'PISOutr' : $name);
+        $element = $dom->createElement($name ?? 'PISOutr');
         Util::appendNode($element, 'CST', $this->getTributacao(true));
         Util::appendNode($element, 'vPIS', $this->getValor(true));
         return $element;

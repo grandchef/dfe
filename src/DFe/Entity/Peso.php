@@ -75,16 +75,8 @@ class Peso
         } elseif (!is_array($peso)) {
             return $this;
         }
-        if (isset($peso['liquido'])) {
-            $this->setLiquido($peso['liquido']);
-        } else {
-            $this->setLiquido(null);
-        }
-        if (isset($peso['bruto'])) {
-            $this->setBruto($peso['bruto']);
-        } else {
-            $this->setBruto(null);
-        }
+        $this->setLiquido($peso['liquido'] ?? null);
+        $this->setBruto($peso['bruto'] ?? null);
         return $this;
     }
 }

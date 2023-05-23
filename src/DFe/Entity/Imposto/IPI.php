@@ -173,43 +173,23 @@ class IPI extends Imposto
             return $this;
         }
         parent::fromArray($ipi);
-        if (isset($ipi['classe'])) {
-            $this->setClasse($ipi['classe']);
-        } else {
-            $this->setClasse(null);
-        }
-        if (isset($ipi['cnpj'])) {
-            $this->setCNPJ($ipi['cnpj']);
-        } else {
-            $this->setCNPJ(null);
-        }
-        if (isset($ipi['selo'])) {
-            $this->setSelo($ipi['selo']);
-        } else {
-            $this->setSelo(null);
-        }
-        if (isset($ipi['quantidade'])) {
-            $this->setQuantidade($ipi['quantidade']);
-        } else {
-            $this->setQuantidade(null);
-        }
+        $this->setClasse($ipi['classe'] ?? null);
+        $this->setCNPJ($ipi['cnpj'] ?? null);
+        $this->setSelo($ipi['selo'] ?? null);
+        $this->setQuantidade($ipi['quantidade'] ?? null);
         if (!isset($ipi['enquadramento'])) {
             $this->setEnquadramento('999');
         } else {
             $this->setEnquadramento($ipi['enquadramento']);
         }
-        if (isset($ipi['tributo'])) {
-            $this->setTributo($ipi['tributo']);
-        } else {
-            $this->setTributo(null);
-        }
+        $this->setTributo($ipi['tributo'] ?? null);
         return $this;
     }
 
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'IPI' : $name);
+        $element = $dom->createElement($name ?? 'IPI');
         if (!is_null($this->getClasse())) {
             Util::appendNode($element, 'clEnq', $this->getClasse(true));
         }

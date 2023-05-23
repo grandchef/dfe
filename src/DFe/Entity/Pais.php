@@ -70,16 +70,8 @@ class Pais
         } elseif (!is_array($pais)) {
             return $this;
         }
-        if (isset($pais['codigo'])) {
-            $this->setCodigo($pais['codigo']);
-        } else {
-            $this->setCodigo(null);
-        }
-        if (isset($pais['nome'])) {
-            $this->setNome($pais['nome']);
-        } else {
-            $this->setNome(null);
-        }
+        $this->setCodigo($pais['codigo'] ?? null);
+        $this->setNome($pais['nome'] ?? null);
         return $this;
     }
 }

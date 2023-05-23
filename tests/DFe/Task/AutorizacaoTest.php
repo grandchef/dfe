@@ -58,13 +58,13 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
         $dom->preserveWhiteSpace = false;
         $dom->loadXML($data);
 
-        if (getenv('TEST_MODE') == 'override') {
+        if (getenv('TEST_MODE') === 'override') {
             $dom->formatOutput = true;
-            file_put_contents($xml_file, $dom->saveXML());
+            file_put_contents($xml_file, $dom->saveXML($dom->documentElement));
         }
 
-        $xml_cmp = $dom_cmp->saveXML();
-        $test->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML());
+        $xml_cmp = $dom_cmp->saveXML($dom_cmp->documentElement);
+        $test->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML($dom->documentElement));
 
         $xml_resp_file = dirname(dirname(__DIR__)) . '/resources/xml/task/' . $resp_name;
         $dom_resp = new \DOMDocument();

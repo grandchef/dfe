@@ -609,51 +609,15 @@ class Ajuste extends Configuracao implements Evento
             return $this;
         }
         parent::fromArray($ajuste);
-        if (isset($ajuste['pasta_xml_base'])) {
-            $this->setPastaXmlBase($ajuste['pasta_xml_base']);
-        } else {
-            $this->setPastaXmlBase(null);
-        }
-        if (isset($ajuste['pasta_xml_inutilizado'])) {
-            $this->setPastaXmlInutilizado($ajuste['pasta_xml_inutilizado']);
-        } else {
-            $this->setPastaXmlInutilizado(null);
-        }
-        if (isset($ajuste['pasta_xml_cancelado'])) {
-            $this->setPastaXmlCancelado($ajuste['pasta_xml_cancelado']);
-        } else {
-            $this->setPastaXmlCancelado(null);
-        }
-        if (isset($ajuste['pasta_xml_pendente'])) {
-            $this->setPastaXmlPendente($ajuste['pasta_xml_pendente']);
-        } else {
-            $this->setPastaXmlPendente(null);
-        }
-        if (isset($ajuste['pasta_xml_denegado'])) {
-            $this->setPastaXmlDenegado($ajuste['pasta_xml_denegado']);
-        } else {
-            $this->setPastaXmlDenegado(null);
-        }
-        if (isset($ajuste['pasta_xml_rejeitado'])) {
-            $this->setPastaXmlRejeitado($ajuste['pasta_xml_rejeitado']);
-        } else {
-            $this->setPastaXmlRejeitado(null);
-        }
-        if (isset($ajuste['pasta_xml_autorizado'])) {
-            $this->setPastaXmlAutorizado($ajuste['pasta_xml_autorizado']);
-        } else {
-            $this->setPastaXmlAutorizado(null);
-        }
-        if (isset($ajuste['pasta_xml_processamento'])) {
-            $this->setPastaXmlProcessamento($ajuste['pasta_xml_processamento']);
-        } else {
-            $this->setPastaXmlProcessamento(null);
-        }
-        if (isset($ajuste['pasta_xml_assinado'])) {
-            $this->setPastaXmlAssinado($ajuste['pasta_xml_assinado']);
-        } else {
-            $this->setPastaXmlAssinado(null);
-        }
+        $this->setPastaXmlBase($ajuste['pasta_xml_base'] ?? null);
+        $this->setPastaXmlInutilizado($ajuste['pasta_xml_inutilizado'] ?? null);
+        $this->setPastaXmlCancelado($ajuste['pasta_xml_cancelado'] ?? null);
+        $this->setPastaXmlPendente($ajuste['pasta_xml_pendente'] ?? null);
+        $this->setPastaXmlDenegado($ajuste['pasta_xml_denegado'] ?? null);
+        $this->setPastaXmlRejeitado($ajuste['pasta_xml_rejeitado'] ?? null);
+        $this->setPastaXmlAutorizado($ajuste['pasta_xml_autorizado'] ?? null);
+        $this->setPastaXmlProcessamento($ajuste['pasta_xml_processamento'] ?? null);
+        $this->setPastaXmlAssinado($ajuste['pasta_xml_assinado'] ?? null);
         return $this;
     }
 }

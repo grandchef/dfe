@@ -228,31 +228,11 @@ abstract class Imposto implements Node
         } elseif (!is_array($imposto)) {
             return $this;
         }
-        if (isset($imposto['tipo'])) {
-            $this->setTipo($imposto['tipo']);
-        } else {
-            $this->setTipo(null);
-        }
-        if (isset($imposto['grupo'])) {
-            $this->setGrupo($imposto['grupo']);
-        } else {
-            $this->setGrupo(null);
-        }
-        if (isset($imposto['tributacao'])) {
-            $this->setTributacao($imposto['tributacao']);
-        } else {
-            $this->setTributacao(null);
-        }
-        if (isset($imposto['aliquota'])) {
-            $this->setAliquota($imposto['aliquota']);
-        } else {
-            $this->setAliquota(null);
-        }
-        if (isset($imposto['base'])) {
-            $this->setBase($imposto['base']);
-        } else {
-            $this->setBase(null);
-        }
+        $this->setTipo($imposto['tipo'] ?? null);
+        $this->setGrupo($imposto['grupo'] ?? null);
+        $this->setTributacao($imposto['tributacao'] ?? null);
+        $this->setAliquota($imposto['aliquota'] ?? null);
+        $this->setBase($imposto['base'] ?? null);
         return $this;
     }
 

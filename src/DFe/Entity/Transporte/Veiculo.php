@@ -83,28 +83,16 @@ class Veiculo implements Node
         } elseif (!is_array($veiculo)) {
             return $this;
         }
-        if (isset($veiculo['placa'])) {
-            $this->setPlaca($veiculo['placa']);
-        } else {
-            $this->setPlaca(null);
-        }
-        if (isset($veiculo['uf'])) {
-            $this->setUF($veiculo['uf']);
-        } else {
-            $this->setUF(null);
-        }
-        if (isset($veiculo['rntc'])) {
-            $this->setRNTC($veiculo['rntc']);
-        } else {
-            $this->setRNTC(null);
-        }
+        $this->setPlaca($veiculo['placa'] ?? null);
+        $this->setUF($veiculo['uf'] ?? null);
+        $this->setRNTC($veiculo['rntc'] ?? null);
         return $this;
     }
 
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'veicTransp' : $name);
+        $element = $dom->createElement($name ?? 'veicTransp');
         Util::appendNode($element, 'placa', $this->getPlaca(true));
         Util::appendNode($element, 'UF', $this->getUF(true));
         if (!is_null($this->getRNTC())) {

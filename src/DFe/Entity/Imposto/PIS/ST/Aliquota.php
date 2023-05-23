@@ -45,7 +45,7 @@ class Aliquota extends \DFe\Entity\Imposto\PIS\Aliquota
 
     public function getNode(?string $name = null): \DOMElement
     {
-        $element = parent::getNode(is_null($name) ? 'PISST' : $name);
+        $element = parent::getNode($name ?? 'PISST');
         $item = $element->getElementsByTagName('CST')->item(0);
         $element->removeChild($item);
         return $element;

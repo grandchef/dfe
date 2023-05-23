@@ -89,16 +89,8 @@ class Tributo extends Imposto
             return $this;
         }
         parent::fromArray($tributo);
-        if (isset($tributo['servico'])) {
-            $this->setServico($tributo['servico']);
-        } else {
-            $this->setServico(null);
-        }
-        if (isset($tributo['cfop'])) {
-            $this->setCFOP($tributo['cfop']);
-        } else {
-            $this->setCFOP(null);
-        }
+        $this->setServico($tributo['servico'] ?? null);
+        $this->setCFOP($tributo['cfop'] ?? null);
         $this->setMunicipio(new Municipio(isset($tributo['municipio']) ? $tributo['municipio'] : []));
         return $this;
     }
@@ -106,7 +98,7 @@ class Tributo extends Imposto
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'retTransp' : $name);
+        $element = $dom->createElement($name ?? 'retTransp');
         Util::appendNode($element, 'vServ', $this->getServico(true));
         Util::appendNode($element, 'vBCRet', $this->getBase(true));
         Util::appendNode($element, 'pICMSRet', $this->getAliquota(true));

@@ -70,11 +70,7 @@ class Reducao extends Normal
             return $this;
         }
         parent::fromArray($reducao);
-        if (isset($reducao['reducao'])) {
-            $this->setReducao($reducao['reducao']);
-        } else {
-            $this->setReducao(null);
-        }
+        $this->setReducao($reducao['reducao'] ?? null);
         if (!isset($reducao['tributacao'])) {
             $this->setTributacao('20');
         }
@@ -83,7 +79,7 @@ class Reducao extends Normal
 
     public function getNode(?string $name = null): \DOMElement
     {
-        $element = parent::getNode(is_null($name) ? 'ICMS20' : $name);
+        $element = parent::getNode($name ?? 'ICMS20');
         $dom = $element->ownerDocument;
         Util::appendNode($element, 'pRedBC', $this->getReducao(true));
         return $element;

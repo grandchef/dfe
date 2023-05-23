@@ -9,7 +9,7 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-namespace DFe\Loader\NFe\V4;
+namespace DFe\Loader\CFe\V008;
 
 use DFe\Core\Nota;
 use DFe\Core\SEFAZ;
@@ -36,7 +36,7 @@ class NotaLoader implements Loader
     /**
      * Versão da nota fiscal
      */
-    public const VERSAO = '4.00';
+    public const VERSAO = '0.08';
 
     /**
      * Portal da nota fiscal
@@ -52,7 +52,7 @@ class NotaLoader implements Loader
      */
     public function getID()
     {
-        return 'NFe' . $this->nota->getID();
+        return 'CFe' . $this->nota->getID();
     }
 
     public function getDataMovimentacao()
@@ -484,49 +484,17 @@ class NotaLoader implements Loader
         $this->nota->setDigitoVerificador(substr($this->getID(), -1, 1));
 
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement($name ?? 'NFe');
-        $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', Nota::PORTAL);
+        $element = $dom->createElement($name ?? 'CFe');
 
-        $info = $dom->createElement('infNFe');
-        $id = $dom->createAttribute('Id');
-        $id->value = $this->getID();
-        $info->appendChild($id);
-        $versao = $dom->createAttribute('versao');
+        $info = $dom->createElement('infCFe');
+        $versao = $dom->createAttribute('versaoDadosEnt');
         $versao->value = self::VERSAO;
         $info->appendChild($versao);
 
-        $municipio = $this->nota->getEmitente()->getEndereco()->getMunicipio();
-        $estado = $municipio->getEstado();
         $ident = $dom->createElement('ide');
-        Util::appendNode($ident, 'cUF', $estado->getCodigo());
-        Util::appendNode($ident, 'cNF', $this->getCodigo());
-        Util::appendNode($ident, 'natOp', $this->nota->getNatureza());
-        Util::appendNode($ident, 'mod', $this->getModelo());
-        Util::appendNode($ident, 'serie', $this->nota->getSerie());
-        Util::appendNode($ident, 'nNF', $this->nota->getNumero());
-        Util::appendNode($ident, 'dhEmi', $this->getDataEmissao());
-        Util::appendNode($ident, 'tpNF', $this->getTipo());
-        Util::appendNode($ident, 'idDest', $this->getDestino());
-        Util::appendNode($ident, 'cMunFG', $municipio->getCodigo());
-        Util::appendNode($ident, 'tpImp', $this->getFormato());
-        Util::appendNode($ident, 'tpEmis', $this->getEmissao());
-        Util::appendNode($ident, 'cDV', $this->nota->getDigitoVerificador());
-        Util::appendNode($ident, 'tpAmb', $this->getAmbiente());
-        Util::appendNode($ident, 'finNFe', $this->getFinalidade());
-        Util::appendNode($ident, 'indFinal', $this->getConsumidorFinal());
-        Util::appendNode($ident, 'indPres', $this->getPresenca());
-        if (!is_null($this->nota->getIntermediacao())) {
-            Util::appendNode($ident, 'indIntermed', $this->getIntermediacao());
-        }
-        Util::appendNode($ident, 'procEmi', 0); // emissão de NF-e com aplicativo do contribuinte
-        Util::appendNode($ident, 'verProc', Nota::APP_VERSAO);
-        if (!is_null($this->nota->getDataMovimentacao())) {
-            Util::appendNode($ident, 'dhSaiEnt', $this->getDataMovimentacao());
-        }
-        if ($this->nota->getEmissao() != Nota::EMISSAO_NORMAL) {
-            Util::appendNode($ident, 'dhCont', $this->getDataContingencia());
-            Util::appendNode($ident, 'xJust', $this->nota->getJustificativa());
-        }
+        Util::appendNode($ident, 'CNPJ', $this->nota->getResponsavel()->getCNPJ());
+        Util::appendNode($ident, 'signAC', $this->nota->getResponsavel()->getAssinatura());
+        Util::appendNode($ident, 'numeroCaixa', $this->nota->getCaixa()->getNumero());
         $info->appendChild($ident);
 
         $emitente = $this->nota->getEmitente()->getNode();
@@ -576,7 +544,7 @@ class NotaLoader implements Loader
         $transporte = $dom->importNode($transporte, true);
         $info->appendChild($transporte);
         // TODO: adicionar cobrança
-        $pag = $dom->createElement('pag');
+        $pag = $dom->createElement('pgto');
         $_pagamentos = $this->nota->getPagamentos();
         foreach ($_pagamentos as $_pagamento) {
             $pagamento = $_pagamento->getNode();

@@ -70,11 +70,7 @@ class Normal extends Base
             return $this;
         }
         parent::fromArray($normal);
-        if (isset($normal['modalidade'])) {
-            $this->setModalidade($normal['modalidade']);
-        } else {
-            $this->setModalidade(null);
-        }
+        $this->setModalidade($normal['modalidade'] ?? null);
         if (!isset($normal['fundo']) || !($this->getFundo() instanceof Fundo)) {
             $this->setFundo(new Fundo());
         }
@@ -84,7 +80,7 @@ class Normal extends Base
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'ICMS' : $name);
+        $element = $dom->createElement($name ?? 'ICMS');
         Util::appendNode($element, 'orig', $this->getOrigem(true));
         Util::appendNode($element, 'CST', $this->getTributacao(true));
         Util::appendNode($element, 'modBC', $this->getModalidade(true));

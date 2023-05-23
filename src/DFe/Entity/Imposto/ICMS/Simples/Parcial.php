@@ -47,7 +47,7 @@ class Parcial extends \DFe\Entity\Imposto\ICMS\Parcial
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'ICMSSN202' : $name);
+        $element = $dom->createElement($name ?? 'ICMSSN202');
         Util::appendNode($element, 'orig', $this->getOrigem(true));
         Util::appendNode($element, 'CSOSN', $this->getTributacao(true));
         Util::appendNode($element, 'modBCST', $this->getModalidade(true));

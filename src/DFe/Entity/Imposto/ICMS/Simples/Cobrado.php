@@ -67,11 +67,7 @@ class Cobrado extends Generico
             return $this;
         }
         parent::fromArray($cobrado);
-        if (isset($cobrado['valor'])) {
-            $this->setValor($cobrado['valor']);
-        } else {
-            $this->setValor(null);
-        }
+        $this->setValor($cobrado['valor'] ?? null);
         if (!isset($cobrado['fundo']) || !($this->getFundo() instanceof Retido)) {
             $this->setFundo(new Retido());
         }
@@ -83,7 +79,7 @@ class Cobrado extends Generico
 
     public function getNode(?string $name = null): \DOMElement
     {
-        $element = parent::getNode(is_null($name) ? 'ICMSSN500' : $name);
+        $element = parent::getNode($name ?? 'ICMSSN500');
         $dom = $element->ownerDocument;
         if (is_null($this->getValor())) {
             return $element;

@@ -164,38 +164,18 @@ class Status implements Node
         } elseif (!is_array($status)) {
             return $this;
         }
-        if (isset($status['ambiente'])) {
-            $this->setAmbiente($status['ambiente']);
-        } else {
-            $this->setAmbiente(null);
-        }
-        if (isset($status['versao'])) {
-            $this->setVersao($status['versao']);
-        } else {
-            $this->setVersao(null);
-        }
-        if (isset($status['status'])) {
-            $this->setStatus($status['status']);
-        } else {
-            $this->setStatus(null);
-        }
-        if (isset($status['motivo'])) {
-            $this->setMotivo($status['motivo']);
-        } else {
-            $this->setMotivo(null);
-        }
-        if (isset($status['uf'])) {
-            $this->setUF($status['uf']);
-        } else {
-            $this->setUF(null);
-        }
+        $this->setAmbiente($status['ambiente'] ?? null);
+        $this->setVersao($status['versao'] ?? null);
+        $this->setStatus($status['status'] ?? null);
+        $this->setMotivo($status['motivo'] ?? null);
+        $this->setUF($status['uf'] ?? null);
         return $this;
     }
 
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'Status' : $name);
+        $element = $dom->createElement($name ?? 'Status');
         Util::appendNode($element, 'tpAmb', $this->getAmbiente(true));
         Util::appendNode($element, 'verAplic', $this->getVersao(true));
         Util::appendNode($element, 'cStat', $this->getStatus(true));

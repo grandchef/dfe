@@ -131,7 +131,7 @@ class Isento extends Imposto
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'COFINSNT' : $name);
+        $element = $dom->createElement($name ?? 'COFINSNT');
         Util::appendNode($element, 'CST', $this->getTributacao(true));
         return $element;
     }

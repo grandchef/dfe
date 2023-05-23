@@ -76,7 +76,7 @@ class Integral extends Normal
 
     public function getNode(?string $name = null): \DOMElement
     {
-        $element = parent::getNode(is_null($name) ? 'ICMS00' : $name);
+        $element = parent::getNode($name ?? 'ICMS00');
         if (Util::nodeExists($element, 'vBCFCP')) {
             $node = Util::findNode($element, 'vBCFCP');
             $node->parentNode->removeChild($node);

@@ -98,11 +98,7 @@ class Emitente extends Pessoa
         if (is_null($this->getEndereco())) {
             $this->setEndereco(new Endereco());
         }
-        if (isset($emitente['fantasia'])) {
-            $this->setFantasia($emitente['fantasia']);
-        } else {
-            $this->setFantasia(null);
-        }
+        $this->setFantasia($emitente['fantasia'] ?? null);
         if (!isset($emitente['regime'])) {
             $this->setRegime(self::REGIME_SIMPLES);
         } else {
@@ -114,7 +110,7 @@ class Emitente extends Pessoa
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'emit' : $name);
+        $element = $dom->createElement($name ?? 'emit');
         Util::appendNode($element, 'CNPJ', $this->getCNPJ(true));
         Util::appendNode($element, 'xNome', $this->getRazaoSocial(true));
         if (!is_null($this->getFantasia())) {

@@ -229,51 +229,15 @@ class Inutilizacao extends Retorno
             return $this;
         }
         parent::fromArray($inutilizacao);
-        if (isset($inutilizacao['id'])) {
-            $this->setID($inutilizacao['id']);
-        } else {
-            $this->setID(null);
-        }
-        if (isset($inutilizacao['ano'])) {
-            $this->setAno($inutilizacao['ano']);
-        } else {
-            $this->setAno(null);
-        }
-        if (isset($inutilizacao['cnpj'])) {
-            $this->setCNPJ($inutilizacao['cnpj']);
-        } else {
-            $this->setCNPJ(null);
-        }
-        if (isset($inutilizacao['modelo'])) {
-            $this->setModelo($inutilizacao['modelo']);
-        } else {
-            $this->setModelo(null);
-        }
-        if (isset($inutilizacao['serie'])) {
-            $this->setSerie($inutilizacao['serie']);
-        } else {
-            $this->setSerie(null);
-        }
-        if (isset($inutilizacao['inicio'])) {
-            $this->setInicio($inutilizacao['inicio']);
-        } else {
-            $this->setInicio(null);
-        }
-        if (isset($inutilizacao['final'])) {
-            $this->setFinal($inutilizacao['final']);
-        } else {
-            $this->setFinal(null);
-        }
-        if (isset($inutilizacao['justificativa'])) {
-            $this->setJustificativa($inutilizacao['justificativa']);
-        } else {
-            $this->setJustificativa(null);
-        }
-        if (isset($inutilizacao['numero'])) {
-            $this->setNumero($inutilizacao['numero']);
-        } else {
-            $this->setNumero(null);
-        }
+        $this->setID($inutilizacao['id'] ?? null);
+        $this->setAno($inutilizacao['ano'] ?? null);
+        $this->setCNPJ($inutilizacao['cnpj'] ?? null);
+        $this->setModelo($inutilizacao['modelo'] ?? null);
+        $this->setSerie($inutilizacao['serie'] ?? null);
+        $this->setInicio($inutilizacao['inicio'] ?? null);
+        $this->setFinal($inutilizacao['final'] ?? null);
+        $this->setJustificativa($inutilizacao['justificativa'] ?? null);
+        $this->setNumero($inutilizacao['numero'] ?? null);
         return $this;
     }
 
@@ -297,7 +261,7 @@ class Inutilizacao extends Retorno
         $this->setID($this->gerarID());
 
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'inutNFe' : $name);
+        $element = $dom->createElement($name ?? 'inutNFe');
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', Nota::PORTAL);
         $versao = $dom->createAttribute('versao');
         $versao->value = Nota::VERSAO;
@@ -402,8 +366,8 @@ class Inutilizacao extends Retorno
         $config->verificaValidadeCertificado();
 
         $adapter = new XmlseclibsAdapter();
-        $adapter->setPrivateKey($config->getChavePrivada());
-        $adapter->setPublicKey($config->getChavePublica());
+        $adapter->setPrivateKey($config->getCertificado()->getChavePrivada());
+        $adapter->setPublicKey($config->getCertificado()->getChavePublica());
         $adapter->addTransform(AdapterInterface::ENVELOPED);
         $adapter->addTransform(AdapterInterface::XML_C14N);
         $adapter->sign($dom, 'infInut');

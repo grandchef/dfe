@@ -45,7 +45,7 @@ class EnvioLoader implements Loader
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'nfeDadosMsg' : $name);
+        $element = $dom->createElement($name ?? 'nfeDadosMsg');
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', $this->getServico());
         // Corrige xmlns:default
         // $data = $dom->importNode($this->getConteudo()->documentElement, true);

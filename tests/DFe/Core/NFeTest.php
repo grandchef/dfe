@@ -85,8 +85,8 @@ class NFeTest extends \PHPUnit\Framework\TestCase
         $responsavel->setContato('Empresa LTDA');
         $responsavel->setEmail('contato@empresa.com.br');
         $responsavel->setTelefone('11988220055');
-        $responsavel->setIDCsrt(99);
-        $responsavel->setHashCsrt('aWv6LeEM4X6u4+qBl2OYZ8grigw=');
+        $responsavel->setIdentificador(99);
+        $responsavel->setAssinatura('aWv6LeEM4X6u4+qBl2OYZ8grigw=');
 
         $responsavel->fromArray($responsavel);
         $responsavel->fromArray($responsavel->toArray());

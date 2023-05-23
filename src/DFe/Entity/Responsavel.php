@@ -25,18 +25,24 @@ class Responsavel extends Pessoa implements Node
      * sistema utilizado na emissão do documento fiscal eletrônico.
      */
     private $contato;
+
+    /**
+     * Email da software house'
+     *
+     * @var string
+     */
     private $email;
 
     /**
      * Identificador do CSRT utilizado para montar o hash do CSRT
      */
-    private $idcsrt;
+    private $identificador;
 
     /**
      * O hashCSRT é o resultado da função hash (SHA-1 – Base64) do CSRT
      * fornecido pelo fisco mais a Chave de Acesso da NFe.
      */
-    private $hash_csrt;
+    private $assinatura;
 
     /**
      * Constroi uma instância de Responsavel vazia
@@ -93,53 +99,53 @@ class Responsavel extends Pessoa implements Node
 
     /**
      * Identificador do CSRT utilizado para montar o hash do CSRT
-     * @param boolean $normalize informa se a id_csrt deve estar no formato do XML
-     * @return mixed id_csrt do Responsavel
+     * @param boolean $normalize informa se a identificador deve estar no formato do XML
+     * @return mixed identificador do Responsavel
      */
-    public function getIDCsrt($normalize = false)
+    public function getIdentificador($normalize = false)
     {
         if (!$normalize) {
-            return $this->idcsrt;
+            return $this->identificador;
         }
-        return $this->idcsrt;
+        return $this->identificador;
     }
 
     /**
-     * Altera o valor da IDCsrt para o informado no parâmetro
-     * @param mixed $idcsrt novo valor para IDCsrt
+     * Altera o valor da Identificador para o informado no parâmetro
+     * @param mixed $identificador novo valor para Identificador
      * @return self A própria instância da classe
      */
-    public function setIDCsrt($idcsrt)
+    public function setIdentificador($identificador)
     {
-        if (!empty($idcsrt)) {
-            $idcsrt = intval($idcsrt);
+        if (!empty($identificador)) {
+            $identificador = intval($identificador);
         }
-        $this->idcsrt = $idcsrt;
+        $this->identificador = $identificador;
         return $this;
     }
 
     /**
      * O hashCSRT é o resultado da função hash (SHA-1 – Base64) do CSRT
      * fornecido pelo fisco mais a Chave de Acesso da NFe.
-     * @param boolean $normalize informa se a hash_csrt deve estar no formato do XML
-     * @return mixed hash_csrt do Responsavel
+     * @param boolean $normalize informa se a assinatura deve estar no formato do XML
+     * @return mixed assinatura do Responsavel
      */
-    public function getHashCsrt($normalize = false)
+    public function getAssinatura($normalize = false)
     {
         if (!$normalize) {
-            return $this->hash_csrt;
+            return $this->assinatura;
         }
-        return $this->hash_csrt;
+        return $this->assinatura;
     }
 
     /**
-     * Altera o valor da HashCsrt para o informado no parâmetro
-     * @param mixed $hash_csrt novo valor para HashCsrt
+     * Altera o valor da Assinatura para o informado no parâmetro
+     * @param mixed $assinatura novo valor para Assinatura
      * @return self A própria instância da classe
      */
-    public function setHashCsrt($hash_csrt)
+    public function setAssinatura($assinatura)
     {
-        $this->hash_csrt = $hash_csrt;
+        $this->assinatura = $assinatura;
         return $this;
     }
 
@@ -154,8 +160,8 @@ class Responsavel extends Pessoa implements Node
         $responsavel['contato'] = $this->getContato();
         $responsavel['email'] = $this->getEmail();
         $responsavel['telefone'] = $this->getTelefone();
-        $responsavel['id_csrt'] = $this->getIDCsrt();
-        $responsavel['hash_csrt'] = $this->getHashCsrt();
+        $responsavel['identificador'] = $this->getIdentificador();
+        $responsavel['assinatura'] = $this->getAssinatura();
         return $responsavel;
     }
 
@@ -191,15 +197,15 @@ class Responsavel extends Pessoa implements Node
         } else {
             $this->setTelefone($responsavel['telefone']);
         }
-        if (!array_key_exists('id_csrt', $responsavel)) {
-            $this->setIDCsrt(null);
+        if (!array_key_exists('identificador', $responsavel)) {
+            $this->setIdentificador(null);
         } else {
-            $this->setIDCsrt($responsavel['id_csrt']);
+            $this->setIdentificador($responsavel['identificador']);
         }
-        if (!array_key_exists('hash_csrt', $responsavel)) {
-            $this->setHashCsrt(null);
+        if (!array_key_exists('assinatura', $responsavel)) {
+            $this->setAssinatura(null);
         } else {
-            $this->setHashCsrt($responsavel['hash_csrt']);
+            $this->setAssinatura($responsavel['assinatura']);
         }
         return $this;
     }
@@ -212,16 +218,16 @@ class Responsavel extends Pessoa implements Node
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'infRespTec' : $name);
+        $element = $dom->createElement($name ?? 'infRespTec');
         Util::appendNode($element, 'CNPJ', $this->getCNPJ(true));
         Util::appendNode($element, 'xContato', $this->getContato(true));
         Util::appendNode($element, 'email', $this->getEmail(true));
         Util::appendNode($element, 'fone', $this->getTelefone(true));
-        if (!is_null($this->getIDCsrt())) {
-            Util::appendNode($element, 'idCSRT', $this->getIDCsrt(true));
+        if (!is_null($this->getIdentificador())) {
+            Util::appendNode($element, 'idCSRT', $this->getIdentificador(true));
         }
-        if (!is_null($this->getHashCsrt())) {
-            Util::appendNode($element, 'hashCSRT', $this->getHashCsrt(true));
+        if (!is_null($this->getAssinatura())) {
+            Util::appendNode($element, 'hashCSRT', $this->getAssinatura(true));
         }
         return $element;
     }
@@ -240,8 +246,8 @@ class Responsavel extends Pessoa implements Node
         $this->setContato(Util::loadNode($element, 'xContato', 'Tag "xContato" não encontrada no Responsavel'));
         $this->setEmail(Util::loadNode($element, 'email', 'Tag "email" não encontrada no Responsavel'));
         $this->setTelefone(Util::loadNode($element, 'fone', 'Tag "fone" não encontrada no Responsavel'));
-        $this->setIDCsrt(Util::loadNode($element, 'idCSRT'));
-        $this->setHashCsrt(Util::loadNode($element, 'hashCSRT'));
+        $this->setIdentificador(Util::loadNode($element, 'idCSRT'));
+        $this->setAssinatura(Util::loadNode($element, 'hashCSRT'));
         return $element;
     }
 }

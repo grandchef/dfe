@@ -43,7 +43,7 @@ class Quantidade extends \DFe\Entity\Imposto\COFINS\Quantidade
 
     public function getNode(?string $name = null): \DOMElement
     {
-        $element = parent::getNode(is_null($name) ? 'COFINSST' : $name);
+        $element = parent::getNode($name ?? 'COFINSST');
         $item = $element->getElementsByTagName('CST')->item(0);
         $element->removeChild($item);
         return $element;

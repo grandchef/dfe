@@ -15,6 +15,7 @@ use DOMDocument;
 use DFe\Common\Node;
 use DFe\Entity\Total;
 use DFe\Common\Loader;
+use DFe\Entity\Caixa;
 use DFe\Task\Protocolo;
 use DFe\Entity\Imposto;
 use DFe\Entity\Produto;
@@ -28,6 +29,7 @@ use DFe\Util\AdapterInterface;
 use DFe\Util\XmlseclibsAdapter;
 use DFe\Loader\NFe\V4\NotaLoader;
 use DFe\Exception\ValidationException;
+use DFe\Loader\CFe\V008\NotaLoader as CFeNotaLoader;
 
 /**
  * Classe base para a formação da nota fiscal
@@ -135,6 +137,13 @@ abstract class Nota implements Node
      * Número do Documento Fiscal
      */
     private $numero;
+
+    /**
+     * Caixa que realizou a venda
+     *
+     * @var Caixa
+     */
+    private $caixa;
 
     /**
      * Emitente da nota fiscal
@@ -367,6 +376,29 @@ abstract class Nota implements Node
     public function setNumero($numero)
     {
         $this->numero = $numero;
+        return $this;
+    }
+
+    /**
+     * Caixa que realizou a venda
+     *
+     * @return Caixa|null
+     */
+    public function getCaixa()
+    {
+        return $this->caixa;
+    }
+
+    /**
+     * Altera o valor do Caixa para o informado no parâmetro
+     *
+     * @param Caixa $caixa
+     *
+     * @return self
+     */
+    public function setCaixa($caixa)
+    {
+        $this->caixa = $caixa;
         return $this;
     }
 
@@ -1069,6 +1101,11 @@ abstract class Nota implements Node
         $nota = [];
         $nota['id'] = $this->getID();
         $nota['numero'] = $this->getNumero();
+        if (!is_null($this->getCaixa()) && $recursive) {
+            $nota['caixa'] = $this->getCaixa()->toArray($recursive);
+        } else {
+            $nota['caixa'] = $this->getCaixa();
+        }
         if (!is_null($this->getEmitente()) && $recursive) {
             $nota['emitente'] = $this->getEmitente()->toArray($recursive);
         } else {
@@ -1155,55 +1192,28 @@ abstract class Nota implements Node
         } elseif (!is_array($nota)) {
             return $this;
         }
-        if (isset($nota['id'])) {
-            $this->setID($nota['id']);
-        } else {
-            $this->setID(null);
-        }
-        if (isset($nota['numero'])) {
-            $this->setNumero($nota['numero']);
-        } else {
-            $this->setNumero(null);
-        }
-        $this->setEmitente(new Emitente(isset($nota['emitente']) ? $nota['emitente'] : []));
-        $this->setDestinatario(new Destinatario(isset($nota['destinatario']) ? $nota['destinatario'] : []));
-        $this->setResponsavel(new Responsavel(isset($nota['responsavel']) ? $nota['responsavel'] : []));
-        if (!isset($nota['produtos'])) {
-            $this->setProdutos([]);
-        } else {
-            $this->setProdutos($nota['produtos']);
-        }
+        $this->setID($nota['id'] ?? null);
+        $this->setNumero($nota['numero'] ?? null);
+        $this->setCaixa(new Caixa($nota['caixa'] ?? []));
+        $this->setEmitente(new Emitente($nota['emitente'] ?? []));
+        $this->setDestinatario(new Destinatario($nota['destinatario'] ?? []));
+        $this->setResponsavel(new Responsavel($nota['responsavel'] ?? []));
+        $this->setProdutos($nota['produtos'] ?? []);
         if (isset($nota['intermediador'])) {
-            $this->setIntermediador(new Intermediador(isset($nota['intermediador']) ? $nota['intermediador'] : []));
+            $this->setIntermediador(new Intermediador($nota['intermediador'] ?? []));
         } else {
             $this->setIntermediador(null);
         }
-        $this->setTransporte(new Transporte(isset($nota['transporte']) ? $nota['transporte'] : []));
+        $this->setTransporte(new Transporte($nota['transporte'] ?? []));
         if (!isset($nota['pagamentos'])) {
             $this->setPagamentos([]);
         } else {
             $this->setPagamentos($nota['pagamentos']);
         }
-        if (isset($nota['data_movimentacao'])) {
-            $this->setDataMovimentacao($nota['data_movimentacao']);
-        } else {
-            $this->setDataMovimentacao(null);
-        }
-        if (isset($nota['data_contingencia'])) {
-            $this->setDataContingencia($nota['data_contingencia']);
-        } else {
-            $this->setDataContingencia(null);
-        }
-        if (isset($nota['justificativa'])) {
-            $this->setJustificativa($nota['justificativa']);
-        } else {
-            $this->setJustificativa(null);
-        }
-        if (isset($nota['modelo'])) {
-            $this->setModelo($nota['modelo']);
-        } else {
-            $this->setModelo(null);
-        }
+        $this->setDataMovimentacao($nota['data_movimentacao'] ?? null);
+        $this->setDataContingencia($nota['data_contingencia'] ?? null);
+        $this->setJustificativa($nota['justificativa'] ?? null);
+        $this->setModelo($nota['modelo'] ?? null);
         if (!isset($nota['tipo'])) {
             $this->setTipo(self::TIPO_SAIDA);
         } else {
@@ -1219,21 +1229,9 @@ abstract class Nota implements Node
         } else {
             $this->setNatureza($nota['natureza']);
         }
-        if (isset($nota['codigo'])) {
-            $this->setCodigo($nota['codigo']);
-        } else {
-            $this->setCodigo(null);
-        }
-        if (isset($nota['data_emissao'])) {
-            $this->setDataEmissao($nota['data_emissao']);
-        } else {
-            $this->setDataEmissao(null);
-        }
-        if (isset($nota['serie'])) {
-            $this->setSerie($nota['serie']);
-        } else {
-            $this->setSerie(null);
-        }
+        $this->setCodigo($nota['codigo'] ?? null);
+        $this->setDataEmissao($nota['data_emissao'] ?? null);
+        $this->setSerie($nota['serie'] ?? null);
         if (!isset($nota['formato'])) {
             $this->setFormato(self::FORMATO_NENHUMA);
         } else {
@@ -1244,11 +1242,7 @@ abstract class Nota implements Node
         } else {
             $this->setEmissao($nota['emissao']);
         }
-        if (isset($nota['digito_verificador'])) {
-            $this->setDigitoVerificador($nota['digito_verificador']);
-        } else {
-            $this->setDigitoVerificador(null);
-        }
+        $this->setDigitoVerificador($nota['digito_verificador'] ?? null);
         if (!isset($nota['ambiente'])) {
             $this->setAmbiente(self::AMBIENTE_HOMOLOGACAO);
         } else {
@@ -1264,16 +1258,8 @@ abstract class Nota implements Node
         } else {
             $this->setConsumidorFinal($nota['consumidor_final']);
         }
-        if (isset($nota['presenca'])) {
-            $this->setPresenca($nota['presenca']);
-        } else {
-            $this->setPresenca(null);
-        }
-        if (isset($nota['intermediacao'])) {
-            $this->setIntermediacao($nota['intermediacao']);
-        } else {
-            $this->setIntermediacao(null);
-        }
+        $this->setPresenca($nota['presenca'] ?? null);
+        $this->setIntermediacao($nota['intermediacao'] ?? null);
         $this->setTotal(new Total(isset($nota['total']) ? $nota['total'] : []));
         if (!array_key_exists('adicionais', $nota)) {
             $this->setAdicionais(null);
@@ -1290,11 +1276,7 @@ abstract class Nota implements Node
         } else {
             $this->setInformacoes($nota['informacoes']);
         }
-        if (isset($nota['protocolo'])) {
-            $this->setProtocolo($nota['protocolo']);
-        } else {
-            $this->setProtocolo(null);
-        }
+        $this->setProtocolo($nota['protocolo'] ?? null);
         return $this;
     }
 
@@ -1375,6 +1357,9 @@ abstract class Nota implements Node
 
     public function getLoader(): Loader
     {
+        if ($this->getModelo() === self::MODELO_CFE) {
+            return new CFeNotaLoader($this);
+        }
         return new NotaLoader($this);
     }
 
@@ -1419,8 +1404,8 @@ abstract class Nota implements Node
         $config->verificaValidadeCertificado();
 
         $adapter = new XmlseclibsAdapter();
-        $adapter->setPrivateKey($config->getChavePrivada());
-        $adapter->setPublicKey($config->getChavePublica());
+        $adapter->setPrivateKey($config->getCertificado()->getChavePrivada());
+        $adapter->setPublicKey($config->getCertificado()->getChavePublica());
         $adapter->addTransform(AdapterInterface::ENVELOPED);
         $adapter->addTransform(AdapterInterface::XML_C14N);
         $adapter->sign($dom, 'infNFe');

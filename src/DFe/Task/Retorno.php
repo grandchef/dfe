@@ -110,11 +110,7 @@ class Retorno extends Status
             return $this;
         }
         parent::fromArray($retorno);
-        if (isset($retorno['data_recebimento'])) {
-            $this->setDataRecebimento($retorno['data_recebimento']);
-        } else {
-            $this->setDataRecebimento(null);
-        }
+        $this->setDataRecebimento($retorno['data_recebimento'] ?? null);
         return $this;
     }
 

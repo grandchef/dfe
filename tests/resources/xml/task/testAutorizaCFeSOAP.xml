@@ -1,6 +1,5 @@
-<?xml version="1.0"?>
 <NFe xmlns="http://www.portalfiscal.inf.br/nfe">
-  <infNFe Id="NFe35160908380787000176000010000000811778821923" versao="4.00">
+  <infNFe Id="NFe35160908380787000176000010000000811778821923" versao="0.08">
     <ide>
       <cUF>35</cUF>
       <cNF>77882192</cNF>
@@ -27,11 +26,11 @@
       <xNome>Empresa LTDA</xNome>
       <xFant>Minha Empresa</xFant>
       <enderEmit>
-        <xLgr>Rua Paranava&#xED;</xLgr>
+        <xLgr>Rua Paranavaí</xLgr>
         <nro>123</nro>
         <xBairro>Centro</xBairro>
         <cMun>3550308</cMun>
-        <xMun>S&#xE3;o Paulo</xMun>
+        <xMun>São Paulo</xMun>
         <UF>SP</UF>
         <CEP>01122500</CEP>
         <cPais>1058</cPais>
@@ -46,11 +45,11 @@
       <CPF>12345678912</CPF>
       <xNome>NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL</xNome>
       <enderDest>
-        <xLgr>Rua Paranava&#xED;</xLgr>
+        <xLgr>Rua Paranavaí</xLgr>
         <nro>123</nro>
         <xBairro>Centro</xBairro>
         <cMun>4118402</cMun>
-        <xMun>Paranava&#xED;</xMun>
+        <xMun>Paranavaí</xMun>
         <UF>PR</UF>
         <CEP>01122500</CEP>
         <cPais>1058</cPais>

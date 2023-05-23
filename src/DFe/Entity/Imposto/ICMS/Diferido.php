@@ -94,11 +94,7 @@ class Diferido extends Reducao
             return $this;
         }
         parent::fromArray($diferido);
-        if (isset($diferido['diferimento'])) {
-            $this->setDiferimento($diferido['diferimento']);
-        } else {
-            $this->setDiferimento(null);
-        }
+        $this->setDiferimento($diferido['diferimento'] ?? null);
         if (!isset($diferido['tributacao'])) {
             $this->setTributacao('51');
         }
@@ -109,12 +105,12 @@ class Diferido extends Reducao
     {
         if (is_null($this->getDiferimento())) {
             $dom = new \DOMDocument('1.0', 'UTF-8');
-            $element = $dom->createElement(is_null($name) ? 'ICMS51' : $name);
+            $element = $dom->createElement($name ?? 'ICMS51');
             Util::appendNode($element, 'orig', $this->getOrigem(true));
             Util::appendNode($element, 'CST', $this->getTributacao(true));
             return $element;
         }
-        $element = parent::getNode(is_null($name) ? 'ICMS51' : $name);
+        $element = parent::getNode($name ?? 'ICMS51');
         $dom = $element->ownerDocument;
         Util::appendNode($element, 'vICMSOp', $this->getOperacao(true));
         Util::appendNode($element, 'pDif', $this->getDiferimento(true));

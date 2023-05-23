@@ -58,18 +58,14 @@ class Lacre implements Node
         } elseif (!is_array($lacre)) {
             return $this;
         }
-        if (isset($lacre['numero'])) {
-            $this->setNumero($lacre['numero']);
-        } else {
-            $this->setNumero(null);
-        }
+        $this->setNumero($lacre['numero'] ?? null);
         return $this;
     }
 
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'lacres' : $name);
+        $element = $dom->createElement($name ?? 'lacres');
         Util::appendNode($element, 'nLacre', $this->getNumero(true));
         return $element;
     }

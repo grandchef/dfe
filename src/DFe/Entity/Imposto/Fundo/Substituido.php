@@ -78,7 +78,7 @@ class Substituido extends Base
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'FCPST' : $name);
+        $element = $dom->createElement($name ?? 'FCPST');
         Util::appendNode($element, 'vBCFCPST', $this->getBase(true));
         Util::appendNode($element, 'pFCPST', $this->getAliquota(true));
         Util::appendNode($element, 'vFCPST', $this->getValor(true));

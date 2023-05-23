@@ -101,16 +101,8 @@ class Situacao extends Retorno
             return $this;
         }
         parent::fromArray($situacao);
-        if (isset($situacao['chave'])) {
-            $this->setChave($situacao['chave']);
-        } else {
-            $this->setChave(null);
-        }
-        if (isset($situacao['modelo'])) {
-            $this->setModelo($situacao['modelo']);
-        } else {
-            $this->setModelo(null);
-        }
+        $this->setChave($situacao['chave'] ?? null);
+        $this->setModelo($situacao['modelo'] ?? null);
         return $this;
     }
 
@@ -157,7 +149,7 @@ class Situacao extends Retorno
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'consSitNFe' : $name);
+        $element = $dom->createElement($name ?? 'consSitNFe');
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', Nota::PORTAL);
         $versao = $dom->createAttribute('versao');
         $versao->value = Nota::VERSAO;

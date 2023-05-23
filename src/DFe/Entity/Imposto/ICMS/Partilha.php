@@ -82,16 +82,8 @@ class Partilha extends Mista
             return $this;
         }
         parent::fromArray($partilha);
-        if (isset($partilha['operacao'])) {
-            $this->setOperacao($partilha['operacao']);
-        } else {
-            $this->setOperacao(null);
-        }
-        if (isset($partilha['uf'])) {
-            $this->setUF($partilha['uf']);
-        } else {
-            $this->setUF(null);
-        }
+        $this->setOperacao($partilha['operacao'] ?? null);
+        $this->setUF($partilha['uf'] ?? null);
         if (!isset($partilha['tributacao'])) {
             $this->setTributacao('10');
         }
@@ -100,7 +92,7 @@ class Partilha extends Mista
 
     public function getNode(?string $name = null): \DOMElement
     {
-        $element = parent::getNode(is_null($name) ? 'ICMSPart' : $name);
+        $element = parent::getNode($name ?? 'ICMSPart');
         $dom = $element->ownerDocument;
         Util::appendNode($element, 'pBCOp', $this->getOperacao(true));
         Util::appendNode($element, 'UFST', $this->getUF(true));

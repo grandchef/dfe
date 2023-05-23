@@ -161,26 +161,10 @@ abstract class Pessoa implements Node
         } elseif (!is_array($pessoa)) {
             return $this;
         }
-        if (isset($pessoa['razao_social'])) {
-            $this->setRazaoSocial($pessoa['razao_social']);
-        } else {
-            $this->setRazaoSocial(null);
-        }
-        if (isset($pessoa['cnpj'])) {
-            $this->setCNPJ($pessoa['cnpj']);
-        } else {
-            $this->setCNPJ(null);
-        }
-        if (isset($pessoa['ie'])) {
-            $this->setIE($pessoa['ie']);
-        } else {
-            $this->setIE(null);
-        }
-        if (isset($pessoa['im'])) {
-            $this->setIM($pessoa['im']);
-        } else {
-            $this->setIM(null);
-        }
+        $this->setRazaoSocial($pessoa['razao_social'] ?? null);
+        $this->setCNPJ($pessoa['cnpj'] ?? null);
+        $this->setIE($pessoa['ie'] ?? null);
+        $this->setIM($pessoa['im'] ?? null);
         if (!array_key_exists('endereco', $pessoa)) {
             $this->setEndereco(new Endereco());
         } elseif (isset($pessoa['endereco'])) {
@@ -188,11 +172,7 @@ abstract class Pessoa implements Node
         } else {
             $this->setEndereco($pessoa['endereco']);
         }
-        if (isset($pessoa['telefone'])) {
-            $this->setTelefone($pessoa['telefone']);
-        } else {
-            $this->setTelefone(null);
-        }
+        $this->setTelefone($pessoa['telefone'] ?? null);
         return $this;
     }
 

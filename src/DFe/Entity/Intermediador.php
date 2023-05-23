@@ -142,7 +142,7 @@ class Intermediador implements Node
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'infIntermed' : $name);
+        $element = $dom->createElement($name ?? 'infIntermed');
         Util::appendNode($element, 'CNPJ', $this->getCNPJ(true));
         Util::appendNode($element, 'idCadIntTran', $this->getIdentificador(true));
         return $element;

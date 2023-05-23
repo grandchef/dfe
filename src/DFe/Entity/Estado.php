@@ -100,21 +100,9 @@ class Estado
         } elseif (!is_array($estado)) {
             return $this;
         }
-        if (isset($estado['codigo'])) {
-            $this->setCodigo($estado['codigo']);
-        } else {
-            $this->setCodigo(null);
-        }
-        if (isset($estado['nome'])) {
-            $this->setNome($estado['nome']);
-        } else {
-            $this->setNome(null);
-        }
-        if (isset($estado['uf'])) {
-            $this->setUF($estado['uf']);
-        } else {
-            $this->setUF(null);
-        }
+        $this->setCodigo($estado['codigo'] ?? null);
+        $this->setNome($estado['nome'] ?? null);
+        $this->setUF($estado['uf'] ?? null);
         return $this;
     }
 }

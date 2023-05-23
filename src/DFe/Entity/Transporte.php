@@ -293,16 +293,8 @@ class Transporte implements Node
         $this->setRetencao(new Tributo(isset($transporte['retencao']) ? $transporte['retencao'] : []));
         $this->setVeiculo(new Veiculo(isset($transporte['veiculo']) ? $transporte['veiculo'] : []));
         $this->setReboque(new Veiculo(isset($transporte['reboque']) ? $transporte['reboque'] : []));
-        if (isset($transporte['vagao'])) {
-            $this->setVagao($transporte['vagao']);
-        } else {
-            $this->setVagao(null);
-        }
-        if (isset($transporte['balsa'])) {
-            $this->setBalsa($transporte['balsa']);
-        } else {
-            $this->setBalsa(null);
-        }
+        $this->setVagao($transporte['vagao'] ?? null);
+        $this->setBalsa($transporte['balsa'] ?? null);
         if (!isset($transporte['volumes'])) {
             $this->setVolumes([]);
         } else {
@@ -314,7 +306,7 @@ class Transporte implements Node
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'transp' : $name);
+        $element = $dom->createElement($name ?? 'transp');
         Util::appendNode($element, 'modFrete', $this->getFrete(true));
         if ($this->getFrete() == self::FRETE_NENHUM) {
             return $element;

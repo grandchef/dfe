@@ -44,7 +44,7 @@ test:
 		-u $(CURRENT_UID) \
 		-v $(shell pwd):/app \
 		-w /app \
-		grandchef/php:8.1.0-fpm-dev php ./vendor/bin/phpunit --configuration . --no-coverage --colors=always
+		grandchef/php:8.1.0-fpm-dev php ./vendor/bin/phpunit --configuration . --no-coverage --colors=always --stop-on-error --stop-on-fail
 
 cmd:
 	@docker run --rm -it \

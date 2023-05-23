@@ -86,7 +86,7 @@ class Base extends Imposto
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'FCP' : $name);
+        $element = $dom->createElement($name ?? 'FCP');
         Util::appendNode($element, 'vBCFCP', $this->getBase(true));
         Util::appendNode($element, 'pFCP', $this->getAliquota(true));
         Util::appendNode($element, 'vFCP', $this->getValor(true));

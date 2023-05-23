@@ -524,41 +524,17 @@ class Pagamento implements Node
         } elseif (!is_array($pagamento)) {
             return $this;
         }
-        if (isset($pagamento['indicador'])) {
-            $this->setIndicador($pagamento['indicador']);
-        } else {
-            $this->setIndicador(null);
-        }
-        if (isset($pagamento['forma'])) {
-            $this->setForma($pagamento['forma']);
-        } else {
-            $this->setForma(null);
-        }
-        if (isset($pagamento['valor'])) {
-            $this->setValor($pagamento['valor']);
-        } else {
-            $this->setValor(null);
-        }
+        $this->setIndicador($pagamento['indicador'] ?? null);
+        $this->setForma($pagamento['forma'] ?? null);
+        $this->setValor($pagamento['valor'] ?? null);
         if (!isset($pagamento['integrado'])) {
             $this->setIntegrado('N');
         } else {
             $this->setIntegrado($pagamento['integrado']);
         }
-        if (isset($pagamento['credenciadora'])) {
-            $this->setCredenciadora($pagamento['credenciadora']);
-        } else {
-            $this->setCredenciadora(null);
-        }
-        if (isset($pagamento['autorizacao'])) {
-            $this->setAutorizacao($pagamento['autorizacao']);
-        } else {
-            $this->setAutorizacao(null);
-        }
-        if (isset($pagamento['bandeira'])) {
-            $this->setBandeira($pagamento['bandeira']);
-        } else {
-            $this->setBandeira(null);
-        }
+        $this->setCredenciadora($pagamento['credenciadora'] ?? null);
+        $this->setAutorizacao($pagamento['autorizacao'] ?? null);
+        $this->setBandeira($pagamento['bandeira'] ?? null);
         return $this;
     }
 
@@ -566,13 +542,13 @@ class Pagamento implements Node
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         if ($this->getValor() < 0) {
-            $element = $dom->createElement(is_null($name) ? 'vTroco' : $name);
+            $element = $dom->createElement($name ?? 'vTroco');
             $this->setValor(-floatval($this->getValor()));
             $element->appendChild($dom->createTextNode($this->getValor(true)));
             $this->setValor(-floatval($this->getValor()));
             return $element;
         }
-        $element = $dom->createElement(is_null($name) ? 'detPag' : $name);
+        $element = $dom->createElement($name ?? 'detPag');
         if (!is_null($this->getIndicador())) {
             Util::appendNode($element, 'indPag', $this->getIndicador(true));
         }

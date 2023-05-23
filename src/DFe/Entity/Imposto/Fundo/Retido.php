@@ -78,7 +78,7 @@ class Retido extends Substituido
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'FCPSTRet' : $name);
+        $element = $dom->createElement($name ?? 'FCPSTRet');
         Util::appendNode($element, 'vBCFCPSTRet', $this->getBase(true));
         Util::appendNode($element, 'pFCPSTRet', $this->getAliquota(true));
         Util::appendNode($element, 'vFCPSTRet', $this->getValor(true));

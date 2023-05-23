@@ -154,36 +154,12 @@ class Tarefa
         } elseif (!is_array($tarefa)) {
             return $this;
         }
-        if (isset($tarefa['id'])) {
-            $this->setID($tarefa['id']);
-        } else {
-            $this->setID(null);
-        }
-        if (isset($tarefa['acao'])) {
-            $this->setAcao($tarefa['acao']);
-        } else {
-            $this->setAcao(null);
-        }
-        if (isset($tarefa['nota'])) {
-            $this->setNota($tarefa['nota']);
-        } else {
-            $this->setNota(null);
-        }
-        if (isset($tarefa['documento'])) {
-            $this->setDocumento($tarefa['documento']);
-        } else {
-            $this->setDocumento(null);
-        }
-        if (isset($tarefa['agente'])) {
-            $this->setAgente($tarefa['agente']);
-        } else {
-            $this->setAgente(null);
-        }
-        if (isset($tarefa['resposta'])) {
-            $this->setResposta($tarefa['resposta']);
-        } else {
-            $this->setResposta(null);
-        }
+        $this->setID($tarefa['id'] ?? null);
+        $this->setAcao($tarefa['acao'] ?? null);
+        $this->setNota($tarefa['nota'] ?? null);
+        $this->setDocumento($tarefa['documento'] ?? null);
+        $this->setAgente($tarefa['agente'] ?? null);
+        $this->setResposta($tarefa['resposta'] ?? null);
         return $this;
     }
 

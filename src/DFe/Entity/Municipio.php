@@ -116,16 +116,8 @@ class Municipio
             return $this;
         }
         $this->setEstado(new Estado(isset($municipio['estado']) ? $municipio['estado'] : []));
-        if (isset($municipio['codigo'])) {
-            $this->setCodigo($municipio['codigo']);
-        } else {
-            $this->setCodigo(null);
-        }
-        if (isset($municipio['nome'])) {
-            $this->setNome($municipio['nome']);
-        } else {
-            $this->setNome(null);
-        }
+        $this->setCodigo($municipio['codigo'] ?? null);
+        $this->setNome($municipio['nome'] ?? null);
         return $this;
     }
 }

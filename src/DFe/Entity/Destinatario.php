@@ -145,21 +145,9 @@ class Destinatario extends Pessoa
             return $this;
         }
         parent::fromArray($destinatario);
-        if (isset($destinatario['nome'])) {
-            $this->setNome($destinatario['nome']);
-        } else {
-            $this->setNome(null);
-        }
-        if (isset($destinatario['cpf'])) {
-            $this->setCPF($destinatario['cpf']);
-        } else {
-            $this->setCPF(null);
-        }
-        if (isset($destinatario['email'])) {
-            $this->setEmail($destinatario['email']);
-        } else {
-            $this->setEmail(null);
-        }
+        $this->setNome($destinatario['nome'] ?? null);
+        $this->setCPF($destinatario['cpf'] ?? null);
+        $this->setEmail($destinatario['email'] ?? null);
         if (!isset($destinatario['indicador'])) {
             $this->setIndicador(self::INDICADOR_NENHUM);
         } else {
@@ -171,7 +159,7 @@ class Destinatario extends Pessoa
     public function getNode(?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'dest' : $name);
+        $element = $dom->createElement($name ?? 'dest');
         if (! empty($this->getCNPJ())) {
             Util::appendNode($element, 'CNPJ', $this->getCNPJ(true));
         } else {

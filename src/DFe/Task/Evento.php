@@ -348,31 +348,11 @@ class Evento extends Retorno
             return $this;
         }
         parent::fromArray($evento);
-        if (isset($evento['id'])) {
-            $this->setID($evento['id']);
-        } else {
-            $this->setID(null);
-        }
-        if (isset($evento['orgao'])) {
-            $this->setOrgao($evento['orgao']);
-        } else {
-            $this->setOrgao(null);
-        }
-        if (isset($evento['identificador'])) {
-            $this->setIdentificador($evento['identificador']);
-        } else {
-            $this->setIdentificador(null);
-        }
-        if (isset($evento['chave'])) {
-            $this->setChave($evento['chave']);
-        } else {
-            $this->setChave(null);
-        }
-        if (isset($evento['data'])) {
-            $this->setData($evento['data']);
-        } else {
-            $this->setData(null);
-        }
+        $this->setID($evento['id'] ?? null);
+        $this->setOrgao($evento['orgao'] ?? null);
+        $this->setIdentificador($evento['identificador'] ?? null);
+        $this->setChave($evento['chave'] ?? null);
+        $this->setData($evento['data'] ?? null);
         if (!isset($evento['tipo'])) {
             $this->setTipo(self::TIPO_CANCELAMENTO);
         } else {
@@ -388,31 +368,11 @@ class Evento extends Retorno
         } else {
             $this->setDescricao($evento['descricao']);
         }
-        if (isset($evento['numero'])) {
-            $this->setNumero($evento['numero']);
-        } else {
-            $this->setNumero(null);
-        }
-        if (isset($evento['justificativa'])) {
-            $this->setJustificativa($evento['justificativa']);
-        } else {
-            $this->setJustificativa(null);
-        }
-        if (isset($evento['email'])) {
-            $this->setEmail($evento['email']);
-        } else {
-            $this->setEmail(null);
-        }
-        if (isset($evento['modelo'])) {
-            $this->setModelo($evento['modelo']);
-        } else {
-            $this->setModelo(null);
-        }
-        if (isset($evento['informacao'])) {
-            $this->setInformacao($evento['informacao']);
-        } else {
-            $this->setInformacao(null);
-        }
+        $this->setNumero($evento['numero'] ?? null);
+        $this->setJustificativa($evento['justificativa'] ?? null);
+        $this->setEmail($evento['email'] ?? null);
+        $this->setModelo($evento['modelo'] ?? null);
+        $this->setInformacao($evento['informacao'] ?? null);
         return $this;
     }
 
@@ -436,7 +396,7 @@ class Evento extends Retorno
         $this->setID($this->gerarID());
 
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'evento' : $name);
+        $element = $dom->createElement($name ?? 'evento');
         $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', Nota::PORTAL);
         $versao = $dom->createAttribute('versao');
         $versao->value = self::VERSAO;
@@ -758,8 +718,8 @@ class Evento extends Retorno
         $config->verificaValidadeCertificado();
 
         $adapter = new XmlseclibsAdapter();
-        $adapter->setPrivateKey($config->getChavePrivada());
-        $adapter->setPublicKey($config->getChavePublica());
+        $adapter->setPrivateKey($config->getCertificado()->getChavePrivada());
+        $adapter->setPublicKey($config->getCertificado()->getChavePublica());
         $adapter->addTransform(AdapterInterface::ENVELOPED);
         $adapter->addTransform(AdapterInterface::XML_C14N);
         $adapter->sign($dom, 'infEvento');

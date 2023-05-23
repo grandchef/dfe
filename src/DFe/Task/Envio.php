@@ -256,31 +256,11 @@ class Envio
         } elseif (!is_array($envio)) {
             return $this;
         }
-        if (isset($envio['servico'])) {
-            $this->setServico($envio['servico']);
-        } else {
-            $this->setServico(null);
-        }
-        if (isset($envio['ambiente'])) {
-            $this->setAmbiente($envio['ambiente']);
-        } else {
-            $this->setAmbiente(null);
-        }
-        if (isset($envio['modelo'])) {
-            $this->setModelo($envio['modelo']);
-        } else {
-            $this->setModelo(null);
-        }
-        if (isset($envio['emissao'])) {
-            $this->setEmissao($envio['emissao']);
-        } else {
-            $this->setEmissao(null);
-        }
-        if (isset($envio['conteudo'])) {
-            $this->setConteudo($envio['conteudo']);
-        } else {
-            $this->setConteudo(null);
-        }
+        $this->setServico($envio['servico'] ?? null);
+        $this->setAmbiente($envio['ambiente'] ?? null);
+        $this->setModelo($envio['modelo'] ?? null);
+        $this->setEmissao($envio['emissao'] ?? null);
+        $this->setConteudo($envio['conteudo'] ?? null);
         return $this;
     }
 
