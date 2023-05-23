@@ -1,3 +1,4 @@
 {
-    "phpcs.standard": "PSR12"
+    "phpunit.command": "XDEBUG_MODE=debug",
+    "phpunit.args": ["--testdox", "--colors=always", " --no-coverage"]
 }

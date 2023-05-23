@@ -81,18 +81,22 @@ XML;
         return $this->private_key;
     }
 
-    public function send($url, $body)
+    public function send($url, $body, $raw = false)
     {
         $this->setOpt(CURLOPT_SSLCERT, $this->getCertificate());
         $this->setOpt(CURLOPT_SSLKEY, $this->getPrivateKey());
         if ($body instanceof \DOMDocument) {
             $body = $body->saveXML($body->documentElement);
         }
-        $dom = new \DOMDocument();
-        $dom->preserveWhiteSpace = false;
-        $dom->loadXML(self::ENVELOPE);
-        $envelope = $dom->saveXML();
-        $data = str_replace('<soap12:Body/>', '<soap12:Body>' . $body . '</soap12:Body>', $envelope);
+        if ($raw) {
+            $data = $body;
+        } else {
+            $dom = new \DOMDocument();
+            $dom->preserveWhiteSpace = false;
+            $dom->loadXML(self::ENVELOPE);
+            $envelope = $dom->saveXML();
+            $data = str_replace('<soap12:Body/>', '<soap12:Body>' . $body . '</soap12:Body>', $envelope);
+        }
         if (is_null(self::$post_fn)) {
             $this->post($url, $data);
         } else {

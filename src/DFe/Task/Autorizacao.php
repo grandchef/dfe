@@ -13,8 +13,8 @@ namespace DFe\Task;
 
 use DFe\Core\Nota;
 use DFe\Core\SEFAZ;
-use DFe\Common\Util;
-use DFe\Exception\ValidationException;
+use DFe\Loader\NFe\V4\Task\LoteLoader;
+use DFe\Loader\CFe\V008\Task\LoteLoader as CFeLoteLoader;
 
 class Autorizacao extends Retorno
 {
@@ -40,26 +40,12 @@ class Autorizacao extends Retorno
         return $this;
     }
 
-    private function getConteudo($dom)
+    public function getLoteLoader(Nota $nota, \DOMDocument $dom)
     {
-        $config = SEFAZ::getInstance()->getConfiguracao();
-        $dob = new \DOMDocument('1.0', 'UTF-8');
-        $envio = $dob->createElement('enviNFe');
-        $envio->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', Nota::PORTAL);
-        $versao = $dob->createAttribute('versao');
-        $versao->value = Nota::VERSAO;
-        $envio->appendChild($versao);
-        Util::appendNode($envio, 'idLote', self::genLote());
-        Util::appendNode($envio, 'indSinc', $config->getSincrono(true));
-        // Corrige xmlns:default
-        // $data = $dob->importNode($dom->documentElement, true);
-        // $envio->appendChild($data);
-        Util::appendNode($envio, 'NFe', 0);
-        $dob->appendChild($envio);
-        // Corrige xmlns:default
-        // return $dob;
-        $xml = $dob->saveXML($dob->documentElement);
-        return str_replace('<NFe>0</NFe>', $dom->saveXML($dom->documentElement), $xml);
+        if ($nota->getModelo() === Nota::MODELO_CFE) {
+            return new CFeLoteLoader($dom);
+        }
+        return new LoteLoader($dom);
     }
 
     public function envia($nota, $dom)
@@ -70,8 +56,9 @@ class Autorizacao extends Retorno
         $envio->setModelo($nota->getModelo());
         $envio->setEmissao($nota->getEmissao());
         $this->setVersao($envio->getVersao());
-        $xml_content = $this->getConteudo($dom);
-        $dom_lote = $this->validar($xml_content);
+
+        $loader = $this->getLoteLoader($nota, $dom);
+        $dom_lote = $loader->getNode()->ownerDocument;
         $envio->setConteudo($dom_lote);
         $resp = $envio->envia();
         $this->loadNode($resp->documentElement);
@@ -100,33 +87,5 @@ class Autorizacao extends Retorno
         $tag = is_null($name) ? 'retEnviNFe' : $name;
         $element = parent::loadNode($element, $tag);
         return $element;
-    }
-
-    /**
-     * Valida o XML em lote
-     */
-    public function validar($xml_content)
-    {
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-        $dom->loadXML($xml_content);
-        $xsd_path = dirname(__DIR__) . '/Core/schema';
-        $xsd_file = $xsd_path . '/NFe/v4.0.0/enviNFe_v' . $this->getVersao() . '.xsd';
-        if (!file_exists($xsd_file)) {
-            throw new \Exception(sprintf('O arquivo "%s" de esquema XSD não existe!', $xsd_file), 404);
-        }
-        // Enable user error handling
-        $save = libxml_use_internal_errors(true);
-        if ($dom->schemaValidate($xsd_file)) {
-            libxml_use_internal_errors($save);
-            return $dom;
-        }
-        $msg = [];
-        $errors = libxml_get_errors();
-        foreach ($errors as $error) {
-            $msg[] = 'Não foi possível validar o XML: ' . $error->message;
-        }
-        libxml_clear_errors();
-        libxml_use_internal_errors($save);
-        throw new ValidationException($msg);
     }
 }

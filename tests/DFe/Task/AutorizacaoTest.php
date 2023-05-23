@@ -2,7 +2,9 @@
 
 namespace DFe\Task;
 
+use DFe\Core\NFCe;
 use DFe\Core\Nota;
+use DOMDocument;
 
 class AutorizacaoTest extends \PHPUnit\Framework\TestCase
 {
@@ -28,6 +30,33 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
         $node_cmp = \DFe\Common\Util::findNode($dom_cmp->documentElement, 'idLote');
         $node = \DFe\Common\Util::findNode($dom->documentElement, 'idLote');
         $node_cmp->nodeValue = $node->nodeValue;
+
+        if (getenv('TEST_MODE') == 'override') {
+            $dom->formatOutput = true;
+            file_put_contents($xml_file, $dom->saveXML());
+        }
+
+        $xml_cmp = $dom_cmp->saveXML();
+        $test->assertXmlStringEqualsXmlString($xml_cmp, $dom->saveXML());
+
+        $xml_resp_file = dirname(dirname(__DIR__)) . '/resources/xml/task/' . $resp_name;
+        $dom_resp = new \DOMDocument();
+        $dom_resp->preserveWhiteSpace = false;
+        $dom_resp->load($xml_resp_file);
+
+        $soap_curl->response = $dom_resp;
+    }
+
+    public static function processaCfePostFunction($test, $soap_curl, $url, $data, $xml_name, $resp_name)
+    {
+        $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/task/' . $xml_name;
+        $dom_cmp = new \DOMDocument();
+        $dom_cmp->preserveWhiteSpace = false;
+        $dom_cmp->load($xml_file);
+
+        $dom = new \DOMDocument();
+        $dom->preserveWhiteSpace = false;
+        $dom->loadXML($data);
 
         if (getenv('TEST_MODE') == 'override') {
             $dom->formatOutput = true;
@@ -133,18 +162,13 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('103', $retorno->getStatus());
     }
 
-    public function testValidarEsquemaNotFound()
-    {
-        $autorizacao = new Autorizacao();
-        $this->expectException('\Exception');
-        $autorizacao->validar('<schema/>');
-    }
-
     public function testNaoValidado()
     {
         $autorizacao = new Autorizacao();
         $autorizacao->setVersao(Nota::VERSAO);
         $this->expectException('\DFe\Exception\ValidationException');
-        $autorizacao->validar('<schema/>');
+        $dom = new DOMDocument();
+        $dom->appendChild($dom->createElement('schema'));
+        $autorizacao->getLoteLoader(new NFCe(), $dom)->getNode();
     }
 }

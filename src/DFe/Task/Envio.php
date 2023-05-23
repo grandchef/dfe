@@ -11,12 +11,12 @@
 
 namespace DFe\Task;
 
-use DOMElement;
 use DOMDocument;
 use DFe\Core\Nota;
 use DFe\Core\SEFAZ;
-use DFe\Common\Util;
 use DFe\Common\CurlSoap;
+use DFe\Loader\NFe\V4\Task\EnvioLoader;
+use DFe\Loader\CFe\V008\Task\EnvioLoader as CFeEnvioLoader;
 
 /**
  * Envia requisições para os servidores da SEFAZ
@@ -77,19 +77,12 @@ class Envio
 
     /**
      * Tipo de serviço a ser executado
-     * @param boolean $normalize informa se o servico deve estar no formato do XML
+     *
      * @return mixed servico do Envio
      */
-    public function getServico($normalize = false)
+    public function getServico()
     {
-        if (!$normalize) {
-            return $this->servico;
-        }
-        $url = $this->getServiceInfo();
-        if (is_array($url) && isset($url['servico'])) {
-            return Nota::PORTAL . '/wsdl/' . $url['servico'];
-        }
-        throw new \Exception('A ação do serviço "' . $this->getServico() . '" não foi configurada', 404);
+        return $this->servico;
     }
 
     /**
@@ -104,117 +97,70 @@ class Envio
     }
 
     /**
-     * Identificação do Ambiente:
-     * 1 - Produção
-     * 2 - Homologação
-     * @param boolean $normalize informa se o ambiente deve estar no formato do XML
+     * Identificação do Ambiente
+     *
      * @return mixed ambiente do Envio
      */
-    public function getAmbiente($normalize = false)
+    public function getAmbiente()
     {
-        if (!$normalize) {
-            return $this->ambiente;
-        }
-        switch ($this->ambiente) {
-            case Nota::AMBIENTE_PRODUCAO:
-                return '1';
-            case Nota::AMBIENTE_HOMOLOGACAO:
-                return '2';
-        }
         return $this->ambiente;
     }
 
     /**
      * Altera o valor do Ambiente para o informado no parâmetro
+     *
      * @param mixed $ambiente novo valor para Ambiente
+     *
      * @return self A própria instância da classe
      */
     public function setAmbiente($ambiente)
     {
-        switch ($ambiente) {
-            case '1':
-                $ambiente = Nota::AMBIENTE_PRODUCAO;
-                break;
-            case '2':
-                $ambiente = Nota::AMBIENTE_HOMOLOGACAO;
-                break;
-        }
         $this->ambiente = $ambiente;
         return $this;
     }
 
     /**
-     * Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.
-     * @param boolean $normalize informa se o modelo deve estar no formato do XML
+     * Modelo do Documento Fiscal
+     *
      * @return mixed modelo do Envio
      */
-    public function getModelo($normalize = false)
+    public function getModelo()
     {
-        if (!$normalize) {
-            return $this->modelo;
-        }
-        switch ($this->modelo) {
-            case Nota::MODELO_NFE:
-                return '55';
-            case Nota::MODELO_NFCE:
-                return '65';
-        }
         return $this->modelo;
     }
 
     /**
      * Altera o valor do Modelo para o informado no parâmetro
+     *
      * @param mixed $modelo novo valor para Modelo
+     *
      * @return self A própria instância da classe
      */
     public function setModelo($modelo)
     {
-        switch ($modelo) {
-            case '55':
-                $modelo = Nota::MODELO_NFE;
-                break;
-            case '65':
-                $modelo = Nota::MODELO_NFCE;
-                break;
-        }
         $this->modelo = $modelo;
         return $this;
     }
 
     /**
      * Forma de emissão da NF-e
-     * @param boolean $normalize informa se o emissao deve estar no formato do XML
+     *
      * @return mixed emissao do Envio
      */
-    public function getEmissao($normalize = false)
+    public function getEmissao()
     {
-        if (!$normalize) {
-            return $this->emissao;
-        }
-        switch ($this->emissao) {
-            case Nota::EMISSAO_NORMAL:
-                return '1';
-            case Nota::EMISSAO_CONTINGENCIA:
-                return '9';
-        }
         return $this->emissao;
     }
 
     /**
      * Altera o valor do Emissao para o informado no parâmetro
+     *
      * @param mixed $emissao novo valor para Emissao
+     *
      * @return self A própria instância da classe
      */
     public function setEmissao($emissao)
     {
-        switch ($emissao) {
-            case '1':
-                $emissao = Nota::EMISSAO_NORMAL;
-                break;
-            case '9':
-                $emissao = Nota::EMISSAO_CONTINGENCIA;
-                break;
-        }
         $this->emissao = $emissao;
         return $this;
     }
@@ -256,11 +202,14 @@ class Envio
      * Devolve um array com as informações de serviço (URL, Versão, Serviço)
      * @return array Informações de serviço
      */
-    private function getServiceInfo()
+    public function getServiceInfo()
     {
         $config = SEFAZ::getInstance()->getConfiguracao();
         $db = $config->getBanco();
         $estado = $config->getEmitente()->getEndereco()->getMunicipio()->getEstado();
+        if ($this->getModelo() === Nota::MODELO_CFE) {
+            return $config->getUrlSat() . '/' . $this->getServico();
+        }
         $info = $db->getInformacaoServico(
             $this->getEmissao(),
             $estado->getUF(),
@@ -335,33 +284,12 @@ class Envio
         return $this;
     }
 
-    /**
-     * Cria um nó XML do envio de acordo com o leiaute da NFe
-     *
-     * @param  string $name Nome do nó que será criado
-     */
-    public function getNode(?string $name = null): \DOMElement
+    public function getLoader()
     {
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement(is_null($name) ? 'nfeDadosMsg' : $name);
-        $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', $this->getServico(true));
-        // Corrige xmlns:default
-        // $data = $dom->importNode($this->getConteudo()->documentElement, true);
-        // $element->appendChild($data);
-        Util::appendNode($element, 'Conteudo', 0);
-
-        $dom->appendChild($element);
-
-        // Corrige xmlns:default
-        // return $dom;
-        if ($this->getConteudo() instanceof \DOMDocument) {
-            $xml = $this->getConteudo()->saveXML($this->getConteudo()->documentElement);
-        } else {
-            $xml = $this->getConteudo();
+        if ($this->getModelo() === Nota::MODELO_CFE) {
+            return new CFeEnvioLoader($this);
         }
-        $xml = str_replace('<Conteudo>0</Conteudo>', $xml, $dom->saveXML($dom->documentElement));
-        $dom->loadXML($xml);
-        return $dom->documentElement;
+        return new EnvioLoader($this);
     }
 
     /**
@@ -375,18 +303,19 @@ class Envio
         if (is_array($url)) {
             $url = $url['url'];
         }
-        if ($config->isOffline()) {
+        if ($config->isOffline() && $this->getModelo() !== Nota::MODELO_CFE) {
             throw new \DFe\Exception\NetworkException('Operação offline, sem conexão com a internet', 7);
         }
         $config->verificaValidadeCertificado();
         $soap = new CurlSoap();
         $soap->setConnectTimeout(intval($config->getTempoLimite()));
         $soap->setTimeout(ceil($config->getTempoLimite() * 1.5));
-        $soap->setCertificate($config->getArquivoChavePublica());
-        $soap->setPrivateKey($config->getArquivoChavePrivada());
-        $dom = $this->getNode()->ownerDocument;
+        $soap->setCertificate($config->getCertificado()->getArquivoChavePublica());
+        $soap->setPrivateKey($config->getCertificado()->getArquivoChavePrivada());
+        $loader = $this->getLoader();
+        $dom = $loader->getNode()->ownerDocument;
         try {
-            $response = $soap->send($url, $dom);
+            $response = $soap->send($url, $dom, $this->getModelo() === Nota::MODELO_CFE);
             return $response;
         } catch (\DFe\Exception\NetworkException $e) {
             $config->setOffline(time());

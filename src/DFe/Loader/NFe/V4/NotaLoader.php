@@ -17,7 +17,6 @@ use DFe\Common\Util;
 use DFe\Entity\Total;
 use DFe\Common\Loader;
 use DFe\Task\Protocolo;
-use DFe\Entity\Imposto;
 use DFe\Entity\Produto;
 use DFe\Entity\Emitente;
 use DFe\Entity\Pagamento;

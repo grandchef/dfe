@@ -42,6 +42,11 @@ class Configuracao
     /**
      * @var string
      */
+    private $url_sat;
+
+    /**
+     * @var string
+     */
     private $token;
 
     /**
@@ -258,6 +263,29 @@ class Configuracao
     }
 
     /**
+     * Url para envio da nota em contingência
+     *
+     * @return string
+     */
+    public function getUrlSat()
+    {
+        return $this->url_sat;
+    }
+
+    /**
+     * Informa a url para envio da nota em contingência
+     *
+     * @param string|null $url_sat
+     *
+     * @return self
+     */
+    public function setUrlSat($url_sat)
+    {
+        $this->url_sat = $url_sat;
+        return $this;
+    }
+
+    /**
      * Token do CSC
      * @return string
      */
@@ -392,6 +420,7 @@ class Configuracao
         $configuracao['emitente'] = $this->getEmitente();
         $configuracao['evento'] = $this->getEvento();
         $configuracao['certificado'] = $this->getCertificado();
+        $configuracao['url_sat'] = $this->getUrlSat();
         $configuracao['token'] = $this->getToken();
         $configuracao['csc'] = $this->getCSC();
         $configuracao['token_ibpt'] = $this->getTokenIBPT();
@@ -408,39 +437,16 @@ class Configuracao
         } elseif (!is_array($configuracao)) {
             return $this;
         }
-        $this->setBanco(new Estatico(isset($configuracao['banco']) ? $configuracao['banco'] : []));
-        $this->setEmitente(new Emitente(isset($configuracao['emitente']) ? $configuracao['emitente'] : []));
-        $this->setCertificado(new Certificado(isset($configuracao['certificado']) ? $configuracao['certificado'] : []));
-        if (isset($configuracao['evento'])) {
-            $this->setEvento($configuracao['evento']);
-        } else {
-            $this->setEvento(null);
-        }
-        if (isset($configuracao['token'])) {
-            $this->setToken($configuracao['token']);
-        } else {
-            $this->setToken(null);
-        }
-        if (isset($configuracao['csc'])) {
-            $this->setCSC($configuracao['csc']);
-        } else {
-            $this->setCSC(null);
-        }
-        if (isset($configuracao['token_ibpt'])) {
-            $this->setTokenIBPT($configuracao['token_ibpt']);
-        } else {
-            $this->setTokenIBPT(null);
-        }
-        if (!isset($configuracao['tempo_limite'])) {
-            $this->setTempoLimite(4);
-        } else {
-            $this->setTempoLimite($configuracao['tempo_limite']);
-        }
-        if (!isset($configuracao['sincrono'])) {
-            $this->setSincrono('Y');
-        } else {
-            $this->setSincrono($configuracao['sincrono']);
-        }
+        $this->setBanco(new Estatico($configuracao['banco'] ?? []));
+        $this->setEmitente(new Emitente($configuracao['emitente'] ?? []));
+        $this->setCertificado(new Certificado($configuracao['certificado'] ?? []));
+        $this->setEvento($configuracao['evento'] ?? null);
+        $this->setUrlSat($configuracao['token'] ?? null);
+        $this->setToken($configuracao['token'] ?? null);
+        $this->setCSC($configuracao['csc'] ?? null);
+        $this->setTokenIBPT($configuracao['token_ibpt'] ?? null);
+        $this->setTempoLimite($configuracao['tempo_limite'] ?? 4);
+        $this->setSincrono($configuracao['sincrono'] ?? 'Y');
         return $this;
     }
 

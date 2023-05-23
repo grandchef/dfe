@@ -50,9 +50,10 @@ abstract class Nota implements Node
     public const PORTAL = 'http://www.portalfiscal.inf.br/nfe';
 
     /**
-     * Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.
+     * Código do modelo do Documento Fiscal. 55 = NF-e; 59 = CFe; 65 = NFC-e.
      */
     public const MODELO_NFE = 'nfe';
+    public const MODELO_CFE = 'cfe';
     public const MODELO_NFCE = 'nfce';
 
     /**

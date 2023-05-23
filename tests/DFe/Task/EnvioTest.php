@@ -47,37 +47,6 @@ class EnvioTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('2.00', $envio->getVersao());
     }
 
-    public function testNormalization()
-    {
-        $envio = new Envio();
-        $envio->setEmissao('1');
-        $this->assertEquals(Nota::EMISSAO_NORMAL, $envio->getEmissao());
-        $this->assertEquals('1', $envio->getEmissao(true));
-        $envio->setEmissao('9');
-        $this->assertEquals(Nota::EMISSAO_CONTINGENCIA, $envio->getEmissao());
-        $this->assertEquals('9', $envio->getEmissao(true));
-        $envio->setEmissao('2');
-        $this->assertEquals('2', $envio->getEmissao(true));
-
-        $envio->setModelo('65');
-        $this->assertEquals(Nota::MODELO_NFCE, $envio->getModelo());
-        $this->assertEquals('65', $envio->getModelo(true));
-        $envio->setModelo('55');
-        $this->assertEquals(Nota::MODELO_NFE, $envio->getModelo());
-        $this->assertEquals('55', $envio->getModelo(true));
-        $envio->setModelo('50');
-        $this->assertEquals('50', $envio->getModelo(true));
-
-        $envio->setAmbiente('1');
-        $this->assertEquals(Nota::AMBIENTE_PRODUCAO, $envio->getAmbiente());
-        $this->assertEquals('1', $envio->getAmbiente(true));
-        $envio->setAmbiente('2');
-        $this->assertEquals(Nota::AMBIENTE_HOMOLOGACAO, $envio->getAmbiente());
-        $this->assertEquals('2', $envio->getAmbiente(true));
-        $envio->setAmbiente('3');
-        $this->assertEquals('3', $envio->getAmbiente(true));
-    }
-
     public function testEnvioOffline()
     {
         $old_envio = self::createEnvio();
@@ -119,7 +88,7 @@ class EnvioTest extends \PHPUnit\Framework\TestCase
         $envio = self::createEnvio();
         $envio->setServico('qrcode');
         $this->expectException('\Exception');
-        $envio->getServico(true);
+        $envio->getLoader()->getServico();
     }
 
     public function testEnvioServicoInvalido()
@@ -127,6 +96,6 @@ class EnvioTest extends \PHPUnit\Framework\TestCase
         $envio = self::createEnvio();
         $envio->setServico('cancelar');
         $this->expectException('\Exception');
-        $envio->getServico(true);
+        $envio->getLoader()->getServico();
     }
 }

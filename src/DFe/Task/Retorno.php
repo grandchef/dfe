@@ -121,7 +121,6 @@ class Retorno extends Status
     public function getNode(?string $name = null): \DOMElement
     {
         $element = parent::getNode(is_null($name) ? '' : $name);
-        $dom = $element->ownerDocument;
         $status = $element->getElementsByTagName('cStat')->item(0);
         if (!is_null($this->getDataRecebimento())) {
             Util::appendNode($element, 'dhRecbto', $this->getDataRecebimento(true), $status);

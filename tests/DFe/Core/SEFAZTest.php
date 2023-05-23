@@ -2,10 +2,10 @@
 
 namespace DFe\Core;
 
-use DFe\Database\Estatico;
 use DFe\Logger\Log;
-use DFe\Task\Inutilizacao;
 use DFe\Task\Tarefa;
+use DFe\Database\Estatico;
+use DFe\Task\Inutilizacao;
 
 class SEFAZTest extends \PHPUnit\Framework\TestCase implements \DFe\Common\Evento
 {
@@ -74,6 +74,18 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \DFe\Common\Event
         );
     }
 
+    public function cfeAutorizadoPostFunction($soap_curl, $url, $data)
+    {
+        \DFe\Task\AutorizacaoTest::processaCfePostFunction(
+            $this,
+            $soap_curl,
+            $url,
+            $data,
+            'testAutorizaCFeSOAP.xml',
+            'testAutorizaAutorizadoCFeReponseSOAP.xml'
+        );
+    }
+
     public function testAutoriza()
     {
         $sefaz = self::createSEFAZ();
@@ -99,6 +111,28 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \DFe\Common\Event
         $sefaz = self::createSEFAZ();
         $sefaz->getConfiguracao()->setEvento($this);
         $nota = \DFe\Core\NFCeTest::createNFCe($sefaz);
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'networkErrorPostFunction']);
+        try {
+            $sefaz->setNotas([]);
+            $sefaz->addNota($nota);
+            $this->assertEquals(1, $sefaz->autoriza());
+        } catch (\Exception $e) {
+            $sefaz->getConfiguracao()->setOffline(null);
+            \DFe\Common\CurlSoap::setPostFunction(null);
+            throw $e;
+        }
+        $sefaz->getConfiguracao()->setOffline(null);
+        \DFe\Common\CurlSoap::setPostFunction(null);
+    }
+
+    public function testAutorizaContingenciaSat()
+    {
+        $sefaz = self::createSEFAZ();
+        $sefaz->getConfiguracao()->setEvento($this);
+        $sefaz->getConfiguracao()->setUrlSat('http://localhost:8060/sat');
+        $nota = \DFe\Core\NFCeTest::createNFCe($sefaz);
+        $nota->getEmitente()->getEndereco()->getMunicipio()
+            ->setNome('São Paulo')->getEstado()->setUF('SP');
         \DFe\Common\CurlSoap::setPostFunction([$this, 'networkErrorPostFunction']);
         try {
             $sefaz->setNotas([]);
@@ -211,6 +245,14 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \DFe\Common\Event
     {
         $ajuste = new \DFe\Common\Ajuste();
         $ajuste->onNotaContingencia($nota, $offline, $exception);
+        if ($nota->getEmitente()->getEndereco()->getMunicipio()->getEstado()->getUF() == 'SP') {
+            $cfe = new CFe($nota->toArray());
+            $cfe->setEmissao(Nota::EMISSAO_NORMAL);
+            $cfe->setDataContingencia(null);
+            $cfe->setJustificativa(null);
+            \DFe\Common\CurlSoap::setPostFunction([$this, 'cfeAutorizadoPostFunction']);
+            return $cfe;
+        }
     }
 
     /**

@@ -57,6 +57,11 @@ class Endereco implements Node
         return $this;
     }
 
+    /**
+     * Município do endereço
+     *
+     * @return Municipio
+     */
     public function getMunicipio()
     {
         return $this->municipio;

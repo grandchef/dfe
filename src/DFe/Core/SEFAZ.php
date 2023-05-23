@@ -13,13 +13,13 @@ namespace DFe\Core;
 
 use DFe\Logger\Log;
 use DFe\Task\Tarefa;
+use DFe\Task\Evento;
 use DFe\Task\Recibo;
 use DFe\Task\Retorno;
 use DFe\Common\Ajuste;
-use DFe\Task\Autorizacao;
-use DFe\Task\Evento;
-use DFe\Task\Inutilizacao;
 use DFe\Task\Protocolo;
+use DFe\Task\Autorizacao;
+use DFe\Task\Inutilizacao;
 
 /**
  * Classe que envia uma ou mais notas fiscais para os servidores da sefaz
@@ -175,7 +175,7 @@ class SEFAZ
         $evento = $this->getConfiguracao()->getEvento();
         if ($retorno->isRecebido()) {
             if ($retorno instanceof Recibo) {
-                Log::debug('SEFAZ.despacha - Recibo: ' . $retorno->getNumero() . ' da ' . $nota->getID(true));
+                Log::debug('SEFAZ.despacha - Recibo: ' . $retorno->getNumero() . ' da ' . $nota->getID());
             }
             $evento->onNotaProcessando($nota, $dom, $retorno);
         } elseif ($retorno->isAutorizado()) {
@@ -187,7 +187,7 @@ class SEFAZ
                 || $retorno instanceof Evento
             ) {
                 Log::debug('SEFAZ.despacha(' . $retorno->getStatus() . ') - ' . $retorno->getMotivo() .
-                    ', Protocolo: ' . $retorno->getNumero() . ' - ' . $nota->getID(true));
+                    ', Protocolo: ' . $retorno->getNumero() . ' - ' . $nota->getID());
             }
             $evento->onNotaAutorizada($nota, $dom, $retorno);
         } elseif ($retorno->isDenegada()) {
@@ -210,7 +210,7 @@ class SEFAZ
     {
         $i = 0;
         $evento = $this->getConfiguracao()->getEvento();
-        foreach ($this->getNotas() as $nota) {
+        foreach ($this->getNotas() as $index => $nota) {
             try {
                 $envia = true;
                 do {
@@ -232,21 +232,30 @@ class SEFAZ
                         if ($partial_response) {
                             $evento->onNotaPendente($nota, $dom, $e);
                         }
-                        if ($nota->getEmissao() == Nota::EMISSAO_CONTINGENCIA) {
+                        if (
+                            $nota->getEmissao() == Nota::EMISSAO_CONTINGENCIA
+                            || $nota->getModelo() == Nota::MODELO_CFE
+                        ) {
                             throw $e;
                         }
                         Log::debug('SEFAZ.autoriza(' . $e->getCode() . ') - Mudando emissão para contingência: ' .
-                            $e->getMessage() . ' - ' . $nota->getID(true));
+                            $e->getMessage() . ' - ' . $nota->getID());
                         $msg = 'Falha no envio da nota';
                         $nota->setEmissao(Nota::EMISSAO_CONTINGENCIA);
                         $nota->setDataContingencia(time());
                         $nota->setJustificativa($msg);
-                        $evento->onNotaContingencia($nota, !$partial_response, $e);
-                        $envia = false;
+                        $nova_nota = $evento->onNotaContingencia($nota, !$partial_response, $e);
+                        if (isset($nova_nota)) {
+                            $nota = $nova_nota;
+                            Log::debug('SEFAZ.autoriza(' . $e->getCode() .
+                                ') - Mudando tipo de nota em contingência: ' . $nota->getID());
+                            $this->notas[$index] = $nota;
+                        }
+                        $envia = isset($nova_nota);
                         continue;
                     }
                     Log::debug('SEFAZ.autoriza(' . $retorno->getStatus() . ') - ' .
-                        $retorno->getMotivo() . ' - ' . $nota->getID(true));
+                        $retorno->getMotivo() . ' - ' . $nota->getID());
                     $this->despacha($nota, $dom, $retorno);
                     break;
                 } while (true);
@@ -274,7 +283,7 @@ class SEFAZ
                 $retorno = $pendencia->executa();
                 $dom = $pendencia->getDocumento();
                 Log::debug('SEFAZ.consulta(' . $retorno->getStatus() . ') - ' .
-                    $retorno->getMotivo() . ' - ' . $nota->getID(true));
+                    $retorno->getMotivo() . ' - ' . $nota->getID());
                 $this->despacha($nota, $dom, $retorno);
                 $evento->onNotaCompleto($nota, $dom);
                 $pendencia->setDocumento($dom);
@@ -308,7 +317,7 @@ class SEFAZ
                     case Tarefa::ACAO_INUTILIZAR:
                         $inutilizacao = $tarefa->getAgente();
                         Log::debug('SEFAZ.executa[inutiliza](' . $inutilizacao->getStatus() . ') - ' .
-                            $inutilizacao->getMotivo() . ' - ' . $inutilizacao->getID(true));
+                            $inutilizacao->getMotivo() . ' - ' . $inutilizacao->getID());
                         $evento->onInutilizado($inutilizacao, $dom);
                         break;
                     default:

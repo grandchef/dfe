@@ -43,7 +43,7 @@ class CFe extends Nota
     public function __construct($nfce = [])
     {
         parent::__construct($nfce);
-        $this->setModelo(self::MODELO_NFCE);
+        $this->setModelo(self::MODELO_CFE);
         $this->setFormato(self::FORMATO_CONSUMIDOR);
     }
 
@@ -241,15 +241,13 @@ class CFe extends Nota
         return $element;
     }
 
-    /**
-     * Assina e adiciona informações suplementares da nota
-     */
     public function assinar($dom = null)
     {
-        $dom = parent::assinar($dom);
-        $suplementar = $this->getNodeSuplementar($dom);
-        $signature = $dom->getElementsByTagName('Signature')->item(0);
-        $signature->parentNode->insertBefore($suplementar, $signature);
+        return $dom;
+    }
+
+    public function validar($dom)
+    {
         return $dom;
     }
 }

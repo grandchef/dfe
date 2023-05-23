@@ -29,6 +29,8 @@ class Municipio
 
     /**
      * Estado do município
+     * 
+     * @return Estado
      */
     public function getEstado()
     {

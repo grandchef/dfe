@@ -110,6 +110,8 @@ abstract class Pessoa implements Node
 
     /**
      * Dados do endereço
+     * 
+     * @return Endereco
      */
     public function getEndereco()
     {
