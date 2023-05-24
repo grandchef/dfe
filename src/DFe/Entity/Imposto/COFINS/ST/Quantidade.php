@@ -41,7 +41,7 @@ class Quantidade extends \DFe\Entity\Imposto\COFINS\Quantidade
         return $this;
     }
 
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
         $element = parent::getNode($name ?? 'COFINSST');
         $item = $element->getElementsByTagName('CST')->item(0);
@@ -49,7 +49,7 @@ class Quantidade extends \DFe\Entity\Imposto\COFINS\Quantidade
         return $element;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         $name ??= 'COFINSST';
         $element = Util::findNode($element, $name);

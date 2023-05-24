@@ -1363,13 +1363,13 @@ abstract class Nota implements Node
         return new NotaLoader($this);
     }
 
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
         $loader = $this->getLoader();
         return $loader->getNode($name);
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         $loader = $this->getLoader();
         return $loader->loadNode($element, $name);

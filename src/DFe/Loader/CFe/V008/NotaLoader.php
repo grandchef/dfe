@@ -43,7 +43,9 @@ class NotaLoader implements Loader
      */
     public const PORTAL = 'http://www.portalfiscal.inf.br/nfe';
 
-    public function __construct(private Nota $nota) {}
+    public function __construct(private Nota $nota)
+    {
+    }
 
     /**
      * Chave da nota fiscal
@@ -181,7 +183,7 @@ class NotaLoader implements Loader
 
     public function setDataEmissao($data_emissao)
     {
-        if (!is_numeric($data_emissao) && ! is_null($data_emissao)) {
+        if (!is_numeric($data_emissao) && !is_null($data_emissao)) {
             $data_emissao = strtotime($data_emissao);
         }
         $this->nota->setDataEmissao($data_emissao);
@@ -477,7 +479,7 @@ class NotaLoader implements Loader
         return $element;
     }
 
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
         $this->nota->getEmitente()->getEndereco()->checkCodigos();
         $this->nota->setID($this->gerarID());
@@ -500,11 +502,13 @@ class NotaLoader implements Loader
         $emitente = $this->nota->getEmitente()->getNode();
         $emitente = $dom->importNode($emitente, true);
         $info->appendChild($emitente);
-        if ($this->nota->getAmbiente() == Nota::AMBIENTE_HOMOLOGACAO && !is_null($this->nota->getDestinatario())) {
-            $this->nota->getDestinatario()->setNome('NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL');
-        }
         if (!is_null($this->nota->getDestinatario())) {
             $destinatario = $this->nota->getDestinatario()->getNode();
+            $destinatario = $dom->importNode($destinatario, true);
+            $info->appendChild($destinatario);
+        }
+        if (!is_null($this->nota->getDestinatario()) && !is_null($this->nota->getDestinatario()->getEndereco())) {
+            $destinatario = $this->nota->getDestinatario()->getEndereco()->getNode();
             $destinatario = $dom->importNode($destinatario, true);
             $info->appendChild($destinatario);
         }
@@ -517,9 +521,6 @@ class NotaLoader implements Loader
                 $_produto->setItem($item);
             } else {
                 $item = $_produto->getItem();
-            }
-            if ($this->nota->getAmbiente() == Nota::AMBIENTE_HOMOLOGACAO) {
-                $_produto->setDescricao('NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL');
             }
             $produto = $_produto->getNode();
             $produto = $dom->importNode($produto, true);
@@ -537,13 +538,6 @@ class NotaLoader implements Loader
                 $tributos[$key] += $value;
             }
         }
-        $total = $this->getNodeTotal();
-        $total = $dom->importNode($total, true);
-        $info->appendChild($total);
-        $transporte = $this->nota->getTransporte()->getNode();
-        $transporte = $dom->importNode($transporte, true);
-        $info->appendChild($transporte);
-        // TODO: adicionar cobrança
         $pag = $dom->createElement('pgto');
         $_pagamentos = $this->nota->getPagamentos();
         foreach ($_pagamentos as $_pagamento) {
@@ -552,11 +546,6 @@ class NotaLoader implements Loader
             $pag->appendChild($pagamento);
         }
         $info->appendChild($pag);
-        if (!is_null($this->nota->getIntermediador())) {
-            $intermediador = $this->nota->getIntermediador()->getNode();
-            $intermediador = $dom->importNode($intermediador, true);
-            $info->appendChild($intermediador);
-        }
         $info_adic = $dom->createElement('infAdic');
         if (!is_null($this->nota->getAdicionais())) {
             Util::appendNode($info_adic, 'infAdFisco', $this->nota->getAdicionais());
@@ -588,7 +577,7 @@ class NotaLoader implements Loader
         return $element;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         $root = $element;
         $name ??= 'NFe';

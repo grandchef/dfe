@@ -84,7 +84,7 @@ class Cobranca extends Parcial
         return $this;
     }
 
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
         $element = $this->getNormal()->getNode($name ?? 'ICMS10');
         if (is_null($this->getModalidade())) {
@@ -98,7 +98,7 @@ class Cobranca extends Parcial
         return Util::mergeNodes($element, $parcial);
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         $name ??= 'ICMS10';
         $element = Util::findNode($element, $name);

@@ -43,7 +43,9 @@ class NotaLoader implements Loader
      */
     public const PORTAL = 'http://www.portalfiscal.inf.br/nfe';
 
-    public function __construct(private Nota $nota) {}
+    public function __construct(private Nota $nota)
+    {
+    }
 
     /**
      * Chave da nota fiscal
@@ -181,7 +183,7 @@ class NotaLoader implements Loader
 
     public function setDataEmissao($data_emissao)
     {
-        if (!is_numeric($data_emissao) && ! is_null($data_emissao)) {
+        if (!is_numeric($data_emissao) && !is_null($data_emissao)) {
             $data_emissao = strtotime($data_emissao);
         }
         $this->nota->setDataEmissao($data_emissao);
@@ -477,7 +479,7 @@ class NotaLoader implements Loader
         return $element;
     }
 
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
         $this->nota->getEmitente()->getEndereco()->checkCodigos();
         $this->nota->setID($this->gerarID());
@@ -628,7 +630,7 @@ class NotaLoader implements Loader
         return $element;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         $root = $element;
         $name ??= 'NFe';

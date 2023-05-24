@@ -41,21 +41,21 @@ class Transportador extends Destinatario
         return $this;
     }
 
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement($name ?? 'transporta');
-        if (! empty($this->getCNPJ())) {
+        if (!empty($this->getCNPJ())) {
             Util::appendNode($element, 'CNPJ', $this->getCNPJ(true));
         } else {
             Util::appendNode($element, 'CPF', $this->getCPF(true));
         }
-        if (! empty($this->getCNPJ())) {
+        if (!empty($this->getCNPJ())) {
             Util::appendNode($element, 'xNome', $this->getRazaoSocial(true));
         } else {
             Util::appendNode($element, 'xNome', $this->getNome(true));
         }
-        if (! empty($this->getCNPJ())) {
+        if (!empty($this->getCNPJ())) {
             Util::appendNode($element, 'IE', $this->getIE(true));
         }
         if (!is_null($this->getEndereco())) {
@@ -67,7 +67,7 @@ class Transportador extends Destinatario
         return $element;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         $name ??= 'transporta';
         $element = Util::findNode($element, $name);
@@ -78,7 +78,7 @@ class Transportador extends Destinatario
         }
         $this->setCNPJ($cnpj);
         $this->setCPF($cpf);
-        if (! empty($this->getCNPJ())) {
+        if (!empty($this->getCNPJ())) {
             $this->setRazaoSocial(
                 Util::loadNode(
                     $element,

@@ -13,6 +13,6 @@ namespace DFe\Common;
 
 interface Loader
 {
-    public function getNode(?string $name = null): \DOMElement;
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement;
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement;
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement;
 }

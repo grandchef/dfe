@@ -274,7 +274,7 @@ $[field.end]
      * @param string $name Nome do nó que será criado
      * @return DOMElement Nó que contém todos os campos da classe
      */
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
 $[table.if(inherited)]
         $element = parent::getNode(is_null($name) ? '$[tAble.style]' : $name);
@@ -316,7 +316,7 @@ $[field.end]
      * @param string $name Nome do nó que será carregado
      * @return DOMElement Instância do nó que foi carregado
      */
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         $name ??= '$[tAble.style]';
 $[table.if(inherited)]

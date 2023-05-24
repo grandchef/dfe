@@ -101,7 +101,7 @@ class Diferido extends Reducao
         return $this;
     }
 
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
         if (is_null($this->getDiferimento())) {
             $dom = new \DOMDocument('1.0', 'UTF-8');
@@ -126,7 +126,7 @@ class Diferido extends Reducao
         return $element;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         $name ??= 'ICMS51';
         $element = Util::findNode($element, $name);

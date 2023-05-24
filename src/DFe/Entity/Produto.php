@@ -566,7 +566,7 @@ class Produto extends Total
         return $texto;
     }
 
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement($name ?? 'det');
@@ -579,7 +579,7 @@ class Produto extends Total
         Util::appendNode($produto, 'cEAN', $this->getCodigoBarras(true));
         Util::appendNode($produto, 'xProd', $this->getDescricao(true));
         Util::appendNode($produto, 'NCM', $this->getNCM(true));
-//      Util::appendNode($produto, 'NVE', $this->getNVE(true));
+        //      Util::appendNode($produto, 'NVE', $this->getNVE(true));
         if (!is_null($this->getCEST())) {
             Util::appendNode($produto, 'CEST', $this->getCEST(true));
         }
@@ -608,13 +608,13 @@ class Produto extends Total
             Util::appendNode($produto, 'vOutro', $this->getDespesas(true));
         }
         Util::appendNode($produto, 'indTot', $this->getMultiplicador(true));
-//      Util::appendNode($produto, 'DI', $this->getImportacoes(true));
-//      Util::appendNode($produto, 'detExport', $this->getDetalhes(true));
+        //      Util::appendNode($produto, 'DI', $this->getImportacoes(true));
+        //      Util::appendNode($produto, 'detExport', $this->getDetalhes(true));
         if (!is_null($this->getPedido())) {
             Util::appendNode($produto, 'xPed', $this->getPedido(true));
         }
         Util::appendNode($produto, 'nItemPed', $this->getItem(true));
-//      Util::appendNode($produto, 'nFCI', $this->getControle(true));
+        //      Util::appendNode($produto, 'nFCI', $this->getControle(true));
         $element->appendChild($produto);
 
         $imposto = $dom->createElement('imposto');
@@ -645,7 +645,7 @@ class Produto extends Total
         return $element;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         $name ??= 'det';
         $element = Util::findNode($element, $name);

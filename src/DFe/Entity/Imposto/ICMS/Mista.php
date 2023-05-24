@@ -46,14 +46,14 @@ class Mista extends Cobranca
         return $this;
     }
 
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
         $element = parent::getNode($name ?? 'ICMS70');
         $dom = $element->ownerDocument;
         return $element;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         $normal = new Reducao();
         $this->setNormal($normal);

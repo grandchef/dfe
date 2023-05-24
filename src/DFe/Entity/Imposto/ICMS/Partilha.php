@@ -90,7 +90,7 @@ class Partilha extends Mista
         return $this;
     }
 
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
         $element = parent::getNode($name ?? 'ICMSPart');
         $dom = $element->ownerDocument;
@@ -99,7 +99,7 @@ class Partilha extends Mista
         return $element;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         $name ??= 'ICMSPart';
         $element = parent::loadNode($element, $name);

@@ -263,7 +263,7 @@ class Protocolo extends Retorno
     /**
      * Carrega as informações do nó e preenche a instância da classe
      */
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         $name ??= 'infProt';
         $element = parent::loadNode($element, $name);
@@ -286,7 +286,7 @@ class Protocolo extends Retorno
      * @param string $name Nome do nó que será criado
      * @return DOMElement Nó que contém todos os campos da classe
      */
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
         $old_uf = $this->getUF();
         $this->setUF(null);
@@ -312,10 +312,10 @@ class Protocolo extends Retorno
             $recebimento = $status;
         }
         Util::appendNode($info, 'chNFe', $this->getChave(true), $recebimento);
-        if (! is_null($this->getCodigo())) {
+        if (!is_null($this->getCodigo())) {
             Util::appendNode($info, 'cMsg', $this->getCodigo(true));
         }
-        if (! empty($this->getMensagem())) {
+        if (!empty($this->getMensagem())) {
             Util::appendNode($info, 'xMsg', $this->getMensagem(true));
         }
         $element->appendChild($info);

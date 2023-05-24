@@ -328,7 +328,7 @@ class Total implements Node
      * @param  string $name Nome do nó que será criado
      * @return DOMElement   Nó que contém todos os campos da classe
      */
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement($name ?? 'prod');
@@ -348,7 +348,7 @@ class Total implements Node
         if (!is_null($this->getTributos())) {
             Util::appendNode($element, 'vTotTrib', $this->getTributos(true));
         }
-        if (! empty($this->getComplemento())) {
+        if (!empty($this->getComplemento())) {
             Util::appendNode($element, 'infCpl', $this->getComplemento(true));
         }
         return $element;
@@ -360,7 +360,7 @@ class Total implements Node
      * @param  string $name        Nome do nó que será carregado
      * @return DOMElement          Instância do nó que foi carregado
      */
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         $name ??= 'prod';
         $element = Util::findNode($element, $name);

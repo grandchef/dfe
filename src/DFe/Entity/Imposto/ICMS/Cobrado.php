@@ -67,7 +67,7 @@ class Cobrado extends Generico
         return $this;
     }
 
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
         $element = parent::getNode($name ?? 'ICMS60');
         $dom = $element->ownerDocument;
@@ -77,7 +77,7 @@ class Cobrado extends Generico
         return $this->exportFundo($element);
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         $name ??= 'ICMS60';
         $element = Util::findNode($element, $name);

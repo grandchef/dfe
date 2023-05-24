@@ -538,7 +538,7 @@ class Pagamento implements Node
         return $this;
     }
 
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         if ($this->getValor() < 0) {
@@ -572,7 +572,7 @@ class Pagamento implements Node
         return $element;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         $name ??= 'detPag';
         $element = Util::findNode($element, $name);

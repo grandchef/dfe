@@ -16,14 +16,16 @@ use DFe\Task\Autorizacao;
 
 class AutorizacaoLoader implements Loader
 {
-    public function __construct(private Autorizacao $autorizacao) {}
+    public function __construct(private Autorizacao $autorizacao)
+    {
+    }
 
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
         return $this->autorizacao->getDocument()->documentElement;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         $this->autorizacao->setDocument($element->ownerDocument);
         $this->autorizacao->setStatus('100');

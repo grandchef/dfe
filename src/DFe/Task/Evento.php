@@ -391,7 +391,7 @@ class Evento extends Retorno
         return $id;
     }
 
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
         $this->setID($this->gerarID());
 
@@ -436,7 +436,7 @@ class Evento extends Retorno
         return $element;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         $root = $element;
         $element = Util::findNode($element, 'evento');

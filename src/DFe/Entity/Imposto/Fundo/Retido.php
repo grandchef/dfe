@@ -75,7 +75,7 @@ class Retido extends Substituido
      * @param  string $name Nome do nó que será criado
      * @return DOMElement   Nó que contém todos os campos da classe
      */
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement($name ?? 'FCPSTRet');
@@ -91,7 +91,7 @@ class Retido extends Substituido
      * @param  string $name        Nome do nó que será carregado
      * @return DOMElement          Instância do nó que foi carregado
      */
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         $name ??= 'FCPSTRet';
         $element = Util::findNode($element, $name);

@@ -19,14 +19,16 @@ use DFe\Task\Envio as TaskEnvio;
  */
 class EnvioLoader implements Loader
 {
-    public function __construct(private TaskEnvio $envio) {}
+    public function __construct(private TaskEnvio $envio)
+    {
+    }
 
     /**
      * Cria um nó XML do envio de acordo com o leiaute da NFe
      *
      * @param  string $name Nome do nó que será criado
      */
-    public function getNode(?string $name = null): \DOMElement
+    public function getNode(?string $name = null, ?string $version = null): \DOMElement
     {
         if ($this->envio->getConteudo() instanceof \DOMDocument) {
             $dom = $this->envio->getConteudo();
@@ -38,7 +40,7 @@ class EnvioLoader implements Loader
         return $dom->documentElement;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
         return $element;
     }
