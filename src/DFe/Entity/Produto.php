@@ -566,7 +566,7 @@ class Produto extends Total
         return $texto;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement($name ?? 'det');
@@ -632,7 +632,7 @@ class Produto extends Total
         foreach ($grupos as $tag => $_grupo) {
             $grupo = $dom->createElement($tag);
             foreach ($_grupo as $_imposto) {
-                $node = $_imposto->getNode();
+                $node = $_imposto->getNode($version);
                 $node = $dom->importNode($node, true);
                 $grupo->appendChild($node);
             }

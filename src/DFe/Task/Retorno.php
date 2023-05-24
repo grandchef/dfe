@@ -114,9 +114,9 @@ class Retorno extends Status
         return $this;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $element = parent::getNode(is_null($name) ? '' : $name);
+        $element = parent::getNode($version, is_null($name) ? '' : $name);
         $status = $element->getElementsByTagName('cStat')->item(0);
         if (!is_null($this->getDataRecebimento())) {
             Util::appendNode($element, 'dhRecbto', $this->getDataRecebimento(true), $status);

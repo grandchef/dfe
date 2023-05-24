@@ -186,7 +186,7 @@ class IPI extends Imposto
         return $this;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement($name ?? 'IPI');
@@ -206,7 +206,7 @@ class IPI extends Imposto
         if (is_null($this->getTributo())) {
             throw new ValidationException(['tributo' => 'O tributo do imposto IPI não foi informado']);
         }
-        $tributo = $this->getTributo()->getNode();
+        $tributo = $this->getTributo()->getNode($version);
         $tributo = $dom->importNode($tributo, true);
         $element->appendChild($tributo);
         return $element;

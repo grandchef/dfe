@@ -391,7 +391,7 @@ class Evento extends Retorno
         return $id;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         $this->setID($this->gerarID());
 
@@ -556,8 +556,8 @@ class Evento extends Retorno
 
     public function getReturnNode()
     {
-        $outros = parent::getNode('infEvento');
-        $element = $this->getNode(self::TAG_RETORNO);
+        $outros = parent::getNode('', 'infEvento');
+        $element = $this->getNode('', self::TAG_RETORNO);
         $dom = $element->ownerDocument;
         $element->removeAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns');
         $info = $dom->getElementsByTagName('infEvento')->item(0);

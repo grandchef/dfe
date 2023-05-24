@@ -54,9 +54,9 @@ class Isento extends Generico
         return $this;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $element = parent::getNode($name ?? 'ICMSSN102');
+        $element = parent::getNode($version, $name ?? 'ICMSSN102');
         return $element;
     }
 

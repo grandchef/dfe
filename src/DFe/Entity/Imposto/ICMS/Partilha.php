@@ -90,9 +90,9 @@ class Partilha extends Mista
         return $this;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $element = parent::getNode($name ?? 'ICMSPart');
+        $element = parent::getNode($version, $name ?? 'ICMSPart');
         $dom = $element->ownerDocument;
         Util::appendNode($element, 'pBCOp', $this->getOperacao(true));
         Util::appendNode($element, 'UFST', $this->getUF(true));

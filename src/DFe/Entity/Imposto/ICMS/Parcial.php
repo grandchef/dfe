@@ -146,7 +146,7 @@ class Parcial extends Base
         return $this;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement($name ?? 'ICMS30');
@@ -158,7 +158,7 @@ class Parcial extends Base
         Util::appendNode($element, 'vBCST', $this->getBase(true));
         Util::appendNode($element, 'pICMSST', $this->getAliquota(true));
         Util::appendNode($element, 'vICMSST', $this->getValor(true));
-        return $this->exportFundo($element);
+        return $this->exportFundo($element, $version);
     }
 
     public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement

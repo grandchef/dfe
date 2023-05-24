@@ -256,7 +256,7 @@ class Inutilizacao extends Retorno
         return $id;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         $this->setID($this->gerarID());
 
@@ -289,8 +289,8 @@ class Inutilizacao extends Retorno
 
     public function getReturnNode()
     {
-        $outros = parent::getNode('infInut');
-        $element = $this->getNode('retInutNFe');
+        $outros = parent::getNode('', 'infInut');
+        $element = $this->getNode('', 'retInutNFe');
         $dom = $element->ownerDocument;
         $info = $dom->getElementsByTagName('infInut')->item(0);
         $info->removeAttribute('Id');

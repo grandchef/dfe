@@ -43,9 +43,9 @@ class Aliquota extends \DFe\Entity\Imposto\COFINS\Aliquota
         return $this;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $element = parent::getNode($name ?? 'COFINSST');
+        $element = parent::getNode($version, $name ?? 'COFINSST');
         $item = $element->getElementsByTagName('CST')->item(0);
         $element->removeChild($item);
         return $element;

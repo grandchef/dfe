@@ -15,6 +15,7 @@ use DOMDocument;
 use DFe\Common\Node;
 use DFe\Entity\Total;
 use DFe\Common\Loader;
+use DFe\Common\Util;
 use DFe\Entity\Caixa;
 use DFe\Task\Protocolo;
 use DFe\Entity\Imposto;
@@ -132,6 +133,11 @@ abstract class Nota implements Node
      * Chave da nota fiscal
      */
     private $id;
+
+    /**
+     * Versão do Documento Fiscal
+     */
+    private $versao;
 
     /**
      * Número do Documento Fiscal
@@ -355,6 +361,29 @@ abstract class Nota implements Node
     public function setID($id)
     {
         $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * Versão do Documento Fiscal
+     *
+     * @return string|null versão da nota
+     */
+    public function getVersao()
+    {
+        return $this->versao;
+    }
+
+    /**
+     * Altera a versão da nota
+     *
+     * @param string|null $versao versão da nota
+     *
+     * @return self
+     */
+    public function setVersao($versao)
+    {
+        $this->versao = $versao;
         return $this;
     }
 
@@ -1100,6 +1129,7 @@ abstract class Nota implements Node
     {
         $nota = [];
         $nota['id'] = $this->getID();
+        $nota['versao'] = $this->getVersao();
         $nota['numero'] = $this->getNumero();
         if (!is_null($this->getCaixa()) && $recursive) {
             $nota['caixa'] = $this->getCaixa()->toArray($recursive);
@@ -1193,6 +1223,7 @@ abstract class Nota implements Node
             return $this;
         }
         $this->setID($nota['id'] ?? null);
+        $this->setVersao($nota['versao'] ?? null);
         $this->setNumero($nota['numero'] ?? null);
         $this->setCaixa(new Caixa($nota['caixa'] ?? []));
         $this->setEmitente(new Emitente($nota['emitente'] ?? []));
@@ -1355,24 +1386,45 @@ abstract class Nota implements Node
         return $total;
     }
 
-    public function getLoader(): Loader
+    public function getLoaderVersion(): string
     {
         if ($this->getModelo() === self::MODELO_CFE) {
+            $version = $this->getVersao() ?: CFeNotaLoader::VERSAO;
+            return "CFe@{$version}";
+        }
+        $version = $this->getVersao() ?? self::VERSAO;
+        return "NFe@{$version}";
+    }
+
+    public function getLoader(string $version = ''): Loader
+    {
+        if (strpos($version ?: $this->getLoaderVersion(), 'CFe@') !== false) {
             return new CFeNotaLoader($this);
         }
         return new NotaLoader($this);
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $loader = $this->getLoader();
-        return $loader->getNode($name);
+        $loader = $this->getLoader($version);
+        return $loader->getNode($version ?? $this->getLoaderVersion(), $name);
     }
 
     public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
     {
+        if ($element->nodeName === 'CFe') {
+            $this->setModelo(self::MODELO_CFE);
+            $versionNode = Util::findNode($element, 'infCFe');
+            $invoiceVersion = $versionNode->getAttribute('versaoDadosEnt');
+            $this->setVersao($invoiceVersion);
+        } else {
+            $this->setModelo(self::MODELO_NFE);
+            $versionNode = Util::findNode($element, 'infNFe');
+            $invoiceVersion = $versionNode->getAttribute('versao');
+            $this->setVersao($invoiceVersion);
+        }
         $loader = $this->getLoader();
-        return $loader->loadNode($element, $name);
+        return $loader->loadNode($element, $name, $version ?? $this->getLoaderVersion());
     }
 
     /**

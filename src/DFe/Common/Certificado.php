@@ -255,7 +255,7 @@ class Certificado implements Node
      * @param string $name nome da tag raiz do XML
      * @return \DOMElement
      */
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         throw new \Exception('Não implementado', 500);
     }

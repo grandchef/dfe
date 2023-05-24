@@ -84,14 +84,13 @@ class Cobranca extends Parcial
         return $this;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $element = $this->getNormal()->getNode($name ?? 'ICMS10');
+        $element = $this->getNormal()->getNode($version, $name ?? 'ICMS10');
         if (is_null($this->getModalidade())) {
             return $element;
         }
-        $dom = $element->ownerDocument;
-        $parcial = parent::getNode($name ?? 'ICMS10');
+        $parcial = parent::getNode($version, $name ?? 'ICMS10');
         if (is_null($this->getNormal()->getModalidade())) {
             return $parcial;
         }

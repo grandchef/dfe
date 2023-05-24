@@ -45,7 +45,7 @@ class Generico extends Cobranca
         return $this;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         if (is_null($this->getModalidade()) && is_null($this->getNormal()->getModalidade())) {
             $dom = new \DOMDocument('1.0', 'UTF-8');
@@ -54,7 +54,7 @@ class Generico extends Cobranca
             Util::appendNode($element, 'CSOSN', $this->getTributacao(true));
             return $element;
         }
-        $element = parent::getNode($name ?? 'ICMSSN900');
+        $element = parent::getNode($version, $name ?? 'ICMSSN900');
         $dom = $element->ownerDocument;
         return $element;
     }

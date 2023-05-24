@@ -112,12 +112,12 @@ abstract class Base extends Imposto
         return $this;
     }
 
-    protected function exportFundo($element)
+    protected function exportFundo($element, $version)
     {
         if (is_null($this->getFundo()) || is_null($this->getFundo()->getAliquota())) {
             return $element;
         }
-        $fundo = $this->getFundo()->getNode();
+        $fundo = $this->getFundo()->getNode($version);
         return Util::mergeNodes($element, $fundo);
     }
 

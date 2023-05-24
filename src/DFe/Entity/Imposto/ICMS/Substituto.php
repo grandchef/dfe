@@ -46,9 +46,9 @@ class Substituto extends Cobrado
         return $this;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $element = parent::getNode($name ?? 'ICMSST');
+        $element = parent::getNode($version, $name ?? 'ICMSST');
         $dom = $element->ownerDocument;
         Util::appendNode($element, 'vBCSTDest', $this->getNormal()->getBase(true));
         Util::appendNode($element, 'vICMSSTDest', $this->getNormal()->getValor(true));

@@ -101,7 +101,7 @@ class Diferido extends Reducao
         return $this;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         if (is_null($this->getDiferimento())) {
             $dom = new \DOMDocument('1.0', 'UTF-8');
@@ -110,7 +110,7 @@ class Diferido extends Reducao
             Util::appendNode($element, 'CST', $this->getTributacao(true));
             return $element;
         }
-        $element = parent::getNode($name ?? 'ICMS51');
+        $element = parent::getNode($version, $name ?? 'ICMS51');
         $dom = $element->ownerDocument;
         Util::appendNode($element, 'vICMSOp', $this->getOperacao(true));
         Util::appendNode($element, 'pDif', $this->getDiferimento(true));

@@ -77,9 +77,9 @@ class Reducao extends Normal
         return $this;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $element = parent::getNode($name ?? 'ICMS20');
+        $element = parent::getNode($version, $name ?? 'ICMS20');
         $dom = $element->ownerDocument;
         Util::appendNode($element, 'pRedBC', $this->getReducao(true));
         return $element;

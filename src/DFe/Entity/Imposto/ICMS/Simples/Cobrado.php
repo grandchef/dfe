@@ -77,9 +77,9 @@ class Cobrado extends Generico
         return $this;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $element = parent::getNode($name ?? 'ICMSSN500');
+        $element = parent::getNode($version, $name ?? 'ICMSSN500');
         $dom = $element->ownerDocument;
         if (is_null($this->getValor())) {
             return $element;

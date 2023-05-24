@@ -303,7 +303,7 @@ class Transporte implements Node
         return $this;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement($name ?? 'transp');
@@ -312,22 +312,22 @@ class Transporte implements Node
             return $element;
         }
         if (!is_null($this->getTransportador())) {
-            $transportador = $this->getTransportador()->getNode();
+            $transportador = $this->getTransportador()->getNode($version);
             $transportador = $dom->importNode($transportador, true);
             $element->appendChild($transportador);
         }
         if (!is_null($this->getRetencao())) {
-            $retencao = $this->getRetencao()->getNode();
+            $retencao = $this->getRetencao()->getNode($version);
             $retencao = $dom->importNode($retencao, true);
             $element->appendChild($retencao);
         }
         if (!is_null($this->getVeiculo())) {
-            $veiculo = $this->getVeiculo()->getNode('veicTransp');
+            $veiculo = $this->getVeiculo()->getNode($version, 'veicTransp');
             $veiculo = $dom->importNode($veiculo, true);
             $element->appendChild($veiculo);
         }
         if (!is_null($this->getReboque())) {
-            $reboque = $this->getReboque()->getNode('reboque');
+            $reboque = $this->getReboque()->getNode($version, 'reboque');
             $reboque = $dom->importNode($reboque, true);
             $element->appendChild($reboque);
         }
@@ -340,7 +340,7 @@ class Transporte implements Node
         if (!is_null($this->getVolumes())) {
             $_volumes = $this->getVolumes();
             foreach ($_volumes as $_volume) {
-                $volume = $_volume->getNode();
+                $volume = $_volume->getNode($version);
                 $volume = $dom->importNode($volume, true);
                 $element->appendChild($volume);
             }

@@ -274,10 +274,10 @@ $[field.end]
      * @param string $name Nome do nó que será criado
      * @return DOMElement Nó que contém todos os campos da classe
      */
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
 $[table.if(inherited)]
-        $element = parent::getNode(is_null($name) ? '$[tAble.style]' : $name);
+        $element = parent::getNode($version, is_null($name) ? '$[tAble.style]' : $name);
         $dom = $element->ownerDocument;
 $[table.else]
         $dom = new \DOMDocument('1.0', 'UTF-8');

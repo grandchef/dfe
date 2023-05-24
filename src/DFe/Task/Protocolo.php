@@ -286,11 +286,11 @@ class Protocolo extends Retorno
      * @param string $name Nome do nó que será criado
      * @return DOMElement Nó que contém todos os campos da classe
      */
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         $old_uf = $this->getUF();
         $this->setUF(null);
-        $info = parent::getNode('infProt');
+        $info = parent::getNode($version, 'infProt');
         $this->setUF($old_uf);
         $dom = $info->ownerDocument;
         $element = $dom->createElement($name ?? 'protNFe');

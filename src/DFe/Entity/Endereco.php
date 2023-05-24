@@ -200,7 +200,7 @@ class Endereco implements Node
         $this->getMunicipio()->getEstado()->checkCodigos();
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $this->checkCodigos();

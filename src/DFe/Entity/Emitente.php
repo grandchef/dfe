@@ -107,7 +107,7 @@ class Emitente extends Pessoa
         return $this;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement($name ?? 'emit');
@@ -116,7 +116,7 @@ class Emitente extends Pessoa
         if (!is_null($this->getFantasia())) {
             Util::appendNode($element, 'xFant', $this->getFantasia(true));
         }
-        $endereco = $this->getEndereco()->getNode('enderEmit');
+        $endereco = $this->getEndereco()->getNode($version, 'enderEmit');
         $endereco = $dom->importNode($endereco, true);
         if (!is_null($this->getTelefone())) {
             Util::appendNode($endereco, 'fone', $this->getTelefone(true));

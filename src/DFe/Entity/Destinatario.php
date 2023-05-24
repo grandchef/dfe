@@ -156,7 +156,7 @@ class Destinatario extends Pessoa
         return $this;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement($name ?? 'dest');
@@ -169,7 +169,7 @@ class Destinatario extends Pessoa
             Util::appendNode($element, 'xNome', $this->getNome(true));
         }
         if (!is_null($this->getEndereco())) {
-            $endereco = $this->getEndereco()->getNode('enderDest');
+            $endereco = $this->getEndereco()->getNode($version, 'enderDest');
             $endereco = $dom->importNode($endereco, true);
             if (!empty($this->getTelefone())) {
                 Util::appendNode($endereco, 'fone', $this->getTelefone(true));

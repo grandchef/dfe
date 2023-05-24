@@ -67,14 +67,13 @@ class Cobrado extends Generico
         return $this;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $element = parent::getNode($name ?? 'ICMS60');
-        $dom = $element->ownerDocument;
+        $element = parent::getNode($version, $name ?? 'ICMS60');
         Util::appendNode($element, 'vBCSTRet', $this->getBase(true));
         Util::appendNode($element, 'pST', $this->getAliquota(true));
         Util::appendNode($element, 'vICMSSTRet', $this->getValor(true));
-        return $this->exportFundo($element);
+        return $this->exportFundo($element, $version);
     }
 
     public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement

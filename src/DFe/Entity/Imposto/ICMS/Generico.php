@@ -45,7 +45,7 @@ class Generico extends Mista
         return $this;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         if (is_null($this->getModalidade()) && is_null($this->getNormal()->getModalidade())) {
             $dom = new \DOMDocument('1.0', 'UTF-8');
@@ -54,8 +54,7 @@ class Generico extends Mista
             Util::appendNode($element, 'CST', $this->getTributacao(true));
             return $element;
         }
-        $element = parent::getNode($name ?? 'ICMS90');
-        $dom = $element->ownerDocument;
+        $element = parent::getNode($version, $name ?? 'ICMS90');
         return $element;
     }
 
