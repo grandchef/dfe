@@ -12,16 +12,16 @@
 namespace DFe\Loader\NFe\V4\Task;
 
 use DFe\Core\Nota;
+use DFe\Task\Envio;
 use DFe\Common\Util;
 use DFe\Common\Loader;
-use DFe\Task\Envio as TaskEnvio;
 
 /**
  * Envia requisições para os servidores da SEFAZ
  */
 class EnvioLoader implements Loader
 {
-    public function __construct(private TaskEnvio $envio)
+    public function __construct(private Envio $envio)
     {
     }
 
@@ -44,7 +44,7 @@ class EnvioLoader implements Loader
      *
      * @param  string $name Nome do nó que será criado
      */
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement($name ?? 'nfeDadosMsg');
@@ -68,7 +68,7 @@ class EnvioLoader implements Loader
         return $dom->documentElement;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         return $element;
     }

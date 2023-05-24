@@ -20,12 +20,12 @@ class AutorizacaoLoader implements Loader
     {
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         return $this->autorizacao->getDocument()->documentElement;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $this->autorizacao->setDocument($element->ownerDocument);
         $this->autorizacao->setStatus('100');

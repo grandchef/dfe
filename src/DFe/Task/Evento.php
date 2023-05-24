@@ -436,7 +436,7 @@ class Evento extends Retorno
         return $element;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $root = $element;
         $element = Util::findNode($element, 'evento');

@@ -213,7 +213,7 @@ class IPI extends Imposto
     }
 
 
-    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name ??= 'IPI';
         $element = Util::findNode($element, $name);

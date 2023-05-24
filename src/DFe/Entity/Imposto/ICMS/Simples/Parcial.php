@@ -59,7 +59,7 @@ class Parcial extends \DFe\Entity\Imposto\ICMS\Parcial
         return $element;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name ??= 'ICMSSN202';
         $element = Util::findNode($element, $name);

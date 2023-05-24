@@ -186,7 +186,7 @@ class Status implements Node
         return $element;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name ??= 'Status';
         $element = Util::findNode($element, $name);

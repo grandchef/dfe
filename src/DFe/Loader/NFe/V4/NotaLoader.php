@@ -479,7 +479,7 @@ class NotaLoader implements Loader
         return $element;
     }
 
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         $this->nota->getEmitente()->getEndereco()->checkCodigos();
         $this->nota->setID($this->gerarID());
@@ -531,14 +531,14 @@ class NotaLoader implements Loader
         }
         $info->appendChild($ident);
 
-        $emitente = $this->nota->getEmitente()->getNode();
+        $emitente = $this->nota->getEmitente()->getNode($version);
         $emitente = $dom->importNode($emitente, true);
         $info->appendChild($emitente);
         if ($this->nota->getAmbiente() == Nota::AMBIENTE_HOMOLOGACAO && !is_null($this->nota->getDestinatario())) {
             $this->nota->getDestinatario()->setNome('NF-E EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL');
         }
         if (!is_null($this->nota->getDestinatario())) {
-            $destinatario = $this->nota->getDestinatario()->getNode();
+            $destinatario = $this->nota->getDestinatario()->getNode($version);
             $destinatario = $dom->importNode($destinatario, true);
             $info->appendChild($destinatario);
         }
@@ -555,7 +555,7 @@ class NotaLoader implements Loader
             if ($this->nota->getAmbiente() == Nota::AMBIENTE_HOMOLOGACAO) {
                 $_produto->setDescricao('NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL');
             }
-            $produto = $_produto->getNode();
+            $produto = $_produto->getNode($version);
             $produto = $dom->importNode($produto, true);
             $info->appendChild($produto);
             // Soma os tributos aproximados dos produtos
@@ -574,20 +574,20 @@ class NotaLoader implements Loader
         $total = $this->getNodeTotal();
         $total = $dom->importNode($total, true);
         $info->appendChild($total);
-        $transporte = $this->nota->getTransporte()->getNode();
+        $transporte = $this->nota->getTransporte()->getNode($version);
         $transporte = $dom->importNode($transporte, true);
         $info->appendChild($transporte);
         // TODO: adicionar cobrança
         $pag = $dom->createElement('pag');
         $_pagamentos = $this->nota->getPagamentos();
         foreach ($_pagamentos as $_pagamento) {
-            $pagamento = $_pagamento->getNode();
+            $pagamento = $_pagamento->getNode($version);
             $pagamento = $dom->importNode($pagamento, true);
             $pag->appendChild($pagamento);
         }
         $info->appendChild($pag);
         if (!is_null($this->nota->getIntermediador())) {
-            $intermediador = $this->nota->getIntermediador()->getNode();
+            $intermediador = $this->nota->getIntermediador()->getNode($version);
             $intermediador = $dom->importNode($intermediador, true);
             $info->appendChild($intermediador);
         }
@@ -621,7 +621,7 @@ class NotaLoader implements Loader
         // TODO: adicionar compra
         // TODO: adicionar cana
         if (!is_null($this->nota->getResponsavel())) {
-            $responsavel = $this->nota->getResponsavel()->getNode();
+            $responsavel = $this->nota->getResponsavel()->getNode($version);
             $responsavel = $dom->importNode($responsavel, true);
             $info->appendChild($responsavel);
         }
@@ -630,7 +630,7 @@ class NotaLoader implements Loader
         return $element;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $root = $element;
         $name ??= 'NFe';

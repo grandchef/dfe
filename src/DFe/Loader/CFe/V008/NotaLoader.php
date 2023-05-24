@@ -12,7 +12,6 @@
 namespace DFe\Loader\CFe\V008;
 
 use DFe\Core\Nota;
-use DFe\Core\SEFAZ;
 use DFe\Common\Util;
 use DFe\Entity\Total;
 use DFe\Common\Loader;
@@ -24,9 +23,6 @@ use DFe\Entity\Transporte;
 use DFe\Entity\Responsavel;
 use DFe\Entity\Destinatario;
 use DFe\Entity\Intermediador;
-use DFe\Util\AdapterInterface;
-use DFe\Util\XmlseclibsAdapter;
-use DFe\Exception\ValidationException;
 
 /**
  * Classe para carregamento e geração do XML
@@ -441,45 +437,7 @@ class NotaLoader implements Loader
         return $id . Util::getDAC($id, 11);
     }
 
-    private function getNodeTotal($name = null)
-    {
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement($name ?? 'total');
-
-        // Totais referentes ao ICMS
-        $total = $this->nota->getTotais();
-        $icms = $dom->createElement('ICMSTot');
-        Util::appendNode($icms, 'vBC', Util::toCurrency($total['base']));
-        Util::appendNode($icms, 'vICMS', Util::toCurrency($total['icms']));
-        Util::appendNode($icms, 'vICMSDeson', Util::toCurrency($total['desoneracao']));
-        Util::appendNode($icms, 'vFCP', Util::toCurrency($total['fundo']));
-        Util::appendNode($icms, 'vBCST', Util::toCurrency($total['base.st']));
-        Util::appendNode($icms, 'vST', Util::toCurrency($total['icms.st']));
-        Util::appendNode($icms, 'vFCPST', Util::toCurrency($total['fundo.st']));
-        Util::appendNode($icms, 'vFCPSTRet', Util::toCurrency($total['fundo.retido.st']));
-        Util::appendNode($icms, 'vProd', Util::toCurrency($total['produtos']));
-        Util::appendNode($icms, 'vFrete', Util::toCurrency($total['frete']));
-        Util::appendNode($icms, 'vSeg', Util::toCurrency($total['seguro']));
-        Util::appendNode($icms, 'vDesc', Util::toCurrency($total['desconto']));
-        Util::appendNode($icms, 'vII', Util::toCurrency($total['ii']));
-        Util::appendNode($icms, 'vIPI', Util::toCurrency($total['ipi']));
-        Util::appendNode($icms, 'vIPIDevol', Util::toCurrency($total['ipi.devolvido']));
-        Util::appendNode($icms, 'vPIS', Util::toCurrency($total['pis']));
-        Util::appendNode($icms, 'vCOFINS', Util::toCurrency($total['cofins']));
-        Util::appendNode($icms, 'vOutro', Util::toCurrency($total['despesas']));
-        Util::appendNode($icms, 'vNF', Util::toCurrency($total['nota']));
-        Util::appendNode($icms, 'vTotTrib', Util::toCurrency($total['tributos']));
-        $element->appendChild($icms);
-        $this->nota->setTotal(new Total($total));
-        $this->nota->getTotal()->setProdutos($total['produtos']);
-
-        // TODO: Totais referentes ao ISSQN
-
-        // TODO: Retenção de Tributos Federais
-        return $element;
-    }
-
-    public function getNode(?string $name = null, ?string $version = null): \DOMElement
+    public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         $this->nota->getEmitente()->getEndereco()->checkCodigos();
         $this->nota->setID($this->gerarID());
@@ -499,16 +457,16 @@ class NotaLoader implements Loader
         Util::appendNode($ident, 'numeroCaixa', $this->nota->getCaixa()->getNumero());
         $info->appendChild($ident);
 
-        $emitente = $this->nota->getEmitente()->getNode();
+        $emitente = $this->nota->getEmitente()->getNode($version);
         $emitente = $dom->importNode($emitente, true);
         $info->appendChild($emitente);
         if (!is_null($this->nota->getDestinatario())) {
-            $destinatario = $this->nota->getDestinatario()->getNode();
+            $destinatario = $this->nota->getDestinatario()->getNode($version);
             $destinatario = $dom->importNode($destinatario, true);
             $info->appendChild($destinatario);
         }
         if (!is_null($this->nota->getDestinatario()) && !is_null($this->nota->getDestinatario()->getEndereco())) {
-            $destinatario = $this->nota->getDestinatario()->getEndereco()->getNode();
+            $destinatario = $this->nota->getDestinatario()->getEndereco()->getNode($version);
             $destinatario = $dom->importNode($destinatario, true);
             $info->appendChild($destinatario);
         }
@@ -522,7 +480,7 @@ class NotaLoader implements Loader
             } else {
                 $item = $_produto->getItem();
             }
-            $produto = $_produto->getNode();
+            $produto = $_produto->getNode($version);
             $produto = $dom->importNode($produto, true);
             $info->appendChild($produto);
             // Soma os tributos aproximados dos produtos
@@ -541,7 +499,7 @@ class NotaLoader implements Loader
         $pag = $dom->createElement('pgto');
         $_pagamentos = $this->nota->getPagamentos();
         foreach ($_pagamentos as $_pagamento) {
-            $pagamento = $_pagamento->getNode();
+            $pagamento = $_pagamento->getNode($version);
             $pagamento = $dom->importNode($pagamento, true);
             $pag->appendChild($pagamento);
         }
@@ -577,7 +535,7 @@ class NotaLoader implements Loader
         return $element;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $root = $element;
         $name ??= 'NFe';

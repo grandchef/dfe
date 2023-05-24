@@ -316,7 +316,7 @@ $[field.end]
      * @param string $name Nome do nó que será carregado
      * @return DOMElement Instância do nó que foi carregado
      */
-    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name ??= '$[tAble.style]';
 $[table.if(inherited)]

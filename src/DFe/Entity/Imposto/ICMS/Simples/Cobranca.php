@@ -97,7 +97,7 @@ class Cobranca extends Parcial
         return Util::mergeNodes($element, $parcial);
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name ??= 'ICMSSN201';
         $element = Util::findNode($element, $name);

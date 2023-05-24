@@ -1410,7 +1410,7 @@ abstract class Nota implements Node
         return $loader->getNode($version ?? $this->getLoaderVersion(), $name);
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         if ($element->nodeName === 'CFe') {
             $this->setModelo(self::MODELO_CFE);
@@ -1423,7 +1423,7 @@ abstract class Nota implements Node
             $invoiceVersion = $versionNode->getAttribute('versao');
             $this->setVersao($invoiceVersion);
         }
-        $loader = $this->getLoader();
+        $loader = $this->getLoader($version);
         return $loader->loadNode($element, $name, $version ?? $this->getLoaderVersion());
     }
 

@@ -91,7 +91,7 @@ class Normal extends Base
     }
 
 
-    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name ??= 'ICMS';
         $element = Util::findNode($element, $name);

@@ -161,7 +161,7 @@ class Parcial extends Base
         return $this->exportFundo($element, $version);
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name ??= 'ICMS30';
         $element = Util::findNode($element, $name);

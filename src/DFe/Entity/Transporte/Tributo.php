@@ -114,7 +114,7 @@ class Tributo extends Imposto
     }
 
 
-    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name ??= 'retTransp';
         $element = Util::findNode($element, $name);

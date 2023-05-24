@@ -11,7 +11,8 @@
 
 namespace DFe\Entity;
 
-use DFe\Common\Util;
+use DFe\Loader\NFe\V4\EmitenteLoader;
+use DFe\Loader\CFe\V008\EmitenteLoader as CFeEmitenteLoader;
 
 /**
  * Empresa que irá emitir as notas fiscais
@@ -109,39 +110,21 @@ class Emitente extends Pessoa
 
     public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement($name ?? 'emit');
-        Util::appendNode($element, 'CNPJ', $this->getCNPJ(true));
-        Util::appendNode($element, 'xNome', $this->getRazaoSocial(true));
-        if (!is_null($this->getFantasia())) {
-            Util::appendNode($element, 'xFant', $this->getFantasia(true));
+        if (strpos($version, 'CFe@') !== false) {
+            $loader = new CFeEmitenteLoader($this);
+        } else {
+            $loader = new EmitenteLoader($this);
         }
-        $endereco = $this->getEndereco()->getNode($version, 'enderEmit');
-        $endereco = $dom->importNode($endereco, true);
-        if (!is_null($this->getTelefone())) {
-            Util::appendNode($endereco, 'fone', $this->getTelefone(true));
-        }
-        $element->appendChild($endereco);
-        Util::appendNode($element, 'IE', $this->getIE(true));
-        if (!is_null($this->getIM())) {
-            Util::appendNode($element, 'IM', $this->getIM(true));
-        }
-        Util::appendNode($element, 'CRT', $this->getRegime(true));
-        return $element;
+        return $loader->getNode($version, $name);
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
-        $name ??= 'emit';
-        $element = parent::loadNode($element, $name);
-        $this->setFantasia(Util::loadNode($element, 'xFant'));
-        $this->setRegime(
-            Util::loadNode(
-                $element,
-                'CRT',
-                'Tag "CRT" do campo "Regime" não encontrada'
-            )
-        );
-        return $element;
+        if (strpos($version, 'CFe@') !== false) {
+            $loader = new CFeEmitenteLoader($this);
+        } else {
+            $loader = new EmitenteLoader($this);
+        }
+        return $loader->loadNode($element, $name, $version);
     }
 }

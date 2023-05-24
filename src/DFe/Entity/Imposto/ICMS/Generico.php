@@ -58,7 +58,7 @@ class Generico extends Mista
         return $element;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name ??= 'ICMS90';
         $element = Util::findNode($element, $name);

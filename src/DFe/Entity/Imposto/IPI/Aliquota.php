@@ -118,7 +118,7 @@ class Aliquota extends Imposto
         return $element;
     }
 
-    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name ??= 'IPITrib';
         $element = Util::findNode($element, $name);

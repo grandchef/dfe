@@ -263,7 +263,7 @@ class Protocolo extends Retorno
     /**
      * Carrega as informações do nó e preenche a instância da classe
      */
-    public function loadNode(\DOMElement $element, ?string $name = null, ?string $version = null): \DOMElement
+    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name ??= 'infProt';
         $element = parent::loadNode($element, $name);
