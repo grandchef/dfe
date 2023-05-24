@@ -12,7 +12,8 @@
 namespace DFe\Entity;
 
 use DFe\Common\Node;
-use DFe\Common\Util;
+use DFe\Loader\NFe\V4\EnderecoLoader;
+use DFe\Loader\CFe\V008\EnderecoLoader as CFeEnderecoLoader;
 
 /**
  * Informação de endereço que será informado nos clientes e no emitente
@@ -194,101 +195,23 @@ class Endereco implements Node
         return $this;
     }
 
-    public function checkCodigos()
-    {
-        $this->getMunicipio()->checkCodigos();
-        $this->getMunicipio()->getEstado()->checkCodigos();
-    }
-
     public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-        $this->checkCodigos();
-        $element = $dom->createElement($name ?? 'enderEmit');
-        Util::appendNode($element, 'xLgr', $this->getLogradouro(true));
-        Util::appendNode($element, 'nro', $this->getNumero(true));
-        if (!empty($this->getComplemento())) {
-            Util::appendNode($element, 'xCpl', $this->getComplemento(true));
+        if (strpos($version, 'CFe@') !== false) {
+            $loader = new CFeEnderecoLoader($this);
+        } else {
+            $loader = new EnderecoLoader($this);
         }
-        Util::appendNode($element, 'xBairro', $this->getBairro(true));
-        Util::appendNode($element, 'cMun', $this->getMunicipio()->getCodigo(true));
-        Util::appendNode($element, 'xMun', $this->getMunicipio()->getNome(true));
-        Util::appendNode($element, 'UF', $this->getMunicipio()->getEstado()->getUF(true));
-        Util::appendNode($element, 'CEP', $this->getCEP(true));
-        Util::appendNode($element, 'cPais', $this->getPais()->getCodigo(true));
-        Util::appendNode($element, 'xPais', $this->getPais()->getNome(true));
-        // Util::appendNode($element, 'fone', $this->getTelefone(true));
-        return $element;
+        return $loader->getNode($version, $name);
     }
 
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
-        $name ??= 'enderEmit';
-        $element = Util::findNode($element, $name);
-        $this->setLogradouro(
-            Util::loadNode(
-                $element,
-                'xLgr',
-                'Tag "xLgr" do campo "Logradouro" não encontrada'
-            )
-        );
-        $this->setNumero(
-            Util::loadNode(
-                $element,
-                'nro',
-                'Tag "nro" do campo "Numero" não encontrada'
-            )
-        );
-        $this->setComplemento(Util::loadNode($element, 'xCpl'));
-        $this->setBairro(
-            Util::loadNode(
-                $element,
-                'xBairro',
-                'Tag "xBairro" do campo "Bairro" não encontrada'
-            )
-        );
-        $this->getMunicipio()->setCodigo(
-            Util::loadNode(
-                $element,
-                'cMun',
-                'Tag "cMun" do objeto "Municipio" não encontrada'
-            )
-        );
-        $this->getMunicipio()->setNome(
-            Util::loadNode(
-                $element,
-                'xMun',
-                'Tag "xMun" do objeto "Municipio" não encontrada'
-            )
-        );
-        $this->getMunicipio()->getEstado()->setUF(
-            Util::loadNode(
-                $element,
-                'UF',
-                'Tag "UF" do objeto "Estado" não encontrada'
-            )
-        );
-        $this->setCEP(
-            Util::loadNode(
-                $element,
-                'CEP',
-                'Tag "CEP" do campo "CEP" não encontrada'
-            )
-        );
-        $this->getPais()->setCodigo(
-            Util::loadNode(
-                $element,
-                'cPais',
-                'Tag "cPais" do objeto "Pais" não encontrada'
-            )
-        );
-        $this->getPais()->setNome(
-            Util::loadNode(
-                $element,
-                'xPais',
-                'Tag "xPais" do objeto "Pais" não encontrada'
-            )
-        );
-        return $element;
+        if (strpos($version, 'CFe@') !== false) {
+            $loader = new CFeEnderecoLoader($this);
+        } else {
+            $loader = new EnderecoLoader($this);
+        }
+        return $loader->loadNode($element, $name, $version);
     }
 }

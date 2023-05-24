@@ -127,7 +127,7 @@ class Retorno extends Status
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name ??= 'Retorno';
-        $retorno = parent::loadNode($element, $name);
+        $retorno = parent::loadNode($element, $name, $version);
         $this->setDataRecebimento(Util::loadNode($retorno, 'dhRecbto'));
         return $retorno;
     }

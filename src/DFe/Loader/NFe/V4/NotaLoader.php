@@ -481,7 +481,6 @@ class NotaLoader implements Loader
 
     public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $this->nota->getEmitente()->getEndereco()->checkCodigos();
         $this->nota->setID($this->gerarID());
         $this->nota->setDigitoVerificador(substr($this->getID(), -1, 1));
 
@@ -498,6 +497,7 @@ class NotaLoader implements Loader
         $info->appendChild($versao);
 
         $municipio = $this->nota->getEmitente()->getEndereco()->getMunicipio();
+        $municipio->checkCodigos();
         $estado = $municipio->getEstado();
         $ident = $dom->createElement('ide');
         Util::appendNode($ident, 'cUF', $estado->getCodigo());

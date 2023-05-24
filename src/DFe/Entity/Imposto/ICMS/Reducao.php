@@ -88,7 +88,7 @@ class Reducao extends Normal
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name ??= 'ICMS20';
-        $element = parent::loadNode($element, $name);
+        $element = parent::loadNode($element, $name, $version);
         $this->setReducao(
             Util::loadNode(
                 $element,

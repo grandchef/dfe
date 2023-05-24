@@ -92,7 +92,7 @@ class Cobrado extends Generico
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name ??= 'ICMSSN500';
-        $element = parent::loadNode($element, $name);
+        $element = parent::loadNode($element, $name, $version);
         $this->setBase(Util::loadNode($element, 'vBCSTRet'));
         $this->setValor(Util::loadNode($element, 'vICMSSTRet'));
         return $element;

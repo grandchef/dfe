@@ -266,7 +266,7 @@ class Protocolo extends Retorno
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name ??= 'infProt';
-        $element = parent::loadNode($element, $name);
+        $element = parent::loadNode($element, $name, $version);
         $this->setChave(
             Util::loadNode(
                 $element,

@@ -58,7 +58,7 @@ class Substituto extends Cobrado
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name ??= 'ICMSST';
-        $element = parent::loadNode($element, $name);
+        $element = parent::loadNode($element, $name, $version);
         $this->getNormal()->setBase(
             Util::loadNode(
                 $element,

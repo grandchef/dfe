@@ -65,7 +65,7 @@ class Generico extends Mista
         $_mod = $element->getElementsByTagName('modBC');
         $_mod_st = $element->getElementsByTagName('modBCST');
         if ($_mod->length > 0 || $_mod_st->length > 0) {
-            $element = parent::loadNode($element, $name);
+            $element = parent::loadNode($element, $name, $version);
             return $element;
         }
         $this->setOrigem(

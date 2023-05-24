@@ -439,7 +439,6 @@ class NotaLoader implements Loader
 
     public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $this->nota->getEmitente()->getEndereco()->checkCodigos();
         $this->nota->setID($this->gerarID());
         $this->nota->setDigitoVerificador(substr($this->getID(), -1, 1));
 

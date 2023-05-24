@@ -320,7 +320,7 @@ $[field.end]
     {
         $name ??= '$[tAble.style]';
 $[table.if(inherited)]
-        $element = parent::loadNode($element, $name);
+        $element = parent::loadNode($element, $name, $version);
 $[table.else]
         $element = Util::findNode($element, $name);
 $[table.end]

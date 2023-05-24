@@ -36,9 +36,9 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $endereco = new \DFe\Entity\Endereco();
         $endereco->setCEP('01122500');
         $endereco->getMunicipio()
-                 ->setNome('Paranavaí')
-                 ->getEstado()
-                 ->setUF('PR');
+            ->setNome('Paranavaí')
+            ->getEstado()
+            ->setUF('PR');
         $endereco->setBairro('Centro');
         $endereco->setLogradouro('Rua Paranavaí');
         $endereco->setNumero('123');
@@ -63,9 +63,9 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $endereco = new \DFe\Entity\Endereco();
         $endereco->setCEP('01122500');
         $endereco->getMunicipio()
-                 ->setNome('Paranavaí')
-                 ->getEstado()
-                 ->setUF('PR');
+            ->setNome('Paranavaí')
+            ->getEstado()
+            ->setUF('PR');
         $endereco->setBairro('Centro');
         $endereco->setLogradouro('Rua Paranavaí');
         $endereco->setNumero('123');

@@ -66,7 +66,7 @@ class Generico extends Cobranca
         $_cred = $element->getElementsByTagName('pCredSN');
         $_mod_st = $element->getElementsByTagName('modBCST');
         if ($_cred->length > 0 || $_mod_st->length > 0) {
-            $element = parent::loadNode($element, $name);
+            $element = parent::loadNode($element, $name, $version);
             return $element;
         }
         $this->setOrigem(

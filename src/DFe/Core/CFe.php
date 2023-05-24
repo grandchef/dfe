@@ -230,7 +230,7 @@ class CFe extends Nota
      */
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
-        $element = parent::loadNode($element, $name);
+        $element = parent::loadNode($element, $name, $version);
         $qrcode_url = Util::loadNode($element, 'qrCode');
         if (Util::nodeExists($element, 'Signature') && is_null($qrcode_url)) {
             throw new \Exception('Tag "qrCode" não encontrada no CFe', 404);

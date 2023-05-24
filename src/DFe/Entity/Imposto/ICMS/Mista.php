@@ -57,7 +57,7 @@ class Mista extends Cobranca
         $normal = new Reducao();
         $this->setNormal($normal);
         $name ??= 'ICMS70';
-        $element = parent::loadNode($element, $name);
+        $element = parent::loadNode($element, $name, $version);
         if (is_null($this->getNormal()->getReducao())) {
             $this->getNormal()->setReducao($this->getReducao());
         }

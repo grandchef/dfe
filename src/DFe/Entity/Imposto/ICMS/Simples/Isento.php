@@ -63,7 +63,7 @@ class Isento extends Generico
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name ??= 'ICMSSN102';
-        $element = parent::loadNode($element, $name);
+        $element = parent::loadNode($element, $name, $version);
         return $element;
     }
 }

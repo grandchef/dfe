@@ -165,7 +165,7 @@ class Situacao extends Retorno
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name = is_null($name) ? self::TAG_RETORNO : $name;
-        $element = parent::loadNode($element, $name);
+        $element = parent::loadNode($element, $name, $version);
         $this->setChave(Util::loadNode($element, 'chNFe'));
         return $element;
     }

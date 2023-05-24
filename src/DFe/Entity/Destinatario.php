@@ -11,7 +11,8 @@
 
 namespace DFe\Entity;
 
-use DFe\Common\Util;
+use DFe\Loader\NFe\V4\DestinatarioLoader;
+use DFe\Loader\CFe\V008\DestinatarioLoader as CFeDestinatarioLoader;
 
 /**
  * Cliente pessoa física ou jurídica que está comprando os produtos e irá
@@ -158,51 +159,21 @@ class Destinatario extends Pessoa
 
     public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement($name ?? 'dest');
-        if (!empty($this->getCNPJ())) {
-            Util::appendNode($element, 'CNPJ', $this->getCNPJ(true));
+        if (strpos($version, 'CFe@') !== false) {
+            $loader = new CFeDestinatarioLoader($this);
         } else {
-            Util::appendNode($element, 'CPF', $this->getCPF(true));
+            $loader = new DestinatarioLoader($this);
         }
-        if (!empty($this->getNome())) {
-            Util::appendNode($element, 'xNome', $this->getNome(true));
-        }
-        if (!is_null($this->getEndereco())) {
-            $endereco = $this->getEndereco()->getNode($version, 'enderDest');
-            $endereco = $dom->importNode($endereco, true);
-            if (!empty($this->getTelefone())) {
-                Util::appendNode($endereco, 'fone', $this->getTelefone(true));
-            }
-            $element->appendChild($endereco);
-        }
-        Util::appendNode($element, 'indIEDest', $this->getIndicador(true));
-        if (!empty($this->getCNPJ()) && !empty($this->getIE())) {
-            Util::appendNode($element, 'IE', $this->getIE(true));
-        }
-        if (!empty($this->getEmail())) {
-            Util::appendNode($element, 'email', $this->getEmail(true));
-        }
-        return $element;
+        return $loader->getNode($version, $name);
     }
 
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
-        $name ??= 'dest';
-        $element = parent::loadNode($element, $name);
-        $cpf = Util::loadNode($element, 'CPF');
-        if (is_null($cpf) && is_null($this->getCNPJ())) {
-            throw new \Exception('Tag "CPF" não encontrada no Destinatario', 404);
+        if (strpos($version, 'CFe@') !== false) {
+            $loader = new CFeDestinatarioLoader($this);
+        } else {
+            $loader = new DestinatarioLoader($this);
         }
-        $this->setCPF($cpf);
-        $this->setEmail(Util::loadNode($element, 'email'));
-        $this->setIndicador(
-            Util::loadNode(
-                $element,
-                'indIEDest',
-                'Tag "indIEDest" não encontrada no Destinatario'
-            )
-        );
-        return $element;
+        return $loader->loadNode($element, $name, $version);
     }
 }

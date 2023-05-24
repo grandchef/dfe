@@ -650,7 +650,7 @@ class Produto extends Total
         $name ??= 'det';
         $element = Util::findNode($element, $name);
         $root = $element;
-        $element = parent::loadNode($element, $name);
+        $element = parent::loadNode($element, $name, $version);
         $this->setItem(Util::loadNode($element, 'nItemPed'));
         $this->setPedido(Util::loadNode($element, 'xPed'));
         $this->setCodigo(

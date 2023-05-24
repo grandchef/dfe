@@ -321,7 +321,7 @@ class Inutilizacao extends Retorno
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
         $name ??= 'infInut';
-        $element = parent::loadNode($element, $name);
+        $element = parent::loadNode($element, $name, $version);
         if (!$this->isInutilizado()) {
             return $element;
         }

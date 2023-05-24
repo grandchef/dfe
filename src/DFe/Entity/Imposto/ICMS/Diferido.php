@@ -142,7 +142,7 @@ class Diferido extends Reducao
                 Util::appendNode($element, 'pRedBC', '0.0000');
                 $node_added = true;
             }
-            $element = parent::loadNode($element, $name);
+            $element = parent::loadNode($element, $name, $version);
             if ($node_added) {
                 $item = $save_element->getElementsByTagName('pRedBC')->item(0);
                 $save_element->removeChild($item);

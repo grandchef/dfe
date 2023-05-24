@@ -223,7 +223,7 @@ class Recibo extends Retorno
             }
             $element = $_fields->item(0);
         } else {
-            $element = parent::loadNode($element, $name);
+            $element = parent::loadNode($element, $name, $version);
         }
         $this->setNumero(
             Util::loadNode(

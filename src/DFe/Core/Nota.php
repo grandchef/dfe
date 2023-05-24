@@ -1407,7 +1407,7 @@ abstract class Nota implements Node
     public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         $loader = $this->getLoader($version);
-        return $loader->getNode($version ?? $this->getLoaderVersion(), $name);
+        return $loader->getNode($version ?: $this->getLoaderVersion(), $name);
     }
 
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
@@ -1424,7 +1424,7 @@ abstract class Nota implements Node
             $this->setVersao($invoiceVersion);
         }
         $loader = $this->getLoader($version);
-        return $loader->loadNode($element, $name, $version ?? $this->getLoaderVersion());
+        return $loader->loadNode($element, $name, $version ?: $this->getLoaderVersion());
     }
 
     /**

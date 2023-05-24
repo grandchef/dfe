@@ -108,16 +108,16 @@ class Cobranca extends Parcial
         $this->setNormal($normal);
         $_fields = $element->getElementsByTagName('modBCST');
         if ($_fields->length == 0) {
-            $normal->loadNode($element, $name);
+            $normal->loadNode($element, $name, $version);
             return $element;
         }
-        $element = parent::loadNode($element, $name);
+        $element = parent::loadNode($element, $name, $version);
         $_fields = $element->getElementsByTagName('pCredSN');
         if ($_fields->length == 0) {
             return $element;
         }
         $normal->setModalidade(Normal::MODALIDADE_OPERACAO); // forçar escrita
-        $normal->loadNode($element, $name);
+        $normal->loadNode($element, $name, $version);
         return $element;
     }
 }
