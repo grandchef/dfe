@@ -27,21 +27,13 @@
         <cEAN>7894900011531</cEAN>
         <xProd>NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL</xProd>
         <NCM>22021000</NCM>
-        <CEST>0300700</CEST>
         <CFOP>5405</CFOP>
         <uCom>UN</uCom>
         <qCom>1.0000</qCom>
         <vUnCom>4.9900000000</vUnCom>
-        <vProd>4.99</vProd>
-        <cEANTrib/>
-        <uTrib>UN</uTrib>
-        <qTrib>1.0000</qTrib>
-        <vUnTrib>4.9900000000</vUnTrib>
-        <indTot>1</indTot>
-        <nItemPed>1</nItemPed>
+        <indRegra>A</indRegra>
       </prod>
       <imposto>
-        <vTotTrib>1.65</vTotTrib>
         <ICMS>
           <ICMS60>
             <orig>0</orig>
@@ -76,22 +68,14 @@
         <cEAN>7894900011523</cEAN>
         <xProd>NOTA FISCAL EMITIDA EM AMBIENTE DE HOMOLOGACAO - SEM VALOR FISCAL</xProd>
         <NCM>22021000</NCM>
-        <CEST>0300700</CEST>
         <CFOP>5405</CFOP>
         <uCom>UN</uCom>
         <qCom>2.0000</qCom>
         <vUnCom>4.5000000000</vUnCom>
-        <vProd>9.00</vProd>
-        <cEANTrib/>
-        <uTrib>UN</uTrib>
-        <qTrib>2.0000</qTrib>
-        <vUnTrib>4.5000000000</vUnTrib>
+        <indRegra>A</indRegra>
         <vDesc>2.20</vDesc>
-        <indTot>1</indTot>
-        <nItemPed>2</nItemPed>
       </prod>
       <imposto>
-        <vTotTrib>2.24</vTotTrib>
         <ICMS>
           <ICMS60>
             <orig>0</orig>

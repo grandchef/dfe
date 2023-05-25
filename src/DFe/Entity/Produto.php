@@ -12,8 +12,9 @@
 namespace DFe\Entity;
 
 use DFe\Core\SEFAZ;
-use DFe\Common\Node;
 use DFe\Common\Util;
+use DFe\Loader\NFe\V4\ProdutoLoader;
+use DFe\Loader\CFe\V008\ProdutoLoader as CFeProdutoLoader;
 
 /**
  * Produto ou serviço que está sendo vendido ou prestado e será adicionado
@@ -568,191 +569,21 @@ class Produto extends Total
 
     public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement($name ?? 'det');
-        $attr = $dom->createAttribute('nItem');
-        $attr->value = $this->getItem(true);
-        $element->appendChild($attr);
-
-        $produto = $dom->createElement('prod');
-        Util::appendNode($produto, 'cProd', $this->getCodigo(true));
-        Util::appendNode($produto, 'cEAN', $this->getCodigoBarras(true));
-        Util::appendNode($produto, 'xProd', $this->getDescricao(true));
-        Util::appendNode($produto, 'NCM', $this->getNCM(true));
-        //      Util::appendNode($produto, 'NVE', $this->getNVE(true));
-        if (!is_null($this->getCEST())) {
-            Util::appendNode($produto, 'CEST', $this->getCEST(true));
+        if (strpos($version, 'CFe@') !== false) {
+            $loader = new CFeProdutoLoader($this);
+        } else {
+            $loader = new ProdutoLoader($this);
         }
-        if (!is_null($this->getExcecao())) {
-            Util::appendNode($produto, 'EXTIPI', $this->getExcecao(true));
-        }
-        Util::appendNode($produto, 'CFOP', $this->getCFOP(true));
-        Util::appendNode($produto, 'uCom', $this->getUnidade(true));
-        Util::appendNode($produto, 'qCom', $this->getQuantidade(true));
-        Util::appendNode($produto, 'vUnCom', $this->getPrecoUnitario(true));
-        Util::appendNode($produto, 'vProd', $this->getPreco(true));
-        Util::appendNode($produto, 'cEANTrib', $this->getCodigoTributario(true));
-        Util::appendNode($produto, 'uTrib', $this->getUnidade(true));
-        Util::appendNode($produto, 'qTrib', $this->getTributada(true));
-        Util::appendNode($produto, 'vUnTrib', $this->getPrecoTributavel(true));
-        if (Util::isGreater($this->getFrete(), 0.00)) {
-            Util::appendNode($produto, 'vFrete', $this->getFrete(true));
-        }
-        if (Util::isGreater($this->getSeguro(), 0.00)) {
-            Util::appendNode($produto, 'vSeg', $this->getSeguro(true));
-        }
-        if (Util::isGreater($this->getDesconto(), 0.00)) {
-            Util::appendNode($produto, 'vDesc', $this->getDesconto(true));
-        }
-        if (Util::isGreater($this->getDespesas(), 0.00)) {
-            Util::appendNode($produto, 'vOutro', $this->getDespesas(true));
-        }
-        Util::appendNode($produto, 'indTot', $this->getMultiplicador(true));
-        //      Util::appendNode($produto, 'DI', $this->getImportacoes(true));
-        //      Util::appendNode($produto, 'detExport', $this->getDetalhes(true));
-        if (!is_null($this->getPedido())) {
-            Util::appendNode($produto, 'xPed', $this->getPedido(true));
-        }
-        Util::appendNode($produto, 'nItemPed', $this->getItem(true));
-        //      Util::appendNode($produto, 'nFCI', $this->getControle(true));
-        $element->appendChild($produto);
-
-        $imposto = $dom->createElement('imposto');
-        $grupos = [];
-        $_impostos = $this->getImpostos();
-        foreach ($_impostos as $_imposto) {
-            if (is_null($_imposto->getBase())) {
-                $_imposto->setBase($this->getBase());
-            }
-            $grupos[$_imposto->getGrupo(true)][] = $_imposto;
-        }
-        $imposto_info = $this->getImpostoInfo();
-        $this->setTributos($imposto_info['total']);
-        Util::appendNode($imposto, 'vTotTrib', Util::toCurrency($imposto_info['total']));
-        foreach ($grupos as $tag => $_grupo) {
-            $grupo = $dom->createElement($tag);
-            foreach ($_grupo as $_imposto) {
-                $node = $_imposto->getNode($version);
-                $node = $dom->importNode($node, true);
-                $grupo->appendChild($node);
-            }
-            $imposto->appendChild($grupo);
-        }
-        $element->appendChild($imposto);
-        // TODO: verificar se é obrigatório a informação adicional abaixo
-        $complemento = self::addNodeInformacoes($imposto_info, $element);
-        $this->setComplemento($complemento);
-        return $element;
+        return $loader->getNode($version, $name);
     }
 
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
-        $name ??= 'det';
-        $element = Util::findNode($element, $name);
-        $root = $element;
-        $element = parent::loadNode($element, $name, $version);
-        $this->setItem(Util::loadNode($element, 'nItemPed'));
-        $this->setPedido(Util::loadNode($element, 'xPed'));
-        $this->setCodigo(
-            Util::loadNode(
-                $element,
-                'cProd',
-                'Tag "cProd" do campo "Codigo" não encontrada no Produto'
-            )
-        );
-        $this->setCodigoTributario(
-            Util::loadNode(
-                $element,
-                'cEANTrib',
-                'Tag "cEANTrib" do campo "CodigoTributario" não encontrada no Produto'
-            )
-        );
-        $this->setCodigoBarras(
-            Util::loadNode(
-                $element,
-                'cEAN',
-                'Tag "cEAN" do campo "CodigoBarras" não encontrada no Produto'
-            )
-        );
-        $this->setDescricao(
-            Util::loadNode(
-                $element,
-                'xProd',
-                'Tag "xProd" do campo "Descricao" não encontrada no Produto'
-            )
-        );
-        $this->setUnidade(
-            Util::loadNode(
-                $element,
-                'uCom',
-                'Tag "uCom" do campo "Unidade" não encontrada no Produto'
-            )
-        );
-        $this->setMultiplicador(
-            Util::loadNode(
-                $element,
-                'indTot',
-                'Tag "indTot" do campo "Multiplicador" não encontrada no Produto'
-            )
-        );
-        $this->setQuantidade(
-            Util::loadNode(
-                $element,
-                'qCom',
-                'Tag "qCom" do campo "Quantidade" não encontrada no Produto'
-            )
-        );
-        $this->setTributada(
-            Util::loadNode(
-                $element,
-                'qTrib',
-                'Tag "qTrib" do campo "Tributada" não encontrada no Produto'
-            )
-        );
-        $this->setExcecao(Util::loadNode($element, 'EXTIPI'));
-        $this->setCFOP(
-            Util::loadNode(
-                $element,
-                'CFOP',
-                'Tag "CFOP" do campo "CFOP" não encontrada no Produto'
-            )
-        );
-        $this->setNCM(
-            Util::loadNode(
-                $element,
-                'NCM',
-                'Tag "NCM" do campo "NCM" não encontrada no Produto'
-            )
-        );
-        $this->setCEST(Util::loadNode($element, 'CEST'));
-        $impostos = [];
-        $_fields = $root->getElementsByTagName('imposto');
-        if ($_fields->length == 0) {
-            throw new \Exception('Tag "imposto" da lista de "Impostos" não encontrada no Produto', 404);
+        if (strpos($version, 'CFe@') !== false) {
+            $loader = new CFeProdutoLoader($this);
+        } else {
+            $loader = new ProdutoLoader($this);
         }
-        $imposto_node = $_fields->item(0);
-        $this->setTributos(Util::loadNode($imposto_node, 'vTotTrib'));
-        $_items = $imposto_node->childNodes;
-        $total = new \DFe\Entity\Imposto\Total();
-        foreach ($_items as $_item) {
-            if (!$_item->hasChildNodes() || $_item->nodeType !== XML_ELEMENT_NODE) {
-                continue;
-            }
-            $total->setGrupo($_item->nodeName);
-            foreach ($_item->childNodes as $_subitem) {
-                if ($_subitem->nodeType !== XML_ELEMENT_NODE) {
-                    continue;
-                }
-                $imposto = Imposto::loadImposto($_subitem);
-                if ($imposto === false) {
-                    continue;
-                }
-                $imposto->setGrupo($total->getGrupo());
-                $impostos[] = $imposto;
-            }
-        }
-        $this->setImpostos($impostos);
-        $this->setComplemento(Util::loadNode($root, 'infAdProd'));
-        return $element;
+        return $loader->loadNode($element, $name, $version);
     }
 }
