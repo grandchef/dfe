@@ -36,8 +36,8 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \DFe\Common\Event
         $sefaz = SEFAZ::getInstance(true);
         $sefaz->getConfiguracao()
             ->getCertificado()
-                ->setArquivoChavePublica(dirname(dirname(__DIR__)) . '/resources/certs/public.pem')
-                ->setArquivoChavePrivada(dirname(dirname(__DIR__)) . '/resources/certs/private.pem');
+            ->setArquivoChavePublica(dirname(dirname(__DIR__)) . '/resources/certs/public.pem')
+            ->setArquivoChavePrivada(dirname(dirname(__DIR__)) . '/resources/certs/private.pem');
         $sefaz->getConfiguracao()
             ->setEmitente($emitente);
         return $sefaz;
@@ -130,7 +130,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \DFe\Common\Event
         $sefaz = self::createSEFAZ();
         $sefaz->getConfiguracao()->setEvento($this);
         $sefaz->getConfiguracao()->setUrlSat('http://localhost:8060/sat');
-        $nota = \DFe\Core\NFCeTest::createNFCe($sefaz);
+        $nota = \DFe\Core\NFCeTest::createNFCe($sefaz, true);
         $nota->getEmitente()->getEndereco()->getMunicipio()
             ->setNome('São Paulo')->getEstado()->setUF('SP');
         \DFe\Common\CurlSoap::setPostFunction([$this, 'networkErrorPostFunction']);

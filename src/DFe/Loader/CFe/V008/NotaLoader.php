@@ -510,15 +510,6 @@ class NotaLoader implements Loader
         // TODO: adicionar informações adicionais somente na NFC-e?
         $_complemento = Produto::addNodeInformacoes($tributos, $info_adic, 'infCpl');
         $this->nota->getTotal()->setComplemento($_complemento);
-        if (!is_null($this->nota->getObservacoes())) {
-            $_observacoes = $this->nota->getObservacoes();
-            foreach ($_observacoes as $_observacao) {
-                $observacoes = $dom->createElement('obsCont');
-                Util::addAttribute($observacoes, 'xCampo', $_observacao['campo']);
-                Util::appendNode($observacoes, 'xTexto', $_observacao['valor']);
-                $info_adic->appendChild($observacoes);
-            }
-        }
         if (!is_null($this->nota->getInformacoes())) {
             $_informacoes = $this->nota->getInformacoes();
             foreach ($_informacoes as $_informacao) {

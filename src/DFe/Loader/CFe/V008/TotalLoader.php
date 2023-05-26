@@ -38,20 +38,8 @@ class TotalLoader implements Loader
         if (!is_null($this->total->getDesconto())) {
             Util::appendNode($element, 'vDesc', $this->total->getDesconto(true));
         }
-        if (!is_null($this->total->getSeguro())) {
-            Util::appendNode($element, 'vSeg', $this->total->getSeguro(true));
-        }
-        if (!is_null($this->total->getFrete())) {
-            Util::appendNode($element, 'vFrete', $this->total->getFrete(true));
-        }
         if (!is_null($this->total->getDespesas())) {
             Util::appendNode($element, 'vOutro', $this->total->getDespesas(true));
-        }
-        if (!is_null($this->total->getTributos())) {
-            Util::appendNode($element, 'vTotTrib', $this->total->getTributos(true));
-        }
-        if (!empty($this->total->getComplemento())) {
-            Util::appendNode($element, 'infCpl', $this->total->getComplemento(true));
         }
         return $element;
     }

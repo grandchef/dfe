@@ -2,6 +2,8 @@
 
 namespace DFe\Entity;
 
+use DFe\Loader\NFe\V4\PagamentoLoader;
+
 class PagamentoTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp(): void
@@ -11,15 +13,16 @@ class PagamentoTest extends \PHPUnit\Framework\TestCase
     public function testIndicador()
     {
         $pagamento = new Pagamento();
-        $pagamento->setIndicador('0');
+        $loader = new PagamentoLoader($pagamento);
+        $loader->setIndicador('0');
         $this->assertEquals(Pagamento::INDICADOR_AVISTA, $pagamento->getIndicador());
-        $this->assertEquals('0', $pagamento->getIndicador(true));
-        $pagamento->setIndicador('1');
+        $this->assertEquals('0', $loader->getIndicador());
+        $loader->setIndicador('1');
         $this->assertEquals(Pagamento::INDICADOR_APRAZO, $pagamento->getIndicador());
-        $this->assertEquals('1', $pagamento->getIndicador(true));
-        $pagamento->setIndicador('2');
+        $this->assertEquals('1', $loader->getIndicador());
+        $loader->setIndicador('2');
         $this->assertEquals('2', $pagamento->getIndicador());
-        $this->assertEquals('2', $pagamento->getIndicador(true));
+        $this->assertEquals('2', $loader->getIndicador());
     }
 
     public function testPagamentoDinheiroXML()

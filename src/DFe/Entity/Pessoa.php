@@ -11,14 +11,11 @@
 
 namespace DFe\Entity;
 
-use DFe\Common\Node;
-use DFe\Common\Util;
-
 /**
  * Classe base para preenchimento de informações de pessoas físicas e
  * empresas
  */
-abstract class Pessoa implements Node
+abstract class Pessoa
 {
     private $razao_social;
     private $cnpj;
@@ -174,47 +171,5 @@ abstract class Pessoa implements Node
         }
         $this->setTelefone($pessoa['telefone'] ?? null);
         return $this;
-    }
-
-    public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
-    {
-        $name ??= 'emit';
-        $element = Util::findNode($element, $name);
-        $razao_social = Util::loadNode($element, 'xNome');
-        if (is_null($razao_social) && $this instanceof Emitente) {
-            throw new \Exception('Tag "xNome" do campo "RazaoSocial" não encontrada', 404);
-        }
-        $this->setRazaoSocial($razao_social);
-        $cnpj = Util::loadNode($element, 'CNPJ');
-        if (is_null($cnpj) && $this instanceof Emitente) {
-            throw new \Exception('Tag "CNPJ" do campo "CNPJ" não encontrada', 404);
-        }
-        $this->setCNPJ($cnpj);
-        $ie = Util::loadNode($element, 'IE');
-        if (is_null($ie) && $this instanceof Emitente) {
-            throw new \Exception('Tag "IE" do campo "IE" não encontrada', 404);
-        }
-        $this->setIE($ie);
-        $this->setIM(Util::loadNode($element, 'IM'));
-        if ($this instanceof Emitente) {
-            $tag_ender = 'enderEmit';
-        } else {
-            $tag_ender = 'enderDest';
-        }
-        $endereco = null;
-        $_fields = $element->getElementsByTagName($tag_ender);
-        if ($_fields->length > 0) {
-            $endereco = new Endereco();
-            $endereco->loadNode($_fields->item(0), $tag_ender);
-        } elseif ($this instanceof Emitente) {
-            throw new \Exception('Tag "' . $tag_ender . '" do objeto "Endereco" não encontrada', 404);
-        }
-        $this->setEndereco($endereco);
-        $telefone = null;
-        if ($_fields->length > 0) {
-            $telefone = Util::loadNode($_fields->item(0), 'fone');
-        }
-        $this->setTelefone($telefone);
-        return $element;
     }
 }

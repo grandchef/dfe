@@ -35,30 +35,11 @@
       </prod>
       <imposto>
         <ICMS>
-          <ICMS60>
+          <ICMSSN102>
             <orig>0</orig>
-            <CST>60</CST>
-            <vBCSTRet>4.99</vBCSTRet>
-            <pST>0.0000</pST>
-            <vICMSSTRet>0.00</vICMSSTRet>
-          </ICMS60>
+            <CSOSN>102</CSOSN>
+          </ICMSSN102>
         </ICMS>
-        <PIS>
-          <PISAliq>
-            <CST>01</CST>
-            <vBC>4.99</vBC>
-            <pPIS>0.6500</pPIS>
-            <vPIS>0.03</vPIS>
-          </PISAliq>
-        </PIS>
-        <COFINS>
-          <COFINSAliq>
-            <CST>01</CST>
-            <vBC>4.99</vBC>
-            <pCOFINS>3.0000</pCOFINS>
-            <vCOFINS>0.15</vCOFINS>
-          </COFINSAliq>
-        </COFINS>
       </imposto>
       <infAdProd>Trib. aprox.: R$ 0,75 Federal e R$ 0,90 Estadual. Fonte: IBPT/empresometro.com.br 2C01C1</infAdProd>
     </det>
@@ -77,55 +58,26 @@
       </prod>
       <imposto>
         <ICMS>
-          <ICMS60>
+          <ICMSSN102>
             <orig>0</orig>
-            <CST>60</CST>
-            <vBCSTRet>0.00</vBCSTRet>
-            <pST>0.0000</pST>
-            <vICMSSTRet>0.00</vICMSSTRet>
-          </ICMS60>
+            <CSOSN>102</CSOSN>
+          </ICMSSN102>
         </ICMS>
-        <PIS>
-          <PISAliq>
-            <CST>01</CST>
-            <vBC>6.80</vBC>
-            <pPIS>0.6500</pPIS>
-            <vPIS>0.04</vPIS>
-          </PISAliq>
-        </PIS>
-        <COFINS>
-          <COFINSAliq>
-            <CST>01</CST>
-            <vBC>6.80</vBC>
-            <pCOFINS>3.0000</pCOFINS>
-            <vCOFINS>0.20</vCOFINS>
-          </COFINSAliq>
-        </COFINS>
       </imposto>
       <infAdProd>Trib. aprox.: R$ 1,02 Federal e R$ 1,22 Estadual. Fonte: IBPT/empresometro.com.br 2C01C1</infAdProd>
     </det>
     <pgto>
-      <detPag>
-        <tPag>03</tPag>
-        <vPag>4.50</vPag>
-        <card>
-          <tpIntegra>2</tpIntegra>
-          <tBand>02</tBand>
-        </card>
-      </detPag>
-      <detPag>
-        <tPag>01</tPag>
-        <vPag>9.49</vPag>
-      </detPag>
+      <MP>
+        <cMP>03</cMP>
+        <vMP>4.50</vMP>
+      </MP>
+      <MP>
+        <cMP>01</cMP>
+        <vMP>9.49</vMP>
+      </MP>
     </pgto>
     <infAdic>
       <infCpl>Trib. aprox.: R$ 1,77 Federal e R$ 2,12 Estadual. Fonte: IBPT/empresometro.com.br 2C01C1</infCpl>
-      <obsCont xCampo="Vendedor">
-        <xTexto>Fulano de Tal</xTexto>
-      </obsCont>
-      <obsCont xCampo="Local">
-        <xTexto>Mesa 02</xTexto>
-      </obsCont>
       <obsFisco xCampo="RegimeEspecial">
         <xTexto>123456</xTexto>
       </obsFisco>

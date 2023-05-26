@@ -11,7 +11,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $this->sefaz = \DFe\Core\SEFAZTest::createSEFAZ();
     }
 
-    public static function createNFCe($sefaz)
+    public static function createNFCe($sefaz, $simples = false)
     {
         $nfce = new \DFe\Core\NFCe();
         $nfce->setCodigo('77882192');
@@ -107,27 +107,35 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $nfce->addProduto($produto);
 
         /* Impostos */
-        $imposto = new \DFe\Entity\Imposto\ICMS\Cobrado();
-        $imposto->fromArray($imposto);
-        $imposto->fromArray($imposto->toArray());
-        $imposto->fromArray(null);
-        $produto->addImposto($imposto);
+        if ($simples) {
+            $imposto = new \DFe\Entity\Imposto\ICMS\Simples\Isento();
+            $imposto->fromArray($imposto);
+            $imposto->fromArray($imposto->toArray());
+            $imposto->fromArray(null);
+            $produto->addImposto($imposto);
+        } else {
+            $imposto = new \DFe\Entity\Imposto\ICMS\Cobrado();
+            $imposto->fromArray($imposto);
+            $imposto->fromArray($imposto->toArray());
+            $imposto->fromArray(null);
+            $produto->addImposto($imposto);
 
-        $imposto = new \DFe\Entity\Imposto\PIS\Aliquota();
-        $imposto->setTributacao(\DFe\Entity\Imposto\PIS\Aliquota::TRIBUTACAO_NORMAL);
-        $imposto->setAliquota(0.65);
-        $imposto->fromArray($imposto);
-        $imposto->fromArray($imposto->toArray());
-        $imposto->fromArray(null);
-        $produto->addImposto($imposto);
+            $imposto = new \DFe\Entity\Imposto\PIS\Aliquota();
+            $imposto->setTributacao(\DFe\Entity\Imposto\PIS\Aliquota::TRIBUTACAO_NORMAL);
+            $imposto->setAliquota(0.65);
+            $imposto->fromArray($imposto);
+            $imposto->fromArray($imposto->toArray());
+            $imposto->fromArray(null);
+            $produto->addImposto($imposto);
 
-        $imposto = new \DFe\Entity\Imposto\COFINS\Aliquota();
-        $imposto->setTributacao(\DFe\Entity\Imposto\COFINS\Aliquota::TRIBUTACAO_NORMAL);
-        $imposto->setAliquota(3.00);
-        $imposto->fromArray($imposto);
-        $imposto->fromArray($imposto->toArray());
-        $imposto->fromArray(null);
-        $produto->addImposto($imposto);
+            $imposto = new \DFe\Entity\Imposto\COFINS\Aliquota();
+            $imposto->setTributacao(\DFe\Entity\Imposto\COFINS\Aliquota::TRIBUTACAO_NORMAL);
+            $imposto->setAliquota(3.00);
+            $imposto->fromArray($imposto);
+            $imposto->fromArray($imposto->toArray());
+            $imposto->fromArray(null);
+            $produto->addImposto($imposto);
+        }
         $produto->fromArray($produto);
         $produto->fromArray($produto->toArray());
         $produto->fromArray(null);
@@ -146,28 +154,36 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $nfce->addProduto($produto);
 
         /* Impostos */
-        $imposto = new \DFe\Entity\Imposto\ICMS\Cobrado();
-        $imposto->setBase(0.00);
-        $imposto->fromArray($imposto);
-        $imposto->fromArray($imposto->toArray());
-        $imposto->fromArray(null);
-        $produto->addImposto($imposto);
+        if ($simples) {
+            $imposto = new \DFe\Entity\Imposto\ICMS\Simples\Isento();
+            $imposto->fromArray($imposto);
+            $imposto->fromArray($imposto->toArray());
+            $imposto->fromArray(null);
+            $produto->addImposto($imposto);
+        } else {
+            $imposto = new \DFe\Entity\Imposto\ICMS\Cobrado();
+            $imposto->setBase(0.00);
+            $imposto->fromArray($imposto);
+            $imposto->fromArray($imposto->toArray());
+            $imposto->fromArray(null);
+            $produto->addImposto($imposto);
 
-        $imposto = new \DFe\Entity\Imposto\PIS\Aliquota();
-        $imposto->setTributacao(\DFe\Entity\Imposto\PIS\Aliquota::TRIBUTACAO_NORMAL);
-        $imposto->setAliquota(0.65);
-        $imposto->fromArray($imposto);
-        $imposto->fromArray($imposto->toArray());
-        $imposto->fromArray(null);
-        $produto->addImposto($imposto);
+            $imposto = new \DFe\Entity\Imposto\PIS\Aliquota();
+            $imposto->setTributacao(\DFe\Entity\Imposto\PIS\Aliquota::TRIBUTACAO_NORMAL);
+            $imposto->setAliquota(0.65);
+            $imposto->fromArray($imposto);
+            $imposto->fromArray($imposto->toArray());
+            $imposto->fromArray(null);
+            $produto->addImposto($imposto);
 
-        $imposto = new \DFe\Entity\Imposto\COFINS\Aliquota();
-        $imposto->setTributacao(\DFe\Entity\Imposto\COFINS\Aliquota::TRIBUTACAO_NORMAL);
-        $imposto->setAliquota(3.00);
-        $imposto->fromArray($imposto);
-        $imposto->fromArray($imposto->toArray());
-        $imposto->fromArray(null);
-        $produto->addImposto($imposto);
+            $imposto = new \DFe\Entity\Imposto\COFINS\Aliquota();
+            $imposto->setTributacao(\DFe\Entity\Imposto\COFINS\Aliquota::TRIBUTACAO_NORMAL);
+            $imposto->setAliquota(3.00);
+            $imposto->fromArray($imposto);
+            $imposto->fromArray($imposto->toArray());
+            $imposto->fromArray(null);
+            $produto->addImposto($imposto);
+        }
         $produto->fromArray($produto);
         $produto->fromArray($produto->toArray());
         $produto->fromArray(null);

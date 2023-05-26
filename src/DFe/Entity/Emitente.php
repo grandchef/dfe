@@ -11,13 +11,14 @@
 
 namespace DFe\Entity;
 
+use DFe\Common\Node;
 use DFe\Loader\NFe\V4\EmitenteLoader;
 use DFe\Loader\CFe\V008\EmitenteLoader as CFeEmitenteLoader;
 
 /**
  * Empresa que irá emitir as notas fiscais
  */
-class Emitente extends Pessoa
+class Emitente extends Pessoa implements Node
 {
     /**
      * Código de Regime Tributário. Este campo será obrigatoriamente preenchido

@@ -13,6 +13,8 @@ namespace DFe\Entity;
 
 use DFe\Common\Node;
 use DFe\Common\Util;
+use DFe\Loader\NFe\V4\PagamentoLoader;
+use DFe\Loader\CFe\V008\PagamentoLoader as CFePagamentoLoader;
 
 class Pagamento implements Node
 {
@@ -135,20 +137,11 @@ class Pagamento implements Node
     /**
      * Indicador da forma de pagamento: 0 – pagamento à vista; 1 – pagamento à
      * prazo.
-     * @param boolean $normalize informa se o indicador deve estar no formato do XML
+     *
      * @return mixed indicador da Nota
      */
-    public function getIndicador($normalize = false)
+    public function getIndicador()
     {
-        if (!$normalize) {
-            return $this->indicador;
-        }
-        switch ($this->indicador) {
-            case self::INDICADOR_AVISTA:
-                return '0';
-            case self::INDICADOR_APRAZO:
-                return '1';
-        }
         return $this->indicador;
     }
 
@@ -159,14 +152,6 @@ class Pagamento implements Node
      */
     public function setIndicador($indicador)
     {
-        switch ($indicador) {
-            case '0':
-                $indicador = self::INDICADOR_AVISTA;
-                break;
-            case '1':
-                $indicador = self::INDICADOR_APRAZO;
-                break;
-        }
         $this->indicador = $indicador;
         return $this;
     }
@@ -178,50 +163,11 @@ class Pagamento implements Node
      * Bancario;16=Depósito Bancário;17=Pagamento Instantâneo
      * (PIX);18=Transferência bancária, Carteira Digital;19=Programa de
      * fidelidade, Cashback, Crédito Virtual.;90 - Sem Pagamento;99 - Outros
-     * @param boolean $normalize informa se o forma deve estar no formato do XML
+     *
      * @return string forma of Pagamento
      */
-    public function getForma($normalize = false)
+    public function getForma()
     {
-        if (!$normalize) {
-            return $this->forma;
-        }
-        switch ($this->forma) {
-            case self::FORMA_DINHEIRO:
-                return '01';
-            case self::FORMA_CHEQUE:
-                return '02';
-            case self::FORMA_CREDITO:
-                return '03';
-            case self::FORMA_DEBITO:
-                return '04';
-            case self::FORMA_CREDIARIO:
-                return '05';
-            case self::FORMA_ALIMENTACAO:
-                return '10';
-            case self::FORMA_REFEICAO:
-                return '11';
-            case self::FORMA_PRESENTE:
-                return '12';
-            case self::FORMA_COMBUSTIVEL:
-                return '13';
-            case self::FORMA_DUPLICATA:
-                return '14';
-            case self::FORMA_BOLETO:
-                return '15';
-            case self::FORMA_DEPOSITO:
-                return '16';
-            case self::FORMA_INSTANTANEO:
-                return '17';
-            case self::FORMA_TRANSFERENCIA:
-                return '18';
-            case self::FORMA_FIDELIDADE:
-                return '19';
-            case self::FORMA_CORTESIA:
-                return '90';
-            case self::FORMA_OUTROS:
-                return '99';
-        }
         return $this->forma;
     }
 
@@ -234,74 +180,18 @@ class Pagamento implements Node
      */
     public function setForma($forma)
     {
-        switch ($forma) {
-            case '01':
-                $forma = self::FORMA_DINHEIRO;
-                break;
-            case '02':
-                $forma = self::FORMA_CHEQUE;
-                break;
-            case '03':
-                $forma = self::FORMA_CREDITO;
-                break;
-            case '04':
-                $forma = self::FORMA_DEBITO;
-                break;
-            case '05':
-                $forma = self::FORMA_CREDIARIO;
-                break;
-            case '10':
-                $forma = self::FORMA_ALIMENTACAO;
-                break;
-            case '11':
-                $forma = self::FORMA_REFEICAO;
-                break;
-            case '12':
-                $forma = self::FORMA_PRESENTE;
-                break;
-            case '13':
-                $forma = self::FORMA_COMBUSTIVEL;
-                break;
-            case '14':
-                $forma = self::FORMA_DUPLICATA;
-                break;
-            case '15':
-                $forma = self::FORMA_BOLETO;
-                break;
-            case '16':
-                $forma = self::FORMA_DEPOSITO;
-                break;
-            case '17':
-                $forma = self::FORMA_INSTANTANEO;
-                break;
-            case '18':
-                $forma = self::FORMA_TRANSFERENCIA;
-                break;
-            case '19':
-                $forma = self::FORMA_FIDELIDADE;
-                break;
-            case '90':
-                $forma = self::FORMA_CORTESIA;
-                break;
-            case '99':
-                $forma = self::FORMA_OUTROS;
-                break;
-        }
         $this->forma = $forma;
         return $this;
     }
 
     /**
      * Valor do Pagamento
-     * @param boolean $normalize informa se a valor deve estar no formato do XML
+     *
      * @return float|string valor of Pagamento
      */
-    public function getValor($normalize = false)
+    public function getValor()
     {
-        if (!$normalize) {
-            return $this->valor;
-        }
-        return Util::toCurrency($this->valor);
+        return $this->valor;
     }
 
     /**
@@ -313,7 +203,6 @@ class Pagamento implements Node
      */
     public function setValor($valor)
     {
-        $valor = floatval($valor);
         $this->valor = $valor;
         return $this;
     }
@@ -323,15 +212,12 @@ class Pagamento implements Node
      * da empresa/1=Pagamento integrado com o sistema de automação da empresa
      * Ex. equipamento TEF , Comercio Eletronico 2=Pagamento não integrado com
      * o sistema de automação da empresa Ex: equipamento POS
-     * @param boolean $normalize informa se o integrado deve estar no formato do XML
+     *
      * @return string integrado of Pagamento
      */
-    public function getIntegrado($normalize = false)
+    public function getIntegrado()
     {
-        if (!$normalize) {
-            return $this->integrado;
-        }
-        return $this->isIntegrado() ? '1' : '2';
+        return $this->integrado;
     }
 
     /**
@@ -355,23 +241,17 @@ class Pagamento implements Node
      */
     public function setIntegrado($integrado)
     {
-        if (is_bool($integrado)) {
-            $integrado = $integrado ? 'Y' : 'N';
-        }
-        $this->integrado = in_array($integrado, ['Y', '1']) ? 'Y' : 'N';
+        $this->integrado = $integrado;
         return $this;
     }
 
     /**
      * CNPJ da credenciadora de cartão de crédito/débito
-     * @param boolean $normalize informa se a credenciadora deve estar no formato do XML
+     *
      * @return string credenciadora of Pagamento
      */
-    public function getCredenciadora($normalize = false)
+    public function getCredenciadora()
     {
-        if (!$normalize) {
-            return $this->credenciadora;
-        }
         return $this->credenciadora;
     }
 
@@ -390,14 +270,11 @@ class Pagamento implements Node
 
     /**
      * Número de autorização da operação cartão de crédito/débito
-     * @param boolean $normalize informa se a autorizacao deve estar no formato do XML
+     *
      * @return string autorizacao of Pagamento
      */
-    public function getAutorizacao($normalize = false)
+    public function getAutorizacao()
     {
-        if (!$normalize) {
-            return $this->autorizacao;
-        }
         return $this->autorizacao;
     }
 
@@ -421,33 +298,8 @@ class Pagamento implements Node
      * @param boolean $normalize informa se a bandeira deve estar no formato do XML
      * @return string|null bandeira of Pagamento
      */
-    public function getBandeira($normalize = false)
+    public function getBandeira()
     {
-        if (!$normalize) {
-            return $this->bandeira;
-        }
-        switch ($this->bandeira) {
-            case self::BANDEIRA_VISA:
-                return '01';
-            case self::BANDEIRA_MASTERCARD:
-                return '02';
-            case self::BANDEIRA_AMEX:
-                return '03';
-            case self::BANDEIRA_SOROCRED:
-                return '04';
-            case self::BANDEIRA_DINERS:
-                return '05';
-            case self::BANDEIRA_ELO:
-                return '06';
-            case self::BANDEIRA_HIPERCARD:
-                return '07';
-            case self::BANDEIRA_AURA:
-                return '08';
-            case self::BANDEIRA_CABAL:
-                return '09';
-            case self::BANDEIRA_OUTROS:
-                return '99';
-        }
         return $this->bandeira;
     }
 
@@ -460,38 +312,6 @@ class Pagamento implements Node
      */
     public function setBandeira($bandeira)
     {
-        switch ($bandeira) {
-            case '01':
-                $bandeira = self::BANDEIRA_VISA;
-                break;
-            case '02':
-                $bandeira = self::BANDEIRA_MASTERCARD;
-                break;
-            case '03':
-                $bandeira = self::BANDEIRA_AMEX;
-                break;
-            case '04':
-                $bandeira = self::BANDEIRA_SOROCRED;
-                break;
-            case '05':
-                $bandeira = self::BANDEIRA_DINERS;
-                break;
-            case '06':
-                $bandeira = self::BANDEIRA_ELO;
-                break;
-            case '07':
-                $bandeira = self::BANDEIRA_HIPERCARD;
-                break;
-            case '08':
-                $bandeira = self::BANDEIRA_AURA;
-                break;
-            case '09':
-                $bandeira = self::BANDEIRA_CABAL;
-                break;
-            case '99':
-                $bandeira = self::BANDEIRA_OUTROS;
-                break;
-        }
         $this->bandeira = $bandeira;
         return $this;
     }
@@ -538,84 +358,24 @@ class Pagamento implements Node
         return $this;
     }
 
+
     public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-        if ($this->getValor() < 0) {
-            $element = $dom->createElement($name ?? 'vTroco');
-            $this->setValor(-floatval($this->getValor()));
-            $element->appendChild($dom->createTextNode($this->getValor(true)));
-            $this->setValor(-floatval($this->getValor()));
-            return $element;
+        if (strpos($version, 'CFe@') !== false) {
+            $loader = new CFePagamentoLoader($this);
+        } else {
+            $loader = new PagamentoLoader($this);
         }
-        $element = $dom->createElement($name ?? 'detPag');
-        if (!is_null($this->getIndicador())) {
-            Util::appendNode($element, 'indPag', $this->getIndicador(true));
-        }
-        Util::appendNode($element, 'tPag', $this->getForma(true));
-        Util::appendNode($element, 'vPag', $this->getValor(true));
-        if (!$this->isCartao()) {
-            return $element;
-        }
-        $cartao = $dom->createElement('card');
-        Util::appendNode($cartao, 'tpIntegra', $this->getIntegrado(true));
-        if ($this->isIntegrado()) {
-            Util::appendNode($cartao, 'CNPJ', $this->getCredenciadora(true));
-        }
-        if (!is_null($this->getBandeira())) {
-            Util::appendNode($cartao, 'tBand', $this->getBandeira(true));
-        }
-        if ($this->isIntegrado()) {
-            Util::appendNode($cartao, 'cAut', $this->getAutorizacao(true));
-        }
-        $element->appendChild($cartao);
-        return $element;
+        return $loader->getNode($version, $name);
     }
 
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
-        $name ??= 'detPag';
-        $element = Util::findNode($element, $name);
-        if ($name == 'vTroco') {
-            $this->setValor('-' . $element->nodeValue);
-            return $element;
+        if (strpos($version, 'CFe@') !== false) {
+            $loader = new CFePagamentoLoader($this);
+        } else {
+            $loader = new PagamentoLoader($this);
         }
-        $this->setIndicador(
-            Util::loadNode(
-                $element,
-                'indPag'
-            )
-        );
-        $this->setForma(
-            Util::loadNode(
-                $element,
-                'tPag',
-                'Tag "tPag" do campo "Forma" não encontrada'
-            )
-        );
-        $this->setValor(
-            Util::loadNode(
-                $element,
-                'vPag',
-                'Tag "vPag" do campo "Valor" não encontrada'
-            )
-        );
-        $integrado = Util::loadNode($element, 'tpIntegra');
-        if (is_null($integrado) && $this->isCartao()) {
-            throw new \Exception('Tag "tpIntegra" do campo "Integrado" não encontrada', 404);
-        }
-        $this->setIntegrado($integrado);
-        $this->setCredenciadora(Util::loadNode($element, 'CNPJ'));
-        $autorizacao = Util::loadNode($element, 'cAut');
-        if (is_null($autorizacao) && $this->isCartao() && is_numeric($this->getCredenciadora())) {
-            throw new \Exception('Tag "cAut" do campo "Autorizacao" não encontrada', 404);
-        }
-        $this->setAutorizacao($autorizacao);
-        $bandeira = Util::loadNode($element, 'tBand');
-        if (is_null($bandeira) && $this->isCartao() && is_numeric($this->getCredenciadora())) {
-            throw new \Exception('Tag "tBand" do campo "Bandeira" não encontrada', 404);
-        }
-        $this->setBandeira($bandeira);
-        return $element;
+        return $loader->loadNode($element, $name, $version);
     }
 }

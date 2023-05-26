@@ -11,6 +11,7 @@
 
 namespace DFe\Entity;
 
+use DFe\Common\Node;
 use DFe\Loader\NFe\V4\DestinatarioLoader;
 use DFe\Loader\CFe\V008\DestinatarioLoader as CFeDestinatarioLoader;
 
@@ -18,7 +19,7 @@ use DFe\Loader\CFe\V008\DestinatarioLoader as CFeDestinatarioLoader;
  * Cliente pessoa física ou jurídica que está comprando os produtos e irá
  * receber a nota fiscal
  */
-class Destinatario extends Pessoa
+class Destinatario extends Pessoa implements Node
 {
     /**
      * Indicador da IE do destinatário:
