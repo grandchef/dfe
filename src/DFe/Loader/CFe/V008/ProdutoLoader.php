@@ -47,7 +47,14 @@ class ProdutoLoader implements Loader
         if (Util::isGreater($this->produto->getDesconto(), 0.00)) {
             Util::appendNode($produto, 'vDesc', $this->produto->getDesconto(true));
         }
-        if (Util::isGreater($this->produto->getDespesas() + $this->produto->getFrete() + $this->produto->getSeguro(), 0.00)) {
+        if (
+            Util::isGreater(
+                $this->produto->getDespesas()
+                    + $this->produto->getFrete()
+                    + $this->produto->getSeguro(),
+                0.00
+            )
+        ) {
             Util::appendNode(
                 $produto,
                 'vOutro',
@@ -144,6 +151,7 @@ class ProdutoLoader implements Loader
                 continue;
             }
             $total->setGrupo($_item->nodeName);
+            /** @var \DOMElement */
             foreach ($_item->childNodes as $_subitem) {
                 if ($_subitem->nodeType !== XML_ELEMENT_NODE) {
                     continue;

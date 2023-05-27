@@ -16,14 +16,14 @@ use DFe\Entity\Imposto;
 
 class Simples extends Imposto
 {
-    public function fromArray($cofins = [])
+    public function fromArray($simples = [])
     {
-        if ($cofins instanceof Isento) {
-            $cofins = $cofins->toArray();
-        } elseif (!is_array($cofins)) {
+        if ($simples instanceof Isento) {
+            $simples = $simples->toArray();
+        } elseif (!is_array($simples)) {
             return $this;
         }
-        parent::fromArray($cofins);
+        parent::fromArray($simples);
         $this->setGrupo(self::GRUPO_COFINS);
         $this->setTributacao($simples['tributacao'] ?? '49');
         return $this;

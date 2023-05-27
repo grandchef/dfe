@@ -200,7 +200,7 @@ class Envio
 
     /**
      * Devolve um array com as informações de serviço (URL, Versão, Serviço)
-     * @return array Informações de serviço
+     * @return array|string Informações de serviço
      */
     public function getServiceInfo()
     {

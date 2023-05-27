@@ -195,6 +195,7 @@ class ProdutoLoader implements Loader
                 continue;
             }
             $total->setGrupo($_item->nodeName);
+            /** @var \DOMElement */
             foreach ($_item->childNodes as $_subitem) {
                 if ($_subitem->nodeType !== XML_ELEMENT_NODE) {
                     continue;

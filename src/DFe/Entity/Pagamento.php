@@ -295,7 +295,7 @@ class Pagamento implements Node
      * Bandeira da operadora de cartão de crédito/débito:01–Visa;
      * 02–Mastercard; 03–American Express; 04–Sorocred;05-Diners
      * Club;06-Elo;07-Hipercard;08-Aura;09-Cabal;99–Outros
-     * @param boolean $normalize informa se a bandeira deve estar no formato do XML
+     *
      * @return string|null bandeira of Pagamento
      */
     public function getBandeira()

@@ -17,7 +17,8 @@ use UnexpectedValueException;
  */
 class XmlseclibsAdapter implements AdapterInterface
 {
-    public const BASE_TEMPLATE = '<Signature xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><SignatureMethod/></SignedInfo></Signature>';
+    public const BASE_TEMPLATE = '<Signature xmlns="http://www.w3.org/2000/09/xmldsig#">'
+        . '<SignedInfo><SignatureMethod/></SignedInfo></Signature>';
 
     /**
      * Private key.
@@ -122,7 +123,7 @@ class XmlseclibsAdapter implements AdapterInterface
         $objKey = new XMLSecurityKey(
             $this->keyAlgorithm,
             array(
-                 'type' => 'private',
+                'type' => 'private',
             )
         );
         $objKey->loadKey($this->privateKey);
@@ -171,7 +172,7 @@ class XmlseclibsAdapter implements AdapterInterface
             $objKey = new XMLSecurityKey(
                 $this->keyAlgorithm,
                 array(
-                     'type' => 'public',
+                    'type' => 'public',
                 )
             );
             $objKey->loadKey($this->getPublicKey());

@@ -1181,15 +1181,15 @@ abstract class Nota implements Node
         } else {
             $nota['pagamentos'] = $this->getPagamentos();
         }
-        $nota['data_movimentacao'] = $this->getDataMovimentacao($recursive);
-        $nota['data_contingencia'] = $this->getDataContingencia($recursive);
+        $nota['data_movimentacao'] = $this->getDataMovimentacao();
+        $nota['data_contingencia'] = $this->getDataContingencia();
         $nota['justificativa'] = $this->getJustificativa();
         $nota['modelo'] = $this->getModelo();
         $nota['tipo'] = $this->getTipo();
         $nota['destino'] = $this->getDestino();
         $nota['natureza'] = $this->getNatureza();
         $nota['codigo'] = $this->getCodigo();
-        $nota['data_emissao'] = $this->getDataEmissao($recursive);
+        $nota['data_emissao'] = $this->getDataEmissao();
         $nota['serie'] = $this->getSerie();
         $nota['formato'] = $this->getFormato();
         $nota['emissao'] = $this->getEmissao();

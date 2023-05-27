@@ -107,7 +107,7 @@ abstract class Pessoa
 
     /**
      * Dados do endereço
-     * 
+     *
      * @return Endereco
      */
     public function getEndereco()

@@ -52,7 +52,7 @@ class TotalLoader implements Loader
      */
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
-        $element = Util::findNode($element,  $name ?? 'prod');
+        $element = Util::findNode($element, $name ?? 'prod');
         $this->total->setProdutos(
             Util::loadNode(
                 $element,
