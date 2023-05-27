@@ -81,7 +81,7 @@ class Normal extends Base
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement($name ?? 'ICMS');
-        Util::appendNode($element, 'orig', $this->getOrigem(true));
+        Util::appendNode($element, strpos($version, 'CFe') !== false ? 'Orig' : 'orig', $this->getOrigem(true));
         Util::appendNode($element, 'CST', $this->getTributacao(true));
         Util::appendNode($element, 'modBC', $this->getModalidade(true));
         Util::appendNode($element, 'vBC', $this->getBase(true));
@@ -98,7 +98,7 @@ class Normal extends Base
         $this->setOrigem(
             Util::loadNode(
                 $element,
-                'orig',
+                strpos($version, 'CFe') !== false ? 'Orig' : 'orig',
                 'Tag "orig" do campo "Origem" não encontrada'
             )
         );
@@ -130,7 +130,7 @@ class Normal extends Base
                 'Tag "pICMS" do campo "Aliquota" não encontrada'
             )
         );
-        $this->importFundo($element);
+        $this->importFundo($element, $version);
         return $element;
     }
 }

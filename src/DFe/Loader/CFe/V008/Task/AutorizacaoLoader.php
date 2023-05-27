@@ -30,6 +30,7 @@ class AutorizacaoLoader implements Loader
         $this->autorizacao->setDocument($element->ownerDocument);
         $this->autorizacao->setStatus('100');
         $this->autorizacao->setMotivo('Autorizado o uso da CF-e');
+        $this->autorizacao->getNota()->loadNode($element);
         return $element;
     }
 }

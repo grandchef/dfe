@@ -11,6 +11,7 @@
 
 namespace DFe\Task;
 
+use DOMElement;
 use DFe\Core\Nota;
 use DFe\Core\SEFAZ;
 use DFe\Common\Util;
@@ -560,6 +561,7 @@ class Evento extends Retorno
         $element = $this->getNode('', self::TAG_RETORNO);
         $dom = $element->ownerDocument;
         $element->removeAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns');
+        /** @var DOMElement */
         $info = $dom->getElementsByTagName('infEvento')->item(0);
         $info->removeAttribute('Id');
         $remove_tags = ['detEvento', 'verEvento', 'dhEvento', 'CNPJ', 'CPF', 'cOrgao'];
@@ -634,7 +636,6 @@ class Evento extends Retorno
 
     private function getConteudo($dom)
     {
-        $config = SEFAZ::getInstance()->getConfiguracao();
         $dob = new \DOMDocument('1.0', 'UTF-8');
         $envio = $dob->createElement('envEvento');
         $envio->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', Nota::PORTAL);
@@ -642,13 +643,8 @@ class Evento extends Retorno
         $versao->value = self::VERSAO;
         $envio->appendChild($versao);
         Util::appendNode($envio, 'idLote', self::genLote());
-        // Corrige xmlns:default
-        // $data = $dob->importNode($dom->documentElement, true);
-        // $envio->appendChild($data);
         Util::appendNode($envio, 'evento', 0);
         $dob->appendChild($envio);
-        // Corrige xmlns:default
-        // return $dob;
         $xml = $dob->saveXML($dob->documentElement);
         return str_replace('<evento>0</evento>', $dom->saveXML($dom->documentElement), $xml);
     }

@@ -47,7 +47,7 @@ class Normal extends \DFe\Entity\Imposto\ICMS\Normal
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement($name ?? 'ICMSSN101');
-        Util::appendNode($element, 'orig', $this->getOrigem(true));
+        Util::appendNode($element, strpos($version, 'CFe') !== false ? 'Orig' : 'orig', $this->getOrigem(true));
         Util::appendNode($element, 'CSOSN', $this->getTributacao(true));
         Util::appendNode($element, 'pCredSN', $this->getAliquota(true));
         Util::appendNode($element, 'vCredICMSSN', $this->getValor(true));
@@ -61,7 +61,7 @@ class Normal extends \DFe\Entity\Imposto\ICMS\Normal
         $this->setOrigem(
             Util::loadNode(
                 $element,
-                'orig',
+                strpos($version, 'CFe') !== false ? 'Orig' : 'orig',
                 'Tag "orig" do campo "Origem" não encontrada'
             )
         );

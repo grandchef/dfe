@@ -15,14 +15,11 @@ use DFe\Core\Nota;
 use DFe\Common\Util;
 use DFe\Entity\Total;
 use DFe\Common\Loader;
-use DFe\Task\Protocolo;
 use DFe\Entity\Produto;
 use DFe\Entity\Emitente;
 use DFe\Entity\Pagamento;
-use DFe\Entity\Transporte;
 use DFe\Entity\Responsavel;
 use DFe\Entity\Destinatario;
-use DFe\Entity\Intermediador;
 
 /**
  * Classe para carregamento e geração do XML
@@ -104,6 +101,9 @@ class NotaLoader implements Loader
             case '55':
                 $modelo = Nota::MODELO_NFE;
                 break;
+            case '59':
+                $modelo = Nota::MODELO_CFE;
+                break;
             case '65':
                 $modelo = Nota::MODELO_NFCE;
                 break;
@@ -179,7 +179,12 @@ class NotaLoader implements Loader
 
     public function setDataEmissao($data_emissao)
     {
-        if (!is_numeric($data_emissao) && !is_null($data_emissao)) {
+        if (!is_int($data_emissao) && !is_null($data_emissao)) {
+            $data_emissao = preg_replace(
+                '/(\d{4})(\d{2})(\d{2})(\d{2})?(\d{2})?(\d{2})?/',
+                "$1-$2-$3 $4:$5:$6",
+                $data_emissao
+            );
             $data_emissao = strtotime($data_emissao);
         }
         $this->nota->setDataEmissao($data_emissao);
@@ -498,6 +503,10 @@ class NotaLoader implements Loader
         $pag = $dom->createElement('pgto');
         $_pagamentos = $this->nota->getPagamentos();
         foreach ($_pagamentos as $_pagamento) {
+            if ($_pagamento->getValor() < 0) {
+                // troco calculado automaticamente pelo SAT
+                continue;
+            }
             $pagamento = $_pagamento->getNode($version);
             $pagamento = $dom->importNode($pagamento, true);
             $pag->appendChild($pagamento);
@@ -527,27 +536,15 @@ class NotaLoader implements Loader
 
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
-        $root = $element;
-        $name ??= 'NFe';
-        $element = Util::findNode($element, $name);
-        $_fields = $element->getElementsByTagName('infNFe');
-        if ($_fields->length > 0) {
-            /** @var \DOMElement */
-            $info = $_fields->item(0);
-        } else {
-            throw new \Exception('Tag "infNFe" não encontrada', 404);
-        }
+        $element = Util::findNode($element, $name ?? 'CFe');
+        $info = Util::findNode($element, 'infCFe');
         $id = $info->getAttribute('Id');
         if (strlen($id) != 47) {
             throw new \Exception('Atributo "Id" inválido, encontrado: "' . $id . '"', 500);
         }
         $this->nota->setID(substr($id, 3));
-        $_fields = $info->getElementsByTagName('ide');
-        if ($_fields->length > 0) {
-            $ident = $_fields->item(0);
-        } else {
-            throw new \Exception('Tag "ide" não encontrada', 404);
-        }
+        $this->nota->setVersao($info->getAttribute('versao'));
+        $ident = Util::findNode($info, 'ide');
         $emitente = new Emitente();
         $emitente->getEndereco()->getMunicipio()->getEstado()->setCodigo(
             Util::loadNode(
@@ -563,13 +560,6 @@ class NotaLoader implements Loader
                 'Tag "cNF" do campo "Codigo" não encontrada'
             )
         );
-        $this->nota->setNatureza(
-            Util::loadNode(
-                $ident,
-                'natOp',
-                'Tag "natOp" do campo "Natureza" não encontrada'
-            )
-        );
         $this->setModelo(
             Util::loadNode(
                 $ident,
@@ -580,59 +570,28 @@ class NotaLoader implements Loader
         $this->nota->setSerie(
             Util::loadNode(
                 $ident,
-                'serie',
-                'Tag "serie" do campo "Serie" não encontrada'
+                'nserieSAT',
+                'Tag "nserieSAT" do campo "Serie" não encontrada'
             )
         );
         $this->nota->setNumero(
             Util::loadNode(
                 $ident,
-                'nNF',
-                'Tag "nNF" do campo "Numero" não encontrada'
+                'nCFe',
+                'Tag "nCFe" do campo "Numero" não encontrada'
             )
         );
         $this->setDataEmissao(
             Util::loadNode(
                 $ident,
-                'dhEmi',
-                'Tag "dhEmi" do campo "DataEmissao" não encontrada'
-            )
-        );
-        $this->setTipo(
-            Util::loadNode(
-                $ident,
-                'tpNF',
-                'Tag "tpNF" do campo "Tipo" não encontrada'
-            )
-        );
-        $this->setDestino(
-            Util::loadNode(
-                $ident,
-                'idDest',
-                'Tag "idDest" do campo "Destino" não encontrada'
-            )
-        );
-        $emitente->getEndereco()->getMunicipio()->setCodigo(
-            Util::loadNode(
-                $ident,
-                'cMunFG',
-                'Tag "cMunFG" do campo "Codigo IBGE do município" não encontrada'
-            )
-        );
-        $this->setDataMovimentacao(Util::loadNode($ident, 'dhSaiEnt'));
-        $this->setFormato(
-            Util::loadNode(
-                $ident,
-                'tpImp',
-                'Tag "tpImp" do campo "Formato" não encontrada'
-            )
-        );
-        $this->setEmissao(
-            Util::loadNode(
-                $ident,
-                'tpEmis',
-                'Tag "tpEmis" do campo "Emissao" não encontrada'
-            )
+                'dEmi',
+                'Tag "dEmi" do campo "DataEmissao" não encontrada'
+            ) .
+                Util::loadNode(
+                    $ident,
+                    'hEmi',
+                    'Tag "hEmi" do campo "DataEmissao" não encontrada'
+                )
         );
         $this->nota->setDigitoVerificador(
             Util::loadNode(
@@ -648,80 +607,66 @@ class NotaLoader implements Loader
                 'Tag "tpAmb" do campo "Ambiente" não encontrada'
             )
         );
-        $this->setFinalidade(
+        $this->nota->getCaixa()->setNumero(
             Util::loadNode(
                 $ident,
-                'finNFe',
-                'Tag "finNFe" do campo "Finalidade" não encontrada'
+                'numeroCaixa',
+                'Tag "numeroCaixa" do campo "Caixa::Numero" não encontrada'
             )
         );
-        $this->setConsumidorFinal(
+        $responsavel = new Responsavel();
+        $responsavel->setCNPJ(
             Util::loadNode(
                 $ident,
-                'indFinal',
-                'Tag "indFinal" do campo "ConsumidorFinal" não encontrada'
+                'CNPJ',
+                'Tag "CNPJ" do campo "Responsavel" não encontrada'
             )
         );
-        $this->setPresenca(
+        $responsavel->setAssinatura(
             Util::loadNode(
                 $ident,
-                'indPres',
-                'Tag "indPres" do campo "Presenca" não encontrada'
+                'signAC',
+                'Tag "signAC" do campo "Responsavel" não encontrada'
             )
         );
-        $this->setIntermediacao(Util::loadNode($ident, 'indIntermed'));
-        $this->setDataContingencia(Util::loadNode($ident, 'dhCont'));
-        $this->nota->setJustificativa(Util::loadNode($ident, 'xJust'));
+        $this->nota->setResponsavel($responsavel);
         $emitente->loadNode(
             Util::findNode(
                 $info,
                 'emit',
                 'Tag "emit" do objeto "Emitente" não encontrada'
             ),
-            'emit'
+            'emit',
+            $version
         );
         $this->nota->setEmitente($emitente);
         $_fields = $info->getElementsByTagName('dest');
         $destinatario = null;
-        if ($_fields->length > 0) {
+        if ($_fields->length > 0 && $_fields->item(0)->childNodes->count() > 0) {
             $destinatario = new Destinatario();
-            $destinatario->loadNode($_fields->item(0), 'dest');
+            $destinatario->loadNode($_fields->item(0), 'dest', $version);
         }
         $this->nota->setDestinatario($destinatario);
-        $_fields = $info->getElementsByTagName('infRespTec');
-        $responsavel = null;
-        if ($_fields->length > 0) {
-            $responsavel = new Responsavel();
-            $responsavel->loadNode($_fields->item(0), 'infRespTec');
-        }
-        $this->nota->setResponsavel($responsavel);
         $produtos = [];
         $_items = $info->getElementsByTagName('det');
         foreach ($_items as $_item) {
             $produto = new Produto();
-            $produto->loadNode($_item, 'det');
+            $produto->loadNode($_item, 'det', $version);
             $produtos[] = $produto;
         }
         $this->nota->setProdutos($produtos);
-        $_fields = $info->getElementsByTagName('transp');
-        $transporte = null;
-        if ($_fields->length > 0) {
-            $transporte = new Transporte();
-            $transporte->loadNode($_fields->item(0), 'transp');
-        }
-        $this->nota->setTransporte($transporte);
         $pagamentos = [];
-        $_items = $info->getElementsByTagName('pag');
+        $_items = $info->getElementsByTagName('pgto');
         foreach ($_items as $_item) {
-            $_det_items = $_item->getElementsByTagName('detPag');
+            $_det_items = $_item->getElementsByTagName('MP');
             foreach ($_det_items as $_det_item) {
                 $pagamento = new Pagamento();
-                $pagamento->loadNode($_det_item, 'detPag');
+                $pagamento->loadNode($_det_item, 'MP', $version);
                 $pagamentos[] = $pagamento;
             }
             if (Util::nodeExists($_item, 'vTroco')) {
                 $pagamento = new Pagamento();
-                $pagamento->loadNode($_item, 'vTroco');
+                $pagamento->loadNode($_item, 'vTroco', $version);
                 if ($pagamento->getValor() < 0) {
                     $pagamentos[] = $pagamento;
                 }
@@ -731,34 +676,13 @@ class NotaLoader implements Loader
         $_fields = $info->getElementsByTagName('total');
         if ($_fields->length > 0) {
             $total = new Total();
-            $total->loadNode($_fields->item(0), 'total');
-            $total->setComplemento(Util::loadNode($info, 'infCpl'));
+            $total->loadNode($_fields->item(0), 'ICMSTot', $version);
+            $infoAdic = Util::getNode($info, 'infAdic');
+            $total->setComplemento(Util::loadNode($infoAdic, 'infCpl'));
+            $this->nota->setTotal($total);
         } else {
             throw new \Exception('Tag "total" do objeto "Total" não encontrada na Nota', 404);
         }
-        $this->nota->setTotal($total);
-        $_fields = $info->getElementsByTagName('infIntermed');
-        $intermediador = null;
-        if ($_fields->length > 0) {
-            $intermediador = new Intermediador();
-            $intermediador->loadNode($_fields->item(0), 'infIntermed');
-        }
-        $this->nota->setIntermediador($intermediador);
-        $this->nota->setAdicionais(Util::loadNode($info, 'infAdFisco'));
-        $observacoes = [];
-        $_items = $info->getElementsByTagName('obsCont');
-        foreach ($_items as $_item) {
-            $observacao = [
-                'campo' => $_item->getAttribute('xCampo'),
-                'valor' => Util::loadNode(
-                    $_item,
-                    'xTexto',
-                    'Tag "xTexto" do campo "Observação" não encontrada'
-                )
-            ];
-            $observacoes[] = $observacao;
-        }
-        $this->nota->setObservacoes($observacoes);
         $informacoes = [];
         $_items = $info->getElementsByTagName('obsFisco');
         foreach ($_items as $_item) {
@@ -773,14 +697,6 @@ class NotaLoader implements Loader
             $informacoes[] = $informacao;
         }
         $this->nota->setInformacoes($informacoes);
-
-        $_fields = $root->getElementsByTagName('protNFe');
-        $protocolo = null;
-        if ($_fields->length > 0) {
-            $protocolo = new Protocolo();
-            $protocolo->loadNode($_fields->item(0), 'infProt');
-        }
-        $this->nota->setProtocolo($protocolo);
         return $element;
     }
 

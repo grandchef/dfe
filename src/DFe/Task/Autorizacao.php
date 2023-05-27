@@ -30,6 +30,11 @@ class Autorizacao extends Retorno
         return $this->document;
     }
 
+    public function getNota(): Nota
+    {
+        return $this->nota;
+    }
+
     public function setDocument(DOMDocument $document)
     {
         $this->document = $document;
@@ -99,10 +104,9 @@ class Autorizacao extends Retorno
     {
         if ($this->nota->getModelo() === Nota::MODELO_CFE) {
             $loader =  new CFeAutorizacaoLoader($this);
-            return $loader->loadNode($element);
+            return $loader->loadNode($element, $name, $version);
         }
-        $tag = $name ?? 'retEnviNFe';
-        $element = parent::loadNode($element, $tag);
+        $element = parent::loadNode($element, $name ?? 'retEnviNFe');
         return $element;
     }
 }

@@ -62,7 +62,7 @@ class PessoaLoader implements Loader
         $_fields = $element->getElementsByTagName($tag_ender);
         if ($_fields->length > 0) {
             $endereco = new Endereco();
-            $endereco->loadNode($_fields->item(0), $tag_ender);
+            $endereco->loadNode($_fields->item(0), $tag_ender, $version);
         } elseif ($this->pessoa instanceof Emitente) {
             throw new \Exception('Tag "' . $tag_ender . '" do objeto "Endereco" não encontrada', 404);
         }

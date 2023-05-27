@@ -36,7 +36,7 @@
       <imposto>
         <ICMS>
           <ICMSSN102>
-            <orig>0</orig>
+            <Orig>0</Orig>
             <CSOSN>102</CSOSN>
           </ICMSSN102>
         </ICMS>
@@ -59,7 +59,7 @@
       <imposto>
         <ICMS>
           <ICMSSN102>
-            <orig>0</orig>
+            <Orig>0</Orig>
             <CSOSN>102</CSOSN>
           </ICMSSN102>
         </ICMS>

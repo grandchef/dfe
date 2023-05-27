@@ -99,13 +99,7 @@ class ProdutoLoader implements Loader
                 'Tag "cProd" do campo "Codigo" não encontrada no Produto'
             )
         );
-        $this->produto->setCodigoBarras(
-            Util::loadNode(
-                $element,
-                'cEAN',
-                'Tag "cEAN" do campo "CodigoBarras" não encontrada no Produto'
-            )
-        );
+        $this->produto->setCodigoBarras(Util::loadNode($element, 'cEAN'));
         $this->produto->setDescricao(
             Util::loadNode(
                 $element,
@@ -135,13 +129,8 @@ class ProdutoLoader implements Loader
                 'Tag "CFOP" do campo "CFOP" não encontrada no Produto'
             )
         );
-        $this->produto->setNCM(
-            Util::loadNode(
-                $element,
-                'NCM',
-                'Tag "NCM" do campo "NCM" não encontrada no Produto'
-            )
-        );
+        $this->produto->setNCM(Util::loadNode($element, 'NCM'));
+        $this->produto->setCEST(Util::loadNode($element, 'CEST'));
         $impostos = [];
         $_fields = $root->getElementsByTagName('imposto');
         if ($_fields->length == 0) {
@@ -159,7 +148,7 @@ class ProdutoLoader implements Loader
                 if ($_subitem->nodeType !== XML_ELEMENT_NODE) {
                     continue;
                 }
-                $imposto = Imposto::loadImposto($_subitem);
+                $imposto = Imposto::loadImposto($_subitem, $version);
                 if ($imposto === false) {
                     continue;
                 }

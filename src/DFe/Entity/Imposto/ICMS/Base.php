@@ -121,7 +121,7 @@ abstract class Base extends Imposto
         return Util::mergeNodes($element, $fundo);
     }
 
-    protected function importFundo($element)
+    protected function importFundo($element, $version = '')
     {
         if (is_null($this->getFundo())) {
             return $this;
@@ -129,7 +129,7 @@ abstract class Base extends Imposto
         if (!$this->getFundo()->exists($element)) {
             $this->getFundo()->fromArray([]);
         } else {
-            $this->getFundo()->loadNode($element, $element->nodeName);
+            $this->getFundo()->loadNode($element, $element->nodeName, $version);
         }
         return $this;
     }

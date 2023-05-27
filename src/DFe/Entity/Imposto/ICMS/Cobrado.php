@@ -83,7 +83,7 @@ class Cobrado extends Generico
         $this->setOrigem(
             Util::loadNode(
                 $element,
-                'orig',
+                strpos($version, 'CFe') !== false ? 'Orig' : 'orig',
                 'Tag "orig" do campo "Origem" não encontrada'
             )
         );
@@ -114,7 +114,7 @@ class Cobrado extends Generico
                 'Tag "vICMSSTRet" do campo "Valor" não encontrada'
             )
         );
-        $this->importFundo($element);
+        $this->importFundo($element, $version);
         return $element;
     }
 }

@@ -569,7 +569,7 @@ abstract class Nota implements Node
 
     /**
      * Pagamentos realizados
-     * @return mixed pagamentos da Nota
+     * @return Pagamento[] pagamentos da Nota
      */
     public function getPagamentos()
     {

@@ -48,7 +48,7 @@ class Parcial extends \DFe\Entity\Imposto\ICMS\Parcial
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement($name ?? 'ICMSSN202');
-        Util::appendNode($element, 'orig', $this->getOrigem(true));
+        Util::appendNode($element, strpos($version, 'CFe') !== false ? 'Orig' : 'orig', $this->getOrigem(true));
         Util::appendNode($element, 'CSOSN', $this->getTributacao(true));
         Util::appendNode($element, 'modBCST', $this->getModalidade(true));
         Util::appendNode($element, 'pMVAST', $this->getMargem(true));
@@ -66,7 +66,7 @@ class Parcial extends \DFe\Entity\Imposto\ICMS\Parcial
         $this->setOrigem(
             Util::loadNode(
                 $element,
-                'orig',
+                strpos($version, 'CFe') !== false ? 'Orig' : 'orig',
                 'Tag "orig" do campo "Origem" não encontrada'
             )
         );

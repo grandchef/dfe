@@ -14,6 +14,8 @@ namespace DFe\Entity;
 use DOMElement;
 use DFe\Common\Util;
 use DFe\Common\Node;
+use DFe\Loader\NFe\V4\TotalLoader;
+use DFe\Loader\CFe\V008\TotalLoader as CFeTotalLoader;
 
 /**
  * Dados dos totais da NF-e e do produto
@@ -330,28 +332,12 @@ class Total implements Node
      */
     public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement($name ?? 'prod');
-        Util::appendNode($element, 'vProd', $this->getProdutos(true));
-        if (!is_null($this->getDesconto())) {
-            Util::appendNode($element, 'vDesc', $this->getDesconto(true));
+        if (strpos($version, 'CFe@') !== false) {
+            $loader = new CFeTotalLoader($this);
+        } else {
+            $loader = new TotalLoader($this);
         }
-        if (!is_null($this->getSeguro())) {
-            Util::appendNode($element, 'vSeg', $this->getSeguro(true));
-        }
-        if (!is_null($this->getFrete())) {
-            Util::appendNode($element, 'vFrete', $this->getFrete(true));
-        }
-        if (!is_null($this->getDespesas())) {
-            Util::appendNode($element, 'vOutro', $this->getDespesas(true));
-        }
-        if (!is_null($this->getTributos())) {
-            Util::appendNode($element, 'vTotTrib', $this->getTributos(true));
-        }
-        if (!empty($this->getComplemento())) {
-            Util::appendNode($element, 'infCpl', $this->getComplemento(true));
-        }
-        return $element;
+        return $loader->getNode($version, $name);
     }
 
     /**
@@ -362,21 +348,12 @@ class Total implements Node
      */
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
-        $name ??= 'prod';
-        $element = Util::findNode($element, $name);
-        $this->setProdutos(
-            Util::loadNode(
-                $element,
-                'vProd',
-                'Tag "vProd" não encontrada no Total ou Produto'
-            )
-        );
-        $this->setDesconto(Util::loadNode($element, 'vDesc'));
-        $this->setSeguro(Util::loadNode($element, 'vSeg'));
-        $this->setFrete(Util::loadNode($element, 'vFrete'));
-        $this->setDespesas(Util::loadNode($element, 'vOutro'));
-        $this->setTributos(Util::loadNode($element, 'vTotTrib'));
-        $this->setComplemento(Util::loadNode($element, 'infCpl'));
-        return $element;
+
+        if (strpos($version, 'CFe@') !== false) {
+            $loader = new CFeTotalLoader($this);
+        } else {
+            $loader = new TotalLoader($this);
+        }
+        return $loader->loadNode($element, $name, $version);
     }
 }

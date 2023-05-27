@@ -363,28 +363,28 @@ class Transporte implements Node
         $transportador = null;
         if ($_fields->length > 0) {
             $transportador = new Transportador();
-            $transportador->loadNode($_fields->item(0), 'transporta');
+            $transportador->loadNode($_fields->item(0), 'transporta', $version);
         }
         $this->setTransportador($transportador);
         $_fields = $element->getElementsByTagName('retTransp');
         $retencao = null;
         if ($_fields->length > 0) {
             $retencao = new Tributo();
-            $retencao->loadNode($_fields->item(0), 'retTransp');
+            $retencao->loadNode($_fields->item(0), 'retTransp', $version);
         }
         $this->setRetencao($retencao);
         $_fields = $element->getElementsByTagName('veicTransp');
         $veiculo = null;
         if ($_fields->length > 0) {
             $veiculo = new Veiculo();
-            $veiculo->loadNode($_fields->item(0), 'veicTransp');
+            $veiculo->loadNode($_fields->item(0), 'veicTransp', $version);
         }
         $this->setVeiculo($veiculo);
         $_fields = $element->getElementsByTagName('reboque');
         $reboque = null;
         if ($_fields->length > 0) {
             $reboque = new Veiculo();
-            $reboque->loadNode($_fields->item(0), 'reboque');
+            $reboque->loadNode($_fields->item(0), 'reboque', $version);
         }
         $this->setReboque($reboque);
         $this->setVagao(Util::loadNode($element, 'vagao'));
@@ -393,7 +393,7 @@ class Transporte implements Node
         $_fields = $element->getElementsByTagName('vol');
         foreach ($_fields as $_item) {
             $volume = new Volume();
-            $volume->loadNode($_item, 'vol');
+            $volume->loadNode($_item, 'vol', $version);
             $volumes[] = $volume;
         }
         $this->setVolumes($volumes);

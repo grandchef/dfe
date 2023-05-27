@@ -224,7 +224,7 @@ class Volume implements Node
         $_fields = $element->getElementsByTagName('lacres');
         foreach ($_fields as $_item) {
             $lacre = new Lacre();
-            $lacre->loadNode($_item, 'lacres');
+            $lacre->loadNode($_item, 'lacres', $version);
             $lacres[] = $lacre;
         }
         $this->setLacres($lacres);

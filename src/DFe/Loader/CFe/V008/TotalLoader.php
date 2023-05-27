@@ -62,6 +62,7 @@ class TotalLoader implements Loader
         );
         $this->total->setDesconto(Util::loadNode($element, 'vDesc'));
         $this->total->setDespesas(Util::loadNode($element, 'vOutro'));
+        $this->total->setTributos(Util::loadNode($element, 'vICMS'));
         return $element;
     }
 }

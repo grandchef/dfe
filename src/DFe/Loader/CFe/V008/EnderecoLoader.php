@@ -71,11 +71,11 @@ class EnderecoLoader implements Loader
                 'Tag "xMun" do objeto "Municipio" não encontrada'
             )
         );
-        $this->endereco->getMunicipio()->getEstado()->setUF(
+        $this->endereco->setCEP(
             Util::loadNode(
                 $element,
-                'UF',
-                'Tag "UF" do objeto "Estado" não encontrada'
+                'CEP',
+                'Tag "CEP" do campo "CEP" não encontrada'
             )
         );
         return $element;

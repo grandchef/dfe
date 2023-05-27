@@ -50,7 +50,7 @@ class Generico extends Mista
         if (is_null($this->getModalidade()) && is_null($this->getNormal()->getModalidade())) {
             $dom = new \DOMDocument('1.0', 'UTF-8');
             $element = $dom->createElement($name ?? 'ICMS90');
-            Util::appendNode($element, 'orig', $this->getOrigem(true));
+            Util::appendNode($element, strpos($version, 'CFe') !== false ? 'Orig' : 'orig', $this->getOrigem(true));
             Util::appendNode($element, 'CST', $this->getTributacao(true));
             return $element;
         }
@@ -71,7 +71,7 @@ class Generico extends Mista
         $this->setOrigem(
             Util::loadNode(
                 $element,
-                'orig',
+                strpos($version, 'CFe') !== false ? 'Orig' : 'orig',
                 'Tag "orig" do campo "Origem" não encontrada'
             )
         );

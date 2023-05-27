@@ -783,28 +783,29 @@ class NotaLoader implements Loader
                 'emit',
                 'Tag "emit" do objeto "Emitente" não encontrada'
             ),
-            'emit'
+            'emit',
+            $version
         );
         $this->nota->setEmitente($emitente);
         $_fields = $info->getElementsByTagName('dest');
         $destinatario = null;
         if ($_fields->length > 0) {
             $destinatario = new Destinatario();
-            $destinatario->loadNode($_fields->item(0), 'dest');
+            $destinatario->loadNode($_fields->item(0), 'dest', $version);
         }
         $this->nota->setDestinatario($destinatario);
         $_fields = $info->getElementsByTagName('infRespTec');
         $responsavel = null;
         if ($_fields->length > 0) {
             $responsavel = new Responsavel();
-            $responsavel->loadNode($_fields->item(0), 'infRespTec');
+            $responsavel->loadNode($_fields->item(0), 'infRespTec', $version);
         }
         $this->nota->setResponsavel($responsavel);
         $produtos = [];
         $_items = $info->getElementsByTagName('det');
         foreach ($_items as $_item) {
             $produto = new Produto();
-            $produto->loadNode($_item, 'det');
+            $produto->loadNode($_item, 'det', $version);
             $produtos[] = $produto;
         }
         $this->nota->setProdutos($produtos);
@@ -812,7 +813,7 @@ class NotaLoader implements Loader
         $transporte = null;
         if ($_fields->length > 0) {
             $transporte = new Transporte();
-            $transporte->loadNode($_fields->item(0), 'transp');
+            $transporte->loadNode($_fields->item(0), 'transp', $version);
         }
         $this->nota->setTransporte($transporte);
         $pagamentos = [];
@@ -821,12 +822,12 @@ class NotaLoader implements Loader
             $_det_items = $_item->getElementsByTagName('detPag');
             foreach ($_det_items as $_det_item) {
                 $pagamento = new Pagamento();
-                $pagamento->loadNode($_det_item, 'detPag');
+                $pagamento->loadNode($_det_item, 'detPag', $version);
                 $pagamentos[] = $pagamento;
             }
             if (Util::nodeExists($_item, 'vTroco')) {
                 $pagamento = new Pagamento();
-                $pagamento->loadNode($_item, 'vTroco');
+                $pagamento->loadNode($_item, 'vTroco', $version);
                 if ($pagamento->getValor() < 0) {
                     $pagamentos[] = $pagamento;
                 }
@@ -836,7 +837,7 @@ class NotaLoader implements Loader
         $_fields = $info->getElementsByTagName('total');
         if ($_fields->length > 0) {
             $total = new Total();
-            $total->loadNode($_fields->item(0), 'total');
+            $total->loadNode($_fields->item(0), 'total', $version);
             $total->setComplemento(Util::loadNode($info, 'infCpl'));
         } else {
             throw new \Exception('Tag "total" do objeto "Total" não encontrada na Nota', 404);
@@ -846,7 +847,7 @@ class NotaLoader implements Loader
         $intermediador = null;
         if ($_fields->length > 0) {
             $intermediador = new Intermediador();
-            $intermediador->loadNode($_fields->item(0), 'infIntermed');
+            $intermediador->loadNode($_fields->item(0), 'infIntermed', $version);
         }
         $this->nota->setIntermediador($intermediador);
         $this->nota->setAdicionais(Util::loadNode($info, 'infAdFisco'));
@@ -883,7 +884,7 @@ class NotaLoader implements Loader
         $protocolo = null;
         if ($_fields->length > 0) {
             $protocolo = new Protocolo();
-            $protocolo->loadNode($_fields->item(0), 'infProt');
+            $protocolo->loadNode($_fields->item(0), 'infProt', $version);
         }
         $this->nota->setProtocolo($protocolo);
         return $element;

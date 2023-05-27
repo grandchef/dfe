@@ -239,7 +239,7 @@ abstract class Imposto implements Node
     public static function criaPeloNome($nome, $quantitativo = false)
     {
         switch ($nome) {
-            /* Grupo COFINS */
+                /* Grupo COFINS */
             case 'COFINSAliq':
                 $imposto = new Imposto\COFINS\Aliquota();
                 break;
@@ -249,10 +249,13 @@ abstract class Imposto implements Node
             case 'COFINSNT':
                 $imposto = new Imposto\COFINS\Isento();
                 break;
+            case 'COFINSSN':
+                $imposto = new Imposto\COFINS\Simples();
+                break;
             case 'COFINSQtde':
                 $imposto = new Imposto\COFINS\Quantidade();
                 break;
-            /* Grupo COFINSST */
+                /* Grupo COFINSST */
             case 'COFINSST':
                 if ($quantitativo) {
                     $imposto = new Imposto\COFINS\ST\Quantidade();
@@ -260,7 +263,7 @@ abstract class Imposto implements Node
                     $imposto = new Imposto\COFINS\ST\Aliquota();
                 }
                 break;
-            /* Grupo ICMS */
+                /* Grupo ICMS */
             case 'ICMS60':
                 $imposto = new Imposto\ICMS\Cobrado();
                 break;
@@ -294,7 +297,7 @@ abstract class Imposto implements Node
             case 'ICMSST':
                 $imposto = new Imposto\ICMS\Substituto();
                 break;
-            /* Grupo ICMS Simples */
+                /* Grupo ICMS Simples */
             case 'ICMSSN500':
                 $imposto = new Imposto\ICMS\Simples\Cobrado();
                 break;
@@ -313,7 +316,7 @@ abstract class Imposto implements Node
             case 'ICMSSN202':
                 $imposto = new Imposto\ICMS\Simples\Parcial();
                 break;
-            /* Grupo IPI */
+                /* Grupo IPI */
             case 'IPITrib':
                 if ($quantitativo) {
                     $imposto = new Imposto\IPI\Quantidade();
@@ -324,7 +327,7 @@ abstract class Imposto implements Node
             case 'IPINT':
                 $imposto = new Imposto\IPI\Isento();
                 break;
-            /* Grupo PIS */
+                /* Grupo PIS */
             case 'PISAliq':
                 $imposto = new Imposto\PIS\Aliquota();
                 break;
@@ -337,7 +340,7 @@ abstract class Imposto implements Node
             case 'PISQtde':
                 $imposto = new Imposto\PIS\Quantidade();
                 break;
-            /* Grupo PISST */
+                /* Grupo PISST */
             case 'PISST':
                 if ($quantitativo) {
                     $imposto = new Imposto\PIS\ST\Quantidade();
@@ -345,11 +348,14 @@ abstract class Imposto implements Node
                     $imposto = new Imposto\PIS\ST\Aliquota();
                 }
                 break;
-            /* Grupo II básico */
+            case 'PISSN':
+                $imposto = new Imposto\PIS\Simples();
+                break;
+                /* Grupo II básico */
             case 'II':
                 $imposto = new Imposto\II();
                 break;
-            /* Grupo IPI básico */
+                /* Grupo IPI básico */
             case 'IPI':
                 $imposto = new Imposto\IPI();
                 break;
@@ -359,21 +365,21 @@ abstract class Imposto implements Node
         return $imposto;
     }
 
-    public static function loadImposto($element)
+    public static function loadImposto(\DOMElement $element, string $version = '')
     {
         $quantitativo = false;
         switch ($element->nodeName) {
-            /* Grupo COFINSST */
+                /* Grupo COFINSST */
             case 'COFINSST':
                 $_fields = $element->getElementsByTagName('pCOFINS');
                 $quantitativo = $_fields->length == 0;
                 break;
-            /* Grupo IPI */
+                /* Grupo IPI */
             case 'IPITrib':
                 $_fields = $element->getElementsByTagName('pIPI');
                 $quantitativo = $_fields->length == 0;
                 break;
-            /* Grupo PISST */
+                /* Grupo PISST */
             case 'PISST':
                 $_fields = $element->getElementsByTagName('pPIS');
                 $quantitativo = $_fields->length == 0;
@@ -383,7 +389,7 @@ abstract class Imposto implements Node
         if ($imposto === false) {
             return false;
         }
-        $imposto->loadNode($element, $element->nodeName);
+        $imposto->loadNode($element, $element->nodeName, $version);
         return $imposto;
     }
 }

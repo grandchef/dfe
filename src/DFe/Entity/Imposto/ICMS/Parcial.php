@@ -150,7 +150,7 @@ class Parcial extends Base
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement($name ?? 'ICMS30');
-        Util::appendNode($element, 'orig', $this->getOrigem(true));
+        Util::appendNode($element, strpos($version, 'CFe') !== false ? 'Orig' : 'orig', $this->getOrigem(true));
         Util::appendNode($element, 'CST', $this->getTributacao(true));
         Util::appendNode($element, 'modBCST', $this->getModalidade(true));
         Util::appendNode($element, 'pMVAST', $this->getMargem(true));
@@ -168,7 +168,7 @@ class Parcial extends Base
         $this->setOrigem(
             Util::loadNode(
                 $element,
-                'orig',
+                strpos($version, 'CFe') !== false ? 'Orig' : 'orig',
                 'Tag "orig" do campo "Origem" não encontrada no ICMS Parcial'
             )
         );
@@ -214,7 +214,7 @@ class Parcial extends Base
                 'Tag "pICMSST" do campo "Aliquota" não encontrada no ICMS Parcial'
             )
         );
-        $this->importFundo($element);
+        $this->importFundo($element, $version);
         return $element;
     }
 }

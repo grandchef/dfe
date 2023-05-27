@@ -17,9 +17,9 @@ namespace DFe\Common;
 class Util
 {
     public const ACCENT_CHARS =
-        'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
+    'àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ';
     public const NORMAL_CHARS =
-        'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
+    'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY';
 
     /**
      * Converte float para string informando a quantidade de
@@ -277,6 +277,9 @@ class Util
     public static function loadNode($element, $name, $exception = null)
     {
         $value = null;
+        if (is_null($element)) {
+            return $value;
+        }
         $list = $element->getElementsByTagName($name);
         if ($list->length > 0) {
             $value = $list->item(0)->nodeValue;
@@ -292,19 +295,28 @@ class Util
         return ($list->length > 0) || ($element->nodeName == $name);
     }
 
-    public static function findNode(\DOMElement $element, string $name, ?string $exception = null): \DOMElement
+    public static function getNode(\DOMElement $element, string $name): ?\DOMElement
     {
         if ($element->nodeName == $name) {
             return $element;
         }
         $list = $element->getElementsByTagName($name);
         if ($list->length == 0) {
+            return null;
+        }
+        return $list->item(0);
+    }
+
+    public static function findNode(\DOMElement $element, string $name, ?string $exception = null): \DOMElement
+    {
+        $result = self::getNode($element, $name);
+        if (is_null($result)) {
             if (is_null($exception)) {
                 $exception = 'Tag "' . $name . '" não encontrada no bloco "' . $element->nodeName . '"';
             }
             throw new \Exception($exception, 404);
         }
-        return $list->item(0);
+        return $result;
     }
 
     public static function mergeNodes($element, $other)
