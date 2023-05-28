@@ -79,7 +79,7 @@ class XmlseclibsAdapter implements AdapterInterface
         $this->publicKey = $publicKey;
     }
 
-    public function getPublicKey(DOMNode $dom = null)
+    public function getPublicKey(DOMDocument $dom = null)
     {
         if ($dom) {
             $this->setPublicKeyFromNode($dom);
@@ -216,11 +216,11 @@ class XmlseclibsAdapter implements AdapterInterface
      * @see publicKey
      * @see keyAlgorithm
      *
-     * @param DOMNode $dom
+     * @param DOMDocument $dom
      *
      * @return bool `true` If public key was extracted or `false` if cannot be possible
      */
-    protected function setPublicKeyFromNode(DOMNode $dom)
+    protected function setPublicKeyFromNode(DOMDocument $dom)
     {
         // try to get the public key from the certificate
         $objXMLSecDSig = $this->createXmlSecurityDSig();

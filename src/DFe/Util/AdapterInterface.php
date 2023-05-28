@@ -3,7 +3,6 @@
 namespace DFe\Util;
 
 use DOMDocument;
-use DOMNode;
 use RuntimeException;
 
 /**
@@ -68,11 +67,11 @@ interface AdapterInterface
      *  2) From a previous publickey set by setPublicKey
      *  3) From private key set by setPrivateKey
      *
-     * @param null|DOMNode $dom DOM node where to search a publicKey
+     * @param null|DOMDocument $dom DOM node where to search a publicKey
      *
      * @return string|null Public key in PEM format
      */
-    public function getPublicKey(DOMNode $dom = null);
+    public function getPublicKey(DOMDocument $dom = null);
 
     /**
      * Public/Private key signature algorithm.
