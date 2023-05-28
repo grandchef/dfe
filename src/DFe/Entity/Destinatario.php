@@ -12,8 +12,8 @@
 namespace DFe\Entity;
 
 use DFe\Common\Node;
-use DFe\Loader\NFe\V4\DestinatarioLoader;
-use DFe\Loader\CFe\V008\DestinatarioLoader as CFeDestinatarioLoader;
+use DFe\Loader\NFe\DestinatarioLoader;
+use DFe\Loader\CFe\DestinatarioLoader as CFeDestinatarioLoader;
 
 /**
  * Cliente pessoa física ou jurídica que está comprando os produtos e irá

@@ -2,10 +2,8 @@
 
 namespace DFe\Database;
 
+use DFe\Core\NFe;
 use DFe\Core\Nota;
-use DFe\Task\Envio;
-use DFe\Core\NFCe;
-use DFe\Common\Util;
 
 class BancoTest extends \PHPUnit\Framework\TestCase
 {
@@ -231,8 +229,10 @@ class BancoTest extends \PHPUnit\Framework\TestCase
         $soap = new \Curl\Curl();
         $soap->setOpt(CURLOPT_SSLCERT, $chave_publica);
         $soap->setOpt(CURLOPT_SSLKEY, $chave_privada);
-        $ufs = ['AM', 'BA', 'CE', 'GO', 'MG', 'MS', 'MT', 'PE', 'PR', 'RS', 'SP', 'MA', 'PA', 'AC', 'AL', 'AP', 'DF',
-            'ES', 'PB', 'PI', 'RJ', 'RN', 'RO', 'RR', 'SC', 'SE', 'TO'];
+        $ufs = [
+            'AM', 'BA', 'CE', 'GO', 'MG', 'MS', 'MT', 'PE', 'PR', 'RS', 'SP', 'MA', 'PA', 'AC', 'AL', 'AP', 'DF',
+            'ES', 'PB', 'PI', 'RJ', 'RN', 'RO', 'RR', 'SC', 'SE', 'TO'
+        ];
         $modelos = [Nota::MODELO_NFE, Nota::MODELO_NFCE];
         foreach ($modelos as $modelo) {
             foreach ($ufs as $uf) {
@@ -252,7 +252,7 @@ class BancoTest extends \PHPUnit\Framework\TestCase
                         $response = $soap->get($url);
                         if (!$soap->error) {
                             $namespace = (string)$response['targetNamespace'];
-                            $action = str_replace(Nota::PORTAL . '/wsdl/', '', $namespace);
+                            $action = str_replace(NFe::PORTAL . '/wsdl/', '', $namespace);
                             // echo $soap->rawResponse;
                             $this->assertEquals(
                                 [$uf => [$modelo => [$ambiente => [$servico => ['servico' => $action]]]]],

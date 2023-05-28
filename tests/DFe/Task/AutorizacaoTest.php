@@ -2,9 +2,8 @@
 
 namespace DFe\Task;
 
-use DFe\Core\NFCe;
-use DFe\Core\Nota;
 use DOMDocument;
+use DFe\Core\NFCe;
 
 class AutorizacaoTest extends \PHPUnit\Framework\TestCase
 {
@@ -167,7 +166,7 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
         $dom = new DOMDocument();
         $dom->appendChild($dom->createElement('schema'));
         $autorizacao = new Autorizacao(new NFCe(), $dom);
-        $autorizacao->setVersao(Nota::VERSAO);
+        $autorizacao->setVersao(NFCe::VERSAO);
         $this->expectException('\DFe\Exception\ValidationException');
         $autorizacao->getLoteLoader()->getNode();
     }

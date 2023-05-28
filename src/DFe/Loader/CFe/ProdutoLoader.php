@@ -9,7 +9,7 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-namespace DFe\Loader\NFe\V4;
+namespace DFe\Loader\CFe;
 
 use DFe\Common\Util;
 use DFe\Common\Loader;
@@ -39,38 +39,32 @@ class ProdutoLoader implements Loader
         Util::appendNode($produto, 'cEAN', $this->produto->getCodigoBarras(true));
         Util::appendNode($produto, 'xProd', $this->produto->getDescricao(true));
         Util::appendNode($produto, 'NCM', $this->produto->getNCM(true));
-        if (!is_null($this->produto->getCEST())) {
-            Util::appendNode($produto, 'CEST', $this->produto->getCEST(true));
-        }
-        if (!is_null($this->produto->getExcecao())) {
-            Util::appendNode($produto, 'EXTIPI', $this->produto->getExcecao(true));
-        }
         Util::appendNode($produto, 'CFOP', $this->produto->getCFOP(true));
         Util::appendNode($produto, 'uCom', $this->produto->getUnidade(true));
         Util::appendNode($produto, 'qCom', $this->produto->getQuantidade(true));
         Util::appendNode($produto, 'vUnCom', $this->produto->getPrecoUnitario(true));
-        Util::appendNode($produto, 'vProd', $this->produto->getPreco(true));
-        Util::appendNode($produto, 'cEANTrib', $this->produto->getCodigoTributario(true));
-        Util::appendNode($produto, 'uTrib', $this->produto->getUnidade(true));
-        Util::appendNode($produto, 'qTrib', $this->produto->getTributada(true));
-        Util::appendNode($produto, 'vUnTrib', $this->produto->getPrecoTributavel(true));
-        if (Util::isGreater($this->produto->getFrete(), 0.00)) {
-            Util::appendNode($produto, 'vFrete', $this->produto->getFrete(true));
-        }
-        if (Util::isGreater($this->produto->getSeguro(), 0.00)) {
-            Util::appendNode($produto, 'vSeg', $this->produto->getSeguro(true));
-        }
+        Util::appendNode($produto, 'indRegra', 'A');
         if (Util::isGreater($this->produto->getDesconto(), 0.00)) {
             Util::appendNode($produto, 'vDesc', $this->produto->getDesconto(true));
         }
-        if (Util::isGreater($this->produto->getDespesas(), 0.00)) {
-            Util::appendNode($produto, 'vOutro', $this->produto->getDespesas(true));
+        if (
+            Util::isGreater(
+                $this->produto->getDespesas()
+                    + $this->produto->getFrete()
+                    + $this->produto->getSeguro(),
+                0.00
+            )
+        ) {
+            Util::appendNode(
+                $produto,
+                'vOutro',
+                Util::toCurrency(
+                    $this->produto->getDespesas()
+                        + $this->produto->getFrete()
+                        + $this->produto->getSeguro()
+                )
+            );
         }
-        Util::appendNode($produto, 'indTot', $this->produto->getMultiplicador(true));
-        if (!is_null($this->produto->getPedido())) {
-            Util::appendNode($produto, 'xPed', $this->produto->getPedido(true));
-        }
-        Util::appendNode($produto, 'nItemPed', $this->produto->getItem(true));
         $element->appendChild($produto);
 
         $imposto = $dom->createElement('imposto');
@@ -84,7 +78,6 @@ class ProdutoLoader implements Loader
         }
         $imposto_info = $this->produto->getImpostoInfo();
         $this->produto->setTributos($imposto_info['total']);
-        Util::appendNode($imposto, 'vTotTrib', Util::toCurrency($imposto_info['total']));
         foreach ($grupos as $tag => $_grupo) {
             $grupo = $dom->createElement($tag);
             foreach ($_grupo as $_imposto) {
@@ -103,12 +96,9 @@ class ProdutoLoader implements Loader
 
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
-        $name ??= 'det';
-        $element = Util::findNode($element, $name);
+        $element = Util::findNode($element, $name ?? 'det');
         $root = $element;
-        $element = (new TotalLoader($this->produto))->loadNode($element, $name, $version);
-        $this->produto->setItem(Util::loadNode($element, 'nItemPed'));
-        $this->produto->setPedido(Util::loadNode($element, 'xPed'));
+        $element = (new TotalLoader($this->produto))->loadNode($element, $name ?? 'det', $version);
         $this->produto->setCodigo(
             Util::loadNode(
                 $element,
@@ -116,20 +106,7 @@ class ProdutoLoader implements Loader
                 'Tag "cProd" do campo "Codigo" não encontrada no Produto'
             )
         );
-        $this->produto->setCodigoTributario(
-            Util::loadNode(
-                $element,
-                'cEANTrib',
-                'Tag "cEANTrib" do campo "CodigoTributario" não encontrada no Produto'
-            )
-        );
-        $this->produto->setCodigoBarras(
-            Util::loadNode(
-                $element,
-                'cEAN',
-                'Tag "cEAN" do campo "CodigoBarras" não encontrada no Produto'
-            )
-        );
+        $this->produto->setCodigoBarras(Util::loadNode($element, 'cEAN'));
         $this->produto->setDescricao(
             Util::loadNode(
                 $element,
@@ -144,25 +121,11 @@ class ProdutoLoader implements Loader
                 'Tag "uCom" do campo "Unidade" não encontrada no Produto'
             )
         );
-        $this->produto->setMultiplicador(
-            Util::loadNode(
-                $element,
-                'indTot',
-                'Tag "indTot" do campo "Multiplicador" não encontrada no Produto'
-            )
-        );
         $this->produto->setQuantidade(
             Util::loadNode(
                 $element,
                 'qCom',
                 'Tag "qCom" do campo "Quantidade" não encontrada no Produto'
-            )
-        );
-        $this->produto->setTributada(
-            Util::loadNode(
-                $element,
-                'qTrib',
-                'Tag "qTrib" do campo "Tributada" não encontrada no Produto'
             )
         );
         $this->produto->setExcecao(Util::loadNode($element, 'EXTIPI'));
@@ -173,13 +136,7 @@ class ProdutoLoader implements Loader
                 'Tag "CFOP" do campo "CFOP" não encontrada no Produto'
             )
         );
-        $this->produto->setNCM(
-            Util::loadNode(
-                $element,
-                'NCM',
-                'Tag "NCM" do campo "NCM" não encontrada no Produto'
-            )
-        );
+        $this->produto->setNCM(Util::loadNode($element, 'NCM'));
         $this->produto->setCEST(Util::loadNode($element, 'CEST'));
         $impostos = [];
         $_fields = $root->getElementsByTagName('imposto');
@@ -187,7 +144,6 @@ class ProdutoLoader implements Loader
             throw new \Exception('Tag "imposto" da lista de "Impostos" não encontrada no Produto', 404);
         }
         $imposto_node = $_fields->item(0);
-        $this->produto->setTributos(Util::loadNode($imposto_node, 'vTotTrib'));
         $_items = $imposto_node->childNodes;
         $total = new \DFe\Entity\Imposto\Total();
         foreach ($_items as $_item) {
@@ -200,7 +156,7 @@ class ProdutoLoader implements Loader
                 if ($_subitem->nodeType !== XML_ELEMENT_NODE) {
                     continue;
                 }
-                $imposto = Imposto::loadImposto($_subitem);
+                $imposto = Imposto::loadImposto($_subitem, $version);
                 if ($imposto === false) {
                     continue;
                 }

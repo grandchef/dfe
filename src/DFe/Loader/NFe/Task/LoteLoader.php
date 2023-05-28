@@ -9,9 +9,9 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-namespace DFe\Loader\NFe\V4\Task;
+namespace DFe\Loader\NFe\Task;
 
-use DFe\Core\Nota;
+use DFe\Core\NFe;
 use DFe\Core\SEFAZ;
 use DFe\Common\Util;
 use DFe\Task\Status;
@@ -30,11 +30,11 @@ class LoteLoader implements Loader
         $config = SEFAZ::getInstance()->getConfiguracao();
         $dob = new \DOMDocument('1.0', 'UTF-8');
         $envio = $dob->createElement('enviNFe');
-        $envio->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', Nota::PORTAL);
+        $envio->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', NFe::PORTAL);
         $versao = $dob->createAttribute('versao');
-        $versao->value = Nota::VERSAO;
+        $versao->value = NFe::VERSAO;
         $envio->appendChild($versao);
-        Util::appendNode($envio, 'idLote', Status::genLote());
+        Util::appendNode($envio, 'idLote', StatusLoader::genLote());
         Util::appendNode($envio, 'indSinc', $config->getSincrono(true));
         Util::appendNode($envio, 'NFe', 0);
         $dob->appendChild($envio);
@@ -53,11 +53,11 @@ class LoteLoader implements Loader
     /**
      * Valida o XML em lote
      */
-    public function validar($xml_content)
+    private function validar($xml_content)
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->loadXML($xml_content);
-        $xsd_path = dirname(dirname(dirname(dirname(__DIR__)))) . '/Core/schema';
+        $xsd_path = dirname(dirname(dirname(__DIR__))) . '/Core/schema';
         $xsd_file = $xsd_path . '/NFe/v4.0.0/enviNFe_v4.00.xsd';
         if (!file_exists($xsd_file)) {
             throw new \Exception(sprintf('O arquivo "%s" de esquema XSD não existe!', $xsd_file), 404);

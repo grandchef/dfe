@@ -9,7 +9,7 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-namespace DFe\Loader\NFe\V4;
+namespace DFe\Loader\NFe;
 
 use DOMElement;
 use DFe\Common\Util;

@@ -13,8 +13,8 @@ namespace DFe\Entity;
 
 use DFe\Core\SEFAZ;
 use DFe\Common\Util;
-use DFe\Loader\NFe\V4\ProdutoLoader;
-use DFe\Loader\CFe\V008\ProdutoLoader as CFeProdutoLoader;
+use DFe\Loader\NFe\ProdutoLoader;
+use DFe\Loader\CFe\ProdutoLoader as CFeProdutoLoader;
 
 /**
  * Produto ou serviço que está sendo vendido ou prestado e será adicionado

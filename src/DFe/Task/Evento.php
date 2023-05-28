@@ -11,21 +11,14 @@
 
 namespace DFe\Task;
 
-use DOMElement;
 use DFe\Core\Nota;
-use DFe\Core\SEFAZ;
-use DFe\Common\Util;
-use DFe\Util\AdapterInterface;
-use DFe\Util\XmlseclibsAdapter;
-use DFe\Exception\ValidationException;
+use DFe\Common\Loader;
+use DFe\Loader\NFe\Task\EventoLoader;
+use DFe\Loader\CFe\Task\EventoLoader as CFeEventoLoader;
 
 class Evento extends Retorno
 {
-    public const VERSAO = '1.00';
-
     public const TIPO_CANCELAMENTO = '110111';
-    public const TAG_RETORNO = 'retEvento';
-    public const TAG_RETORNO_ENVIO = 'retEnvEvento';
 
     private $id;
     private $orgao;
@@ -39,6 +32,8 @@ class Evento extends Retorno
     private $justificativa;
     private $email;
     private $modelo;
+
+    private $documento;
     private $informacao;
 
     public function __construct($evento = [])
@@ -50,12 +45,9 @@ class Evento extends Retorno
      * Identificador da TAG a ser assinada, a regra de formação do Id é: "ID" +
      * tpEvento +  chave da NF-e + nSeqEvento
      */
-    public function getID($normalize = false)
+    public function getID()
     {
-        if (!$normalize) {
-            return $this->id;
-        }
-        return 'ID' . $this->id;
+        return $this->id;
     }
 
     public function setID($id)
@@ -68,14 +60,9 @@ class Evento extends Retorno
      * Código do órgão de recepção do Evento. Utilizar a Tabela do IBGE
      * extendida, utilizar 91 para identificar o Ambiente Nacional
      */
-    public function getOrgao($normalize = false)
+    public function getOrgao()
     {
-        if (!$normalize || is_numeric($this->orgao)) {
-            return $this->orgao;
-        }
-
-        $db = SEFAZ::getInstance()->getConfiguracao()->getBanco();
-        return $db->getCodigoOrgao($this->orgao);
+        return $this->orgao;
     }
 
     public function setOrgao($orgao)
@@ -87,11 +74,8 @@ class Evento extends Retorno
     /**
      * Identificação do  autor do evento
      */
-    public function getIdentificador($normalize = false)
+    public function getIdentificador()
     {
-        if (!$normalize) {
-            return $this->identificador;
-        }
         return $this->identificador;
     }
 
@@ -104,11 +88,8 @@ class Evento extends Retorno
     /**
      * Chave de Acesso da NF-e vinculada ao evento
      */
-    public function getChave($normalize = false)
+    public function getChave()
     {
-        if (!$normalize) {
-            return $this->chave;
-        }
         return $this->chave;
     }
 
@@ -122,19 +103,13 @@ class Evento extends Retorno
      * Data e Hora do Evento, formato UTC (AAAA-MM-DDThh:mm:ssTZD, onde TZD =
      * +hh:mm ou -hh:mm)
      */
-    public function getData($normalize = false)
+    public function getData()
     {
-        if (!$normalize) {
-            return $this->data;
-        }
-        return Util::toDateTime($this->data);
+        return $this->data;
     }
 
     public function setData($data)
     {
-        if (!is_numeric($data)) {
-            $data = strtotime($data ?? '');
-        }
         $this->data = $data;
         return $this;
     }
@@ -142,11 +117,8 @@ class Evento extends Retorno
     /**
      * Tipo do Evento
      */
-    public function getTipo($normalize = false)
+    public function getTipo()
     {
-        if (!$normalize) {
-            return $this->tipo;
-        }
         return $this->tipo;
     }
 
@@ -162,11 +134,8 @@ class Evento extends Retorno
      * o caso da carta de correção, o autor do evento deve numerar de forma
      * seqüencial.
      */
-    public function getSequencia($normalize = false)
+    public function getSequencia()
     {
-        if (!$normalize) {
-            return $this->sequencia;
-        }
         return $this->sequencia;
     }
 
@@ -179,11 +148,8 @@ class Evento extends Retorno
     /**
      * Descrição do Evento
      */
-    public function getDescricao($normalize = false)
+    public function getDescricao()
     {
-        if (!$normalize) {
-            return $this->descricao;
-        }
         return $this->descricao;
     }
 
@@ -198,11 +164,8 @@ class Evento extends Retorno
      * Fazenda Estadual 2 – Receita Federal); 2 posições ano; 10 seqüencial no
      * ano.
      */
-    public function getNumero($normalize = false)
+    public function getNumero()
     {
-        if (!$normalize) {
-            return $this->numero;
-        }
         return $this->numero;
     }
 
@@ -215,11 +178,8 @@ class Evento extends Retorno
     /**
      * Justificativa do cancelamento
      */
-    public function getJustificativa($normalize = false)
+    public function getJustificativa()
     {
-        if (!$normalize) {
-            return $this->justificativa;
-        }
         return $this->justificativa;
     }
 
@@ -232,11 +192,8 @@ class Evento extends Retorno
     /**
      * email do destinatário
      */
-    public function getEmail($normalize = false)
+    public function getEmail()
     {
-        if (!$normalize) {
-            return $this->email;
-        }
         return $this->email;
     }
 
@@ -248,44 +205,39 @@ class Evento extends Retorno
 
     /**
      * Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.
-     * @param boolean $normalize informa se o modelo deve estar no formato do XML
-     * @return mixed modelo do Envio
      */
-    public function getModelo($normalize = false)
+    public function getModelo()
     {
-        if (!$normalize) {
-            return $this->modelo;
-        }
-        switch ($this->modelo) {
-            case Nota::MODELO_NFE:
-                return '55';
-            case Nota::MODELO_NFCE:
-                return '65';
-        }
         return $this->modelo;
     }
 
-    /**
-     * Altera o valor do Modelo para o informado no parâmetro
-     * @param mixed $modelo novo valor para Modelo
-     * @return self A própria instância da classe
-     */
     public function setModelo($modelo)
     {
-        switch ($modelo) {
-            case '55':
-                $modelo = Nota::MODELO_NFE;
-                break;
-            case '65':
-                $modelo = Nota::MODELO_NFCE;
-                break;
-        }
         $this->modelo = $modelo;
         return $this;
     }
 
     /**
+     * Informa o XML do objeto, quando não informado o XML é gerado a partir do
+     * objeto
+     *
+     * @return \DOMDocument
+     */
+    public function getDocumento()
+    {
+        return $this->documento;
+    }
+
+    public function setDocumento($documento)
+    {
+        $this->documento = $documento;
+        return $this;
+    }
+
+    /**
      * Resposta de informação do evento
+     *
+     * @return Evento
      */
     public function getInformacao()
     {
@@ -337,6 +289,7 @@ class Evento extends Retorno
         $evento['justificativa'] = $this->getJustificativa();
         $evento['email'] = $this->getEmail();
         $evento['modelo'] = $this->getModelo();
+        $evento['documento'] = $this->getDocumento();
         $evento['informacao'] = $this->getInformacao();
         return $evento;
     }
@@ -354,302 +307,49 @@ class Evento extends Retorno
         $this->setIdentificador($evento['identificador'] ?? null);
         $this->setChave($evento['chave'] ?? null);
         $this->setData($evento['data'] ?? null);
-        if (!isset($evento['tipo'])) {
-            $this->setTipo(self::TIPO_CANCELAMENTO);
-        } else {
-            $this->setTipo($evento['tipo']);
-        }
-        if (!isset($evento['sequencia'])) {
-            $this->setSequencia(1);
-        } else {
-            $this->setSequencia($evento['sequencia']);
-        }
-        if (!isset($evento['descricao'])) {
-            $this->setDescricao('Cancelamento');
-        } else {
-            $this->setDescricao($evento['descricao']);
-        }
+        $this->setTipo($evento['tipo'] ?? self::TIPO_CANCELAMENTO);
+        $this->setSequencia($evento['sequencia'] ?? 1);
+        $this->setDescricao($evento['descricao'] ?? 'Cancelamento');
         $this->setNumero($evento['numero'] ?? null);
         $this->setJustificativa($evento['justificativa'] ?? null);
         $this->setEmail($evento['email'] ?? null);
         $this->setModelo($evento['modelo'] ?? null);
+        $this->setDocumento($evento['documento'] ?? null);
         $this->setInformacao($evento['informacao'] ?? null);
         return $this;
     }
 
-    /**
-     * Gera o ID, a regra de formação do Id é: "ID" +
-     * tpEvento +  chave da NF-e + nSeqEvento
-     */
-    public function gerarID()
+    public function getLoaderVersion(): string
     {
-        $id = sprintf(
-            '%s%s%02d',
-            $this->getTipo(true),
-            $this->getChave(true),
-            $this->getSequencia(true)
-        );
-        return $id;
+        if ($this->getModelo() === Nota::MODELO_CFE) {
+            $version = $this->getVersao();
+            return "CFe@{$version}";
+        }
+        $version = $this->getVersao();
+        return "NFe@{$version}";
+    }
+
+    public function getLoader(string $version = ''): Loader
+    {
+        if (strpos($version ?: $this->getLoaderVersion(), 'CFe@') !== false) {
+            return new CFeEventoLoader($this);
+        }
+        return new EventoLoader($this);
     }
 
     public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
-        $this->setID($this->gerarID());
-
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-        $element = $dom->createElement($name ?? 'evento');
-        $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', Nota::PORTAL);
-        $versao = $dom->createAttribute('versao');
-        $versao->value = self::VERSAO;
-        $element->appendChild($versao);
-
-        $info = $dom->createElement('infEvento');
-        $dom = $element->ownerDocument;
-        $id = $dom->createAttribute('Id');
-        $id->value = $this->getID(true);
-        $info->appendChild($id);
-
-        Util::appendNode($info, 'cOrgao', $this->getOrgao(true));
-        Util::appendNode($info, 'tpAmb', $this->getAmbiente(true));
-        if ($this->isCNPJ()) {
-            Util::appendNode($info, 'CNPJ', $this->getIdentificador(true));
-        } else {
-            Util::appendNode($info, 'CPF', $this->getIdentificador(true));
-        }
-        Util::appendNode($info, 'chNFe', $this->getChave(true));
-        Util::appendNode($info, 'dhEvento', $this->getData(true));
-        Util::appendNode($info, 'tpEvento', $this->getTipo(true));
-        Util::appendNode($info, 'nSeqEvento', $this->getSequencia(true));
-        Util::appendNode($info, 'verEvento', self::VERSAO);
-
-        $detalhes = $dom->createElement('detEvento');
-        $versao = $dom->createAttribute('versao');
-        $versao->value = self::VERSAO;
-        $detalhes->appendChild($versao);
-
-        Util::appendNode($detalhes, 'descEvento', $this->getDescricao(true));
-        Util::appendNode($detalhes, 'nProt', $this->getNumero(true));
-        Util::appendNode($detalhes, 'xJust', $this->getJustificativa(true));
-        $info->appendChild($detalhes);
-
-        $element->appendChild($info);
-        $dom->appendChild($element);
-        return $element;
+        $version = $version ?: $this->getLoaderVersion();
+        return $this->getLoader($version)->getNode($version, $name);
     }
 
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
-        $root = $element;
-        $element = Util::findNode($element, 'evento');
-        $name ??= 'infEvento';
-        $element = Util::findNode($element, $name);
-        $this->setOrgao(
-            Util::loadNode(
-                $element,
-                'cOrgao',
-                'Tag "cOrgao" não encontrada no Evento'
-            )
-        );
-        $this->setAmbiente(
-            Util::loadNode(
-                $element,
-                'tpAmb',
-                'Tag "tpAmb" não encontrada no Evento'
-            )
-        );
-        if (Util::nodeExists($element, 'CNPJ')) {
-            $this->setIdentificador(
-                Util::loadNode(
-                    $element,
-                    'CNPJ',
-                    'Tag "CNPJ" não encontrada no Evento'
-                )
-            );
-        } else {
-            $this->setIdentificador(
-                Util::loadNode(
-                    $element,
-                    'CPF',
-                    'Tag "CPF" não encontrada no Evento'
-                )
-            );
-        }
-        $this->setChave(
-            Util::loadNode(
-                $element,
-                'chNFe',
-                'Tag "chNFe" não encontrada no Evento'
-            )
-        );
-        $this->setData(
-            Util::loadNode(
-                $element,
-                'dhEvento',
-                'Tag "dhEvento" não encontrada no Evento'
-            )
-        );
-        $this->setTipo(
-            Util::loadNode(
-                $element,
-                'tpEvento',
-                'Tag "tpEvento" não encontrada no Evento'
-            )
-        );
-        $this->setSequencia(
-            Util::loadNode(
-                $element,
-                'nSeqEvento',
-                'Tag "nSeqEvento" não encontrada no Evento'
-            )
-        );
-
-        $detalhes = Util::findNode($element, 'detEvento');
-        $this->setDescricao(
-            Util::loadNode(
-                $detalhes,
-                'descEvento',
-                'Tag "descEvento" não encontrada no Evento'
-            )
-        );
-        $this->setNumero(
-            Util::loadNode(
-                $detalhes,
-                'nProt',
-                'Tag "nProt" não encontrada no Evento'
-            )
-        );
-        $this->setJustificativa(
-            Util::loadNode(
-                $detalhes,
-                'xJust',
-                'Tag "xJust" não encontrada no Evento'
-            )
-        );
-        $informacao = null;
-        if (Util::nodeExists($root, 'procEventoNFe')) {
-            $informacao = $this->loadResponse($root);
-        }
-        $this->setInformacao($informacao);
-        return $element;
+        $version = $version ?: $this->getLoaderVersion();
+        return $this->getLoader($version)->loadNode($element, $name, $version);
     }
 
-    public function loadResponse(\DOMElement $resp)
-    {
-        $retorno = new Evento();
-        $retorno->loadReturnNode($resp);
-        $this->setInformacao($retorno);
-        return $retorno;
-    }
-
-    public function loadStatusNode(\DOMElement $element, $name = null)
-    {
-        $name = is_null($name) ? self::TAG_RETORNO_ENVIO : $name;
-        $element = parent::loadNode($element, $name);
-        $this->setOrgao(
-            Util::loadNode(
-                $element,
-                'cOrgao',
-                'Tag "cOrgao" do campo "Orgao" não encontrada'
-            )
-        );
-        return $element;
-    }
-
-    public function getReturnNode()
-    {
-        $outros = parent::getNode('', 'infEvento');
-        $element = $this->getNode('', self::TAG_RETORNO);
-        $dom = $element->ownerDocument;
-        $element->removeAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns');
-        /** @var DOMElement */
-        $info = $dom->getElementsByTagName('infEvento')->item(0);
-        $info->removeAttribute('Id');
-        $remove_tags = ['detEvento', 'verEvento', 'dhEvento', 'CNPJ', 'CPF', 'cOrgao'];
-        foreach ($remove_tags as $key) {
-            $_fields = $info->getElementsByTagName($key);
-            if ($_fields->length == 0) {
-                continue;
-            }
-            $node = $_fields->item(0);
-            $info->removeChild($node);
-        }
-        $chave = $info->getElementsByTagName('chNFe')->item(0);
-        foreach ($outros->childNodes as $node) {
-            $node = $dom->importNode($node, true);
-            $list = $info->getElementsByTagName($node->nodeName);
-            if ($list->length == 1) {
-                continue;
-            }
-            $info->insertBefore($node, $chave);
-        }
-        $status = $info->getElementsByTagName('cStat')->item(0);
-        Util::appendNode($info, 'cOrgao', $this->getOrgao(true), $status);
-        $sequencia = $info->getElementsByTagName('nSeqEvento')->item(0);
-        Util::appendNode($info, 'xEvento', $this->getDescricao(true), $sequencia);
-        if (!is_null($this->getIdentificador())) {
-            if ($this->isCNPJ()) {
-                Util::appendNode($info, 'CNPJDest', $this->getIdentificador(true));
-            } else {
-                Util::appendNode($info, 'CPFDest', $this->getIdentificador(true));
-            }
-        }
-        if (!is_null($this->getEmail())) {
-            Util::appendNode($info, 'emailDest', $this->getEmail(true));
-        }
-        Util::appendNode($info, 'dhRegEvento', $this->getData(true));
-        Util::appendNode($info, 'nProt', $this->getNumero(true));
-        return $element;
-    }
-
-    public function loadReturnNode(\DOMElement $element, $name = null)
-    {
-        $element = Util::findNode($element, Evento::TAG_RETORNO);
-        $name ??= 'infEvento';
-        $element = parent::loadNode($element, $name);
-        $this->setOrgao(
-            Util::loadNode(
-                $element,
-                'cOrgao',
-                'Tag "cOrgao" do campo "Orgao" não encontrada'
-            )
-        );
-        $this->setChave(Util::loadNode($element, 'chNFe'));
-        $this->setTipo(Util::loadNode($element, 'tpEvento'));
-        $this->setDescricao(Util::loadNode($element, 'xEvento'));
-        $this->setSequencia(Util::loadNode($element, 'nSeqEvento'));
-        if ($element->getElementsByTagName('CNPJDest')->length > 0) {
-            $this->setIdentificador(Util::loadNode($element, 'CNPJDest'));
-        } else {
-            $this->setIdentificador(Util::loadNode($element, 'CPFDest'));
-        }
-        $this->setEmail(Util::loadNode($element, 'emailDest'));
-        $this->setData(
-            Util::loadNode(
-                $element,
-                'dhRegEvento',
-                'Tag "dhRegEvento" do campo "Data" não encontrada'
-            )
-        );
-        $this->setNumero(Util::loadNode($element, 'nProt'));
-        return $element;
-    }
-
-    private function getConteudo($dom)
-    {
-        $dob = new \DOMDocument('1.0', 'UTF-8');
-        $envio = $dob->createElement('envEvento');
-        $envio->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', Nota::PORTAL);
-        $versao = $dob->createAttribute('versao');
-        $versao->value = self::VERSAO;
-        $envio->appendChild($versao);
-        Util::appendNode($envio, 'idLote', self::genLote());
-        Util::appendNode($envio, 'evento', 0);
-        $dob->appendChild($envio);
-        $xml = $dob->saveXML($dob->documentElement);
-        return str_replace('<evento>0</evento>', $dom->saveXML($dom->documentElement), $xml);
-    }
-
-    public function envia($dom)
+    public function envia(): self
     {
         $envio = new Envio();
         $envio->setServico(Envio::SERVICO_EVENTO);
@@ -657,95 +357,11 @@ class Evento extends Retorno
         $envio->setModelo($this->getModelo());
         $envio->setEmissao(Nota::EMISSAO_NORMAL);
         $this->setVersao($envio->getVersao());
-        $dom = $this->validar($dom);
-        $envio->setConteudo($this->getConteudo($dom));
-        $resp = $envio->envia();
-        $this->loadStatusNode($resp->documentElement);
-        if (!$this->isProcessado()) {
-            throw new \Exception($this->getMotivo(), $this->getStatus());
-        }
-        return $this->loadResponse($resp->documentElement);
-    }
-
-    /**
-     * Adiciona a informação no XML do evento
-     */
-    public function addInformacao($dom)
-    {
-        if (is_null($this->getInformacao())) {
-            throw new \Exception('A informação não foi informado no evento "' . $this->getID() . '"', 404);
-        }
-        $evento = $dom->getElementsByTagName('evento')->item(0);
-        // Corrige xmlns:default
-        $evento_xml = $dom->saveXML($evento);
-
-        $element = $dom->createElement('procEventoNFe');
-        $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', Nota::PORTAL);
-        $versao = $dom->createAttribute('versao');
-        $versao->value = self::VERSAO;
-        $element->appendChild($versao);
-        $dom->removeChild($evento);
-        // Corrige xmlns:default
-        $evento = $dom->createElement('evento', 0);
-
-        $element->appendChild($evento);
-        $info = $this->getInformacao()->getReturnNode();
-        $info = $dom->importNode($info, true);
-        $element->appendChild($info);
-        $dom->appendChild($element);
-        // Corrige xmlns:default
-        $xml = $dom->saveXML();
-        $xml = str_replace('<evento>0</evento>', $evento_xml, $xml);
-        $dom->loadXML($xml);
-
-        return $dom;
-    }
-
-    /**
-     * Assina o XML com a assinatura eletrônica do tipo A1
-     */
-    public function assinar($dom = null)
-    {
-        if (is_null($dom)) {
-            $xml = $this->getNode();
-            $dom = $xml->ownerDocument;
-        }
-        $config = SEFAZ::getInstance()->getConfiguracao();
-        $config->verificaValidadeCertificado();
-
-        $adapter = new XmlseclibsAdapter();
-        $adapter->setPrivateKey($config->getCertificado()->getChavePrivada());
-        $adapter->setPublicKey($config->getCertificado()->getChavePublica());
-        $adapter->addTransform(AdapterInterface::ENVELOPED);
-        $adapter->addTransform(AdapterInterface::XML_C14N);
-        $adapter->sign($dom, 'infEvento');
-        return $dom;
-    }
-
-    /**
-     * Valida o documento após assinar
-     */
-    public function validar($dom)
-    {
-        $dom->loadXML($dom->saveXML());
-        $xsd_path = dirname(__DIR__) . '/Core/schema';
-        $xsd_file = $xsd_path . '/NFe/Cancelamento/v1.0.0/eventoCancNFe_v1.00.xsd';
-        if (!file_exists($xsd_file)) {
-            throw new \Exception(sprintf('O arquivo "%s" de esquema XSD não existe!', $xsd_file), 404);
-        }
-        // Enable user error handling
-        $save = libxml_use_internal_errors(true);
-        if ($dom->schemaValidate($xsd_file)) {
-            libxml_use_internal_errors($save);
-            return $dom;
-        }
-        $msg = [];
-        $errors = libxml_get_errors();
-        foreach ($errors as $error) {
-            $msg[] = 'Não foi possível validar o XML: ' . $error->message;
-        }
-        libxml_clear_errors();
-        libxml_use_internal_errors($save);
-        throw new ValidationException($msg);
+        $version = $this->getLoaderVersion();
+        $loader = $this->getLoader($version);
+        $envio->setConteudo($loader->getNode($version)->ownerDocument);
+        $domResponse = $envio->envia();
+        $loader->loadNode($domResponse->documentElement, '', $version);
+        return $this;
     }
 }

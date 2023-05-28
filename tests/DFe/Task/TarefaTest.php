@@ -4,11 +4,9 @@ namespace DFe\Task;
 
 class TarefaTest extends \PHPUnit\Framework\TestCase
 {
-    private $sefaz;
-
     protected function setUp(): void
     {
-        $this->sefaz = \DFe\Core\SEFAZTest::createSEFAZ();
+        \DFe\Core\SEFAZTest::createSEFAZ();
     }
 
     public function emptyPostFunction($soap_curl)

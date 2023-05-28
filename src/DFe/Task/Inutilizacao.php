@@ -14,6 +14,7 @@ namespace DFe\Task;
 use DFe\Core\Nota;
 use DFe\Core\SEFAZ;
 use DFe\Common\Util;
+use DFe\Core\NFe;
 use DFe\Util\AdapterInterface;
 use DFe\Util\XmlseclibsAdapter;
 use DFe\Exception\ValidationException;
@@ -262,9 +263,9 @@ class Inutilizacao extends Retorno
 
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement($name ?? 'inutNFe');
-        $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', Nota::PORTAL);
+        $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', NFe::PORTAL);
         $versao = $dom->createAttribute('versao');
-        $versao->value = Nota::VERSAO;
+        $versao->value = NFe::VERSAO;
         $element->appendChild($versao);
 
         $info = $dom->createElement('infInut');
@@ -292,6 +293,7 @@ class Inutilizacao extends Retorno
         $outros = parent::getNode('', 'infInut');
         $element = $this->getNode('', 'retInutNFe');
         $dom = $element->ownerDocument;
+        /** @var \DOMElement */
         $info = $dom->getElementsByTagName('infInut')->item(0);
         $info->removeAttribute('Id');
         $remove_tags = ['tpAmb', 'xServ', 'xJust'];

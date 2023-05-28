@@ -137,15 +137,6 @@ class Status implements Node
         return $this;
     }
 
-    /**
-     * Gera um número único com 15 dígitos
-     * @return string Número com 15 dígitos
-     */
-    public static function genLote()
-    {
-        return substr(Util::padText(number_format(microtime(true) * 1000000, 0, '', ''), 15), 0, 15);
-    }
-
     public function toArray($recursive = false)
     {
         $status = [];

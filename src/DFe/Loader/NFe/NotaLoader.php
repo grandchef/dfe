@@ -9,8 +9,9 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-namespace DFe\Loader\NFe\V4;
+namespace DFe\Loader\NFe;
 
+use DFe\Core\NFe;
 use DFe\Core\Nota;
 use DFe\Core\SEFAZ;
 use DFe\Common\Util;
@@ -486,7 +487,7 @@ class NotaLoader implements Loader
 
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement($name ?? 'NFe');
-        $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', Nota::PORTAL);
+        $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', NFe::PORTAL);
 
         $info = $dom->createElement('infNFe');
         $id = $dom->createAttribute('Id');

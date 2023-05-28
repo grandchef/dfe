@@ -9,14 +9,14 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-namespace DFe\Loader\CFe\V008;
+namespace DFe\Loader\CFe;
 
 use DOMDocument;
 use DFe\Common\Util;
 use DFe\Common\Loader;
+use DFe\Entity\Pessoa;
 use DFe\Entity\Emitente;
 use DFe\Entity\Endereco;
-use DFe\Entity\Pessoa;
 
 /**
  * Classe base para preenchimento de informações de pessoas físicas e

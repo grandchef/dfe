@@ -2,15 +2,13 @@
 
 namespace DFe\Task;
 
-use DFe\Core\Nota;
+use Exception;
 
 class EventoTest extends \PHPUnit\Framework\TestCase
 {
-    private $sefaz;
-
     protected function setUp(): void
     {
-        $this->sefaz = \DFe\Core\SEFAZTest::createSEFAZ();
+        \DFe\Core\SEFAZTest::createSEFAZ();
     }
 
     public static function createEvento($nota)
@@ -67,13 +65,12 @@ class EventoTest extends \PHPUnit\Framework\TestCase
         \DFe\Common\CurlSoap::setPostFunction([$this, 'registradoPostFunction']);
         try {
             $evento = self::createEvento($nota);
-            $dom = $evento->getNode()->ownerDocument;
-            $dom = $evento->assinar($dom);
-            $retorno = $evento->envia($dom);
+            $evento->envia();
+            $retorno = $evento->getInformacao();
             $evento->fromArray($evento);
             $evento->fromArray(null);
             $evento->fromArray($evento->toArray());
-            $dom = $evento->addInformacao($dom);
+            $dom = $evento->getDocumento();
         } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
         }
@@ -98,31 +95,13 @@ class EventoTest extends \PHPUnit\Framework\TestCase
         \DFe\Common\CurlSoap::setPostFunction([$this, 'rejeitadoPostFunction']);
         try {
             $evento = self::createEvento($nota);
-            $dom = $evento->getNode()->ownerDocument;
-            $dom = $evento->assinar($dom);
-            $dom = $evento->validar($dom);
-            $retorno = $evento->envia($dom);
+            $evento->envia();
+            $retorno = $evento->getInformacao();
         } finally {
             \DFe\Common\CurlSoap::setPostFunction(null);
         }
         $this->assertInstanceOf('\\DFe\\Task\\Evento', $retorno);
         $this->assertEquals('573', $retorno->getStatus());
-    }
-
-    public function testNormalization()
-    {
-        $evento = new Evento();
-        $evento->setEmail('email@email.com');
-        $evento->setModelo('65');
-        $this->assertEquals(Nota::MODELO_NFCE, $evento->getModelo());
-        $this->assertEquals('65', $evento->getModelo(true));
-        $evento->setModelo('55');
-        $this->assertEquals(Nota::MODELO_NFE, $evento->getModelo());
-        $this->assertEquals('55', $evento->getModelo(true));
-        $evento->setModelo('50');
-        $this->assertEquals('50', $evento->getModelo(true));
-        $evento->fromArray($evento);
-        $this->assertEquals('email@email.com', $evento->getEmail(true));
     }
 
     public function testEventoInvalido()
@@ -131,17 +110,8 @@ class EventoTest extends \PHPUnit\Framework\TestCase
         $nota = $data['nota'];
         $evento = self::createEvento($nota);
         $evento->setAmbiente('Produção');
-        $dom = $evento->assinar();
-        $this->expectException('\Exception');
-        $dom = $evento->validar($dom);
-    }
-
-    public function testEventoSemInformacao()
-    {
-        $data = \DFe\Core\NFCeTest::loadNFCeValidada();
-        $nota = $data['nota'];
-        $evento = self::createEvento($nota);
-        $this->expectException('\Exception');
-        $dom = $evento->addInformacao(new \DOMDocument());
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Falha ao obter o serviço da SEFAZ para o ambiente "Produção"');
+        $evento->envia();
     }
 }

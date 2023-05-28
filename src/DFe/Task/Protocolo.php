@@ -15,6 +15,7 @@ use DOMElement;
 use DOMDocument;
 use DFe\Core\Nota;
 use DFe\Common\Util;
+use DFe\Core\NFe;
 
 /**
  * Protocolo de autorização da nota, é retornado pela autorização, recibo
@@ -295,7 +296,7 @@ class Protocolo extends Retorno
         $dom = $info->ownerDocument;
         $element = $dom->createElement($name ?? 'protNFe');
         $versao = $dom->createAttribute('versao');
-        $versao->value = Nota::VERSAO;
+        $versao->value = NFe::VERSAO;
         $element->appendChild($versao);
 
         $id = $dom->createAttribute('Id');

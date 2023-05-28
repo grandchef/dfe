@@ -306,6 +306,9 @@ class SEFAZ
     /**
      * Consulta se as notas existem e cancela ou inutiliza seus números
      * Também processa pedido de inutilização e cancelamento de notas
+     *
+     * @param Tarefa[] $tarefas
+     *
      * @return int quantidade de tarefas executadas com sucesso
      */
     public function executa($tarefas)
@@ -328,8 +331,8 @@ class SEFAZ
                         break;
                     default:
                         $nota = $tarefa->getNota();
-                        $this->despacha($nota, $save_dom, $retorno);
-                        $evento->onNotaCompleto($nota, $save_dom);
+                        $this->despacha($nota, $dom, $retorno);
+                        $evento->onNotaCompleto($nota, $dom);
                 }
                 $evento->onTarefaExecutada($tarefa, $retorno);
                 $i++;

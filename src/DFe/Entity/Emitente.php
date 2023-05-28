@@ -12,8 +12,8 @@
 namespace DFe\Entity;
 
 use DFe\Common\Node;
-use DFe\Loader\NFe\V4\EmitenteLoader;
-use DFe\Loader\CFe\V008\EmitenteLoader as CFeEmitenteLoader;
+use DFe\Loader\NFe\EmitenteLoader;
+use DFe\Loader\CFe\EmitenteLoader as CFeEmitenteLoader;
 
 /**
  * Empresa que irá emitir as notas fiscais

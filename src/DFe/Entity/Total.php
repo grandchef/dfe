@@ -14,8 +14,8 @@ namespace DFe\Entity;
 use DOMElement;
 use DFe\Common\Util;
 use DFe\Common\Node;
-use DFe\Loader\NFe\V4\TotalLoader;
-use DFe\Loader\CFe\V008\TotalLoader as CFeTotalLoader;
+use DFe\Loader\NFe\TotalLoader;
+use DFe\Loader\CFe\TotalLoader as CFeTotalLoader;
 
 /**
  * Dados dos totais da NF-e e do produto

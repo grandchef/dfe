@@ -16,10 +16,26 @@ namespace DFe\Core;
  */
 class NFe extends Nota
 {
+    /**
+     * Versão da nota fiscal
+     */
+    public const VERSAO = '4.00';
+
+    /**
+     * Portal da nota fiscal
+     */
+    public const PORTAL = 'http://www.portalfiscal.inf.br/nfe';
+
     public function __construct($nfe = [])
     {
         parent::__construct($nfe);
         $this->setModelo(self::MODELO_NFE);
+    }
+
+    public function getLoaderVersion(): string
+    {
+        $version = $this->getVersao() ?? self::VERSAO;
+        return "NFe@{$version}";
     }
 
     public function toArray($recursive = false)

@@ -9,8 +9,9 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-namespace DFe\Loader\CFe\V008;
+namespace DFe\Loader\CFe;
 
+use DFe\Core\CFe;
 use DFe\Core\Nota;
 use DFe\Common\Util;
 use DFe\Entity\Total;
@@ -26,11 +27,6 @@ use DFe\Entity\Destinatario;
  */
 class NotaLoader implements Loader
 {
-    /**
-     * Versão da nota fiscal
-     */
-    public const VERSAO = '0.08';
-
     /**
      * Portal da nota fiscal
      */
@@ -452,7 +448,7 @@ class NotaLoader implements Loader
 
         $info = $dom->createElement('infCFe');
         $versao = $dom->createAttribute('versaoDadosEnt');
-        $versao->value = self::VERSAO;
+        $versao->value = CFe::VERSAO;
         $info->appendChild($versao);
 
         $ident = $dom->createElement('ide');

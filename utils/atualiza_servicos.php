@@ -2,8 +2,8 @@
 error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 require_once(__DIR__ . '/../vendor/autoload.php');
 
-use DFe\Core\Nota;
 use Curl\Curl;
+use DFe\Core\NFe;
 
 function downloadServicesNFe($url)
 {
@@ -118,7 +118,7 @@ function downloadServicesNFCe($url)
     $query = $xpath->query('//tbody');
     foreach ($query as $node) {
         $caption = $node->getElementsByTagName('td');
-        $estado_index = $i == 0? 4: 0;
+        $estado_index = $i == 0 ? 4 : 0;
         $local = trim($caption->item($estado_index)->nodeValue);
         $amazonas = preg_replace('/[^A-Z]/i', '', $local);
         if ($amazonas == 'Amazonas') {
@@ -138,7 +138,7 @@ function downloadServicesNFCe($url)
             $versao_serv = trim($td->item(1)->nodeValue);
             $url_serv = trim($td->item(2)->nodeValue);
             $versao_serv = preg_replace('/[\s]/i', '', $versao_serv);
-            $versoes = empty($versao_serv) ? []: explode('/', $versao_serv);
+            $versoes = empty($versao_serv) ? [] : explode('/', $versao_serv);
             foreach ($versoes as $versao) {
                 $versao = trim($versao);
                 if (!isset($info[$versao])) {
@@ -191,14 +191,14 @@ function converteServicos($nota, $nome)
             }
             if (!isset($emissao[$estado['uf']])) {
                 $emissao[$estado['uf']] = [
-                    'versao' => Nota::VERSAO,
+                    'versao' => NFe::VERSAO,
                     $nome => [],
                 ];
                 if (!in_array($estado['uf'], ['SVCAN', 'SVCRS', 'AN'])) {
                     $emissao[$estado['uf']]['nfce'] = [];
                 }
             }
-            $versao = $estado['versoes'][Nota::VERSAO];
+            $versao = $estado['versoes'][NFe::VERSAO];
             if (is_null($versao)) {
                 continue;
             }
@@ -259,20 +259,20 @@ function converteServicos($nota, $nome)
         }
         foreach ($info['outros']['estados'] as $estado) {
             $normal[$estado] = [
-                'versao' => Nota::VERSAO,
+                'versao' => NFe::VERSAO,
                 $nome => ['base' => $info['outros']['servico']]
             ];
         }
         foreach ($info['consulta']['demais'] as $estado) {
             $normal[$estado] = [
-                'versao' => Nota::VERSAO,
+                'versao' => NFe::VERSAO,
                 $nome => ['base' => $info['consulta']['servico']]
             ];
         }
         foreach ($info['contingencia'] as $row) {
             foreach ($row['estados'] as $estado) {
                 $contingencia[$estado] = [
-                    'versao' => Nota::VERSAO,
+                    'versao' => NFe::VERSAO,
                     $nome => ['base' => $row['servico']],
                 ];
             }
@@ -303,7 +303,7 @@ foreach ($url as $key => $value) {
 }
 $nfce_data = converteServicos($nfce, 'nfce');
 $data = array_merge_recursive($nfe_data, $nfce_data);
-$data = json_encode($data, JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES);
-$outfile = $dest_folder.'/servicos.json';
-echo 'Writing '.$outfile."\n";
+$data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+$outfile = $dest_folder . '/servicos.json';
+echo 'Writing ' . $outfile . "\n";
 file_put_contents($outfile, $data);

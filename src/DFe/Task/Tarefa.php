@@ -93,6 +93,8 @@ class Tarefa
      * Agente que obteve ou vai obter a resposta, podendo ser: pedido de
      * inutilização(NF\Inutilizacao), recibo(NF\Recibo) ou pedido de
      * cancelamento(NF\Evento)
+     *
+     * @return Inutilizacao|Evento|Situacao
      */
     public function getAgente()
     {
@@ -168,8 +170,8 @@ class Tarefa
      */
     public function executa()
     {
-        if (is_null($this->getID())) {
-            $this->setID(Status::genLote());
+        if (!is_null($this->getNota())) {
+            $this->setID($this->getNota()->getID());
         }
         $retorno = null;
         switch ($this->getAcao()) {
@@ -193,19 +195,15 @@ class Tarefa
         $evento = $this->getAgente();
         if (is_null($evento)) {
             if (is_null($nota)) {
-                throw new \Exception(
-                    'A nota não foi informada na tarefa de cancelamento "' . $this->getID() . '"',
-                    404
-                );
+                throw new \Exception('A nota não foi informada na tarefa de cancelamento', 404);
             }
             if (is_null($nota->getProtocolo())) {
-                throw new \Exception('A nota não possui protocolo de autorização para o cancelamento "' .
-                    $this->getID() . '"', 404);
+                throw new \Exception('A nota "' . $this->getID() .
+                    '" não possui protocolo de autorização para o cancelamento', 404);
             }
             $evento = new Evento();
             $evento->setData(time());
-            $evento->setOrgao($nota->getEmitente()->getEndereco()->
-                getMunicipio()->getEstado()->getUF());
+            $evento->setOrgao($nota->getEmitente()->getEndereco()->getMunicipio()->getEstado()->getUF());
             $evento->setJustificativa($nota->getJustificativa());
             $this->setAgente($evento);
         } elseif (!($evento instanceof Evento)) {
@@ -220,14 +218,11 @@ class Tarefa
             }
             $evento->setChave($nota->getID());
         }
-        $dom = $evento->getNode()->ownerDocument;
-        $dom = $evento->assinar($dom);
-        $retorno = $evento->envia($dom);
-        if ($retorno->isCancelado()) {
-            $dom = $evento->addInformacao($dom);
-            $this->setDocumento($dom);
+        $evento->envia();
+        if ($evento->getInformacao()->isCancelado()) {
+            $this->setDocumento($evento->getDocumento());
         }
-        return $retorno;
+        return $evento->getInformacao();
     }
 
     private function inutiliza()
@@ -236,10 +231,7 @@ class Tarefa
         $inutilizacao = $this->getAgente();
         if (is_null($inutilizacao)) {
             if (is_null($nota)) {
-                throw new \Exception(
-                    'A nota não foi informada na tarefa de inutilização "' . $this->getID() . '"',
-                    404
-                );
+                throw new \Exception('A nota não foi informada na tarefa de inutilização', 404);
             }
             $inutilizacao = new Inutilizacao();
             $inutilizacao->setAno(date('Y'));
@@ -253,8 +245,7 @@ class Tarefa
             $inutilizacao->setSerie($nota->getSerie());
             $inutilizacao->setInicio($nota->getNumero());
             $inutilizacao->setFinal($nota->getNumero());
-            $inutilizacao->setUF($nota->getEmitente()->getEndereco()->
-                getMunicipio()->getEstado()->getUF());
+            $inutilizacao->setUF($nota->getEmitente()->getEndereco()->getMunicipio()->getEstado()->getUF());
             $inutilizacao->setAmbiente($nota->getAmbiente());
             $inutilizacao->setModelo($nota->getModelo());
         }
@@ -268,10 +259,11 @@ class Tarefa
     private function consulta()
     {
         $nota = $this->getNota();
+        /** @var Situacao|Recibo */
         $agente = $this->getAgente();
         if (is_null($agente)) {
             if (is_null($nota)) {
-                throw new \Exception('A nota não foi informada na tarefa de consulta "' . $this->getID() . '"', 404);
+                throw new \Exception('A nota não foi informada na tarefa de consulta', 404);
             }
             $agente = new Situacao();
             $agente->setChave($nota->getID());
@@ -285,13 +277,7 @@ class Tarefa
         }
         $retorno = $agente->consulta($this->getNota());
         if ($agente->isCancelado()) {
-            // TODO: carregar assinatura do XML para evitar usar outro certificado
-            $dom = $retorno->assinar();
-            $dom = $retorno->validar($dom);
-            // $dom = $retorno->getNode()->ownerDocument; // descomentar essa linha quando implementar
-            // TODO: Fim do problema de assinatura
-            $dom = $retorno->addInformacao($dom);
-            $this->setDocumento($dom);
+            $this->setDocumento($retorno->getDocumento());
             $retorno = $retorno->getInformacao();
         }
         return $retorno;

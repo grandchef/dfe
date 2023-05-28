@@ -13,8 +13,8 @@ namespace DFe\Entity;
 
 use DFe\Common\Node;
 use DFe\Common\Util;
-use DFe\Loader\NFe\V4\PagamentoLoader;
-use DFe\Loader\CFe\V008\PagamentoLoader as CFePagamentoLoader;
+use DFe\Loader\NFe\PagamentoLoader;
+use DFe\Loader\CFe\PagamentoLoader as CFePagamentoLoader;
 
 class Pagamento implements Node
 {

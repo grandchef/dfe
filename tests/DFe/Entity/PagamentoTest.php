@@ -2,7 +2,7 @@
 
 namespace DFe\Entity;
 
-use DFe\Loader\NFe\V4\PagamentoLoader;
+use DFe\Loader\NFe\PagamentoLoader;
 
 class PagamentoTest extends \PHPUnit\Framework\TestCase
 {

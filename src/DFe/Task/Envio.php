@@ -15,8 +15,11 @@ use DOMDocument;
 use DFe\Core\Nota;
 use DFe\Core\SEFAZ;
 use DFe\Common\CurlSoap;
-use DFe\Loader\NFe\V4\Task\EnvioLoader;
-use DFe\Loader\CFe\V008\Task\EnvioLoader as CFeEnvioLoader;
+use DFe\Core\CFe;
+use DFe\Core\NFCe;
+use DFe\Core\NFe;
+use DFe\Loader\NFe\Task\EnvioLoader;
+use DFe\Loader\CFe\Task\EnvioLoader as CFeEnvioLoader;
 
 /**
  * Envia requisições para os servidores da SEFAZ
@@ -195,7 +198,13 @@ class Envio
         if (is_array($url) && isset($url['versao'])) {
             return $url['versao'];
         }
-        return Nota::VERSAO;
+        if ($this->getModelo() === Nota::MODELO_CFE) {
+            return CFe::VERSAO;
+        }
+        if ($this->getModelo() === Nota::MODELO_NFCE) {
+            return NFCe::VERSAO;
+        }
+        return NFe::VERSAO;
     }
 
     /**
@@ -205,11 +214,11 @@ class Envio
     public function getServiceInfo()
     {
         $config = SEFAZ::getInstance()->getConfiguracao();
-        $db = $config->getBanco();
-        $estado = $config->getEmitente()->getEndereco()->getMunicipio()->getEstado();
         if ($this->getModelo() === Nota::MODELO_CFE) {
             return $config->getUrlSat() . '/' . $this->getServico();
         }
+        $db = $config->getBanco();
+        $estado = $config->getEmitente()->getEndereco()->getMunicipio()->getEstado();
         $info = $db->getInformacaoServico(
             $this->getEmissao(),
             $estado->getUF(),

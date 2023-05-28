@@ -9,7 +9,7 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-namespace DFe\Loader\CFe\V008\Task;
+namespace DFe\Loader\CFe\Task;
 
 use DFe\Common\Loader;
 use DFe\Task\Autorizacao;

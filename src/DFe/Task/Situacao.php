@@ -11,6 +11,7 @@
 
 namespace DFe\Task;
 
+use DFe\Core\NFe;
 use DFe\Core\Nota;
 use DFe\Common\Util;
 use DFe\Exception\ValidationException;
@@ -124,7 +125,8 @@ class Situacao extends Retorno
             return $protocolo;
         } elseif ($this->isCancelado()) {
             $evento = new Evento();
-            $evento->loadStatusNode($resp->documentElement, self::TAG_RETORNO);
+            $evento->setModelo($envio->getModelo());
+            $evento->setVersao($envio->getVersao());
             $evento->loadNode($resp->documentElement);
             return $evento;
         }
@@ -150,9 +152,9 @@ class Situacao extends Retorno
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $element = $dom->createElement($name ?? 'consSitNFe');
-        $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', Nota::PORTAL);
+        $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', NFe::PORTAL);
         $versao = $dom->createAttribute('versao');
-        $versao->value = Nota::VERSAO;
+        $versao->value = NFe::VERSAO;
         $element->appendChild($versao);
 
         Util::appendNode($element, 'tpAmb', $this->getAmbiente(true));

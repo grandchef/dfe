@@ -9,7 +9,7 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-namespace  DFe\Loader\CFe\V008;
+namespace  DFe\Loader\CFe;
 
 use DFe\Common\Util;
 use DFe\Common\Loader;

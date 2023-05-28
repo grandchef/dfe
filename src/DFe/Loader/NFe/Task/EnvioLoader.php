@@ -9,9 +9,11 @@
  * For a copy, see <https://opensource.org/licenses/MIT>.
  */
 
-namespace DFe\Loader\CFe\V008\Task;
+namespace DFe\Loader\NFe\Task;
 
+use DFe\Core\NFe;
 use DFe\Task\Envio;
+use DFe\Common\Util;
 use DFe\Common\Loader;
 
 /**
@@ -24,19 +26,40 @@ class EnvioLoader implements Loader
     }
 
     /**
+     * Tipo de serviço a ser executado
+     *
+     * @return mixed servico do Envio
+     */
+    public function getServico()
+    {
+        $url = $this->envio->getServiceInfo();
+        if (is_array($url) && isset($url['servico'])) {
+            return NFe::PORTAL . '/wsdl/' . $url['servico'];
+        }
+        throw new \Exception('A ação do serviço "' . $this->envio->getServico() . '" não foi configurada', 404);
+    }
+
+    /**
      * Cria um nó XML do envio de acordo com o leiaute da NFe
      *
      * @param  string $name Nome do nó que será criado
      */
     public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
+        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $element = $dom->createElement($name ?? 'nfeDadosMsg');
+        $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', $this->getServico());
+        Util::appendNode($element, 'Conteudo', 0);
+
+        $dom->appendChild($element);
+
         if ($this->envio->getConteudo() instanceof \DOMDocument) {
-            $dom = $this->envio->getConteudo();
+            $xml = $this->envio->getConteudo()->saveXML($this->envio->getConteudo()->documentElement);
         } else {
             $xml = $this->envio->getConteudo();
-            $dom = new \DOMDocument('1.0', 'UTF-8');
-            $dom->loadXML($xml);
         }
+        $xml = str_replace('<Conteudo>0</Conteudo>', $xml, $dom->saveXML($dom->documentElement));
+        $dom->loadXML($xml);
         return $dom->documentElement;
     }
 

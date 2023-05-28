@@ -14,9 +14,9 @@ namespace DFe\Task;
 use DOMDocument;
 use DFe\Core\Nota;
 use DFe\Core\SEFAZ;
-use DFe\Loader\NFe\V4\Task\LoteLoader;
-use DFe\Loader\CFe\V008\Task\LoteLoader as CFeLoteLoader;
-use DFe\Loader\CFe\V008\Task\AutorizacaoLoader as CFeAutorizacaoLoader;
+use DFe\Loader\NFe\Task\LoteLoader;
+use DFe\Loader\CFe\Task\LoteLoader as CFeLoteLoader;
+use DFe\Loader\CFe\Task\AutorizacaoLoader as CFeAutorizacaoLoader;
 
 class Autorizacao extends Retorno
 {

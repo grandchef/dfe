@@ -106,12 +106,7 @@ class SituacaoTest extends \PHPUnit\Framework\TestCase
         }
         $this->assertTrue($situacao->isCancelado());
         $this->assertInstanceOf('\\DFe\\Task\\Evento', $retorno);
-        // TODO: carregar assinatura do XML para evitar usar outro certificado
-        $dom = $retorno->assinar();
-        $dom = $retorno->validar($dom);
-        // $dom = $retorno->getNode()->ownerDocument; // descomentar essa linha quando implementar
-        // TODO: Fim do problema de assinatura
-        $dom = $retorno->addInformacao($dom);
+        $dom = $retorno->getDocumento();
 
         if (getenv('TEST_MODE') == 'external') {
             $dom->formatOutput = true;

@@ -20,6 +20,11 @@ use DFe\Common\Util;
 class CFe extends Nota
 {
     /**
+     * Versão da nota fiscal
+     */
+    public const VERSAO = '0.08';
+
+    /**
      * Dados para gerar o QR-Code da CFe
      */
     private $qrcode_data;
@@ -85,6 +90,12 @@ class CFe extends Nota
         parent::fromArray($nfce);
         $this->setQRCodeData($nfce['qrcode_data'] ?? null);
         return $this;
+    }
+
+    public function getLoaderVersion(): string
+    {
+        $version = $this->getVersao() ?: self::VERSAO;
+        return "CFe@{$version}";
     }
 
     /**

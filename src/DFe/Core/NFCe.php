@@ -14,13 +14,18 @@ namespace DFe\Core;
 use DOMElement;
 use DFe\Common\Util;
 use DFe\Entity\Imposto;
-use DFe\Loader\NFe\V4\NotaLoader;
+use DFe\Loader\NFe\NotaLoader;
 
 /**
  * Classe para validação da nota fiscal eletrônica do consumidor
  */
 class NFCe extends Nota
 {
+    /**
+     * Versão da nota fiscal
+     */
+    public const VERSAO = '4.00';
+
     /**
      * Versão do QRCode
      */
@@ -224,6 +229,12 @@ class NFCe extends Nota
         $urlchave->appendChild($data);
         $element->appendChild($urlchave);
         return $element;
+    }
+
+    public function getLoaderVersion(): string
+    {
+        $version = $this->getVersao() ?? self::VERSAO;
+        return "NFe@{$version}";
     }
 
     /**

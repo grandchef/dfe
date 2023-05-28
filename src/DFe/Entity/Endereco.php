@@ -12,8 +12,8 @@
 namespace DFe\Entity;
 
 use DFe\Common\Node;
-use DFe\Loader\NFe\V4\EnderecoLoader;
-use DFe\Loader\CFe\V008\EnderecoLoader as CFeEnderecoLoader;
+use DFe\Loader\NFe\EnderecoLoader;
+use DFe\Loader\CFe\EnderecoLoader as CFeEnderecoLoader;
 
 /**
  * Informação de endereço que será informado nos clientes e no emitente

@@ -46,7 +46,7 @@
             "phpunit"
         ],
         "cover": [
-            "phpunit --coverage-html storage/coverage"
+            "XDEBUG_MODE=coverage phpunit --coverage-html storage/coverage"
         ],
         "psr-fix": [
             "phpcbf --standard=PSR12 src/DFe/ tests/"

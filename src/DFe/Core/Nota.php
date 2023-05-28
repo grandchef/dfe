@@ -13,10 +13,10 @@ namespace DFe\Core;
 
 use DOMDocument;
 use DFe\Common\Node;
-use DFe\Entity\Total;
-use DFe\Common\Loader;
 use DFe\Common\Util;
+use DFe\Entity\Total;
 use DFe\Entity\Caixa;
+use DFe\Common\Loader;
 use DFe\Task\Protocolo;
 use DFe\Entity\Imposto;
 use DFe\Entity\Produto;
@@ -27,10 +27,10 @@ use DFe\Entity\Responsavel;
 use DFe\Entity\Destinatario;
 use DFe\Entity\Intermediador;
 use DFe\Util\AdapterInterface;
+use DFe\Loader\NFe\NotaLoader;
 use DFe\Util\XmlseclibsAdapter;
-use DFe\Loader\NFe\V4\NotaLoader;
 use DFe\Exception\ValidationException;
-use DFe\Loader\CFe\V008\NotaLoader as CFeNotaLoader;
+use DFe\Loader\CFe\NotaLoader as CFeNotaLoader;
 
 /**
  * Classe base para a formação da nota fiscal
@@ -38,19 +38,9 @@ use DFe\Loader\CFe\V008\NotaLoader as CFeNotaLoader;
 abstract class Nota implements Node
 {
     /**
-     * Versão da nota fiscal
-     */
-    public const VERSAO = '4.00';
-
-    /**
      * Versão do aplicativo gerador da nota
      */
     public const APP_VERSAO = '1.0';
-
-    /**
-     * Portal da nota fiscal
-     */
-    public const PORTAL = 'http://www.portalfiscal.inf.br/nfe';
 
     /**
      * Código do modelo do Documento Fiscal. 55 = NF-e; 59 = CFe; 65 = NFC-e.
@@ -1386,15 +1376,7 @@ abstract class Nota implements Node
         return $total;
     }
 
-    public function getLoaderVersion(): string
-    {
-        if ($this->getModelo() === self::MODELO_CFE) {
-            $version = $this->getVersao() ?: CFeNotaLoader::VERSAO;
-            return "CFe@{$version}";
-        }
-        $version = $this->getVersao() ?? self::VERSAO;
-        return "NFe@{$version}";
-    }
+    abstract public function getLoaderVersion(): string;
 
     public function getLoader(string $version = ''): Loader
     {
@@ -1472,9 +1454,9 @@ abstract class Nota implements Node
         $dom->loadXML($dom->saveXML());
         $xsd_path = __DIR__ . '/schema';
         if (is_null($this->getProtocolo())) {
-            $xsd_file = $xsd_path . '/NFe/v4.0.0/nfe_v' . self::VERSAO . '.xsd';
+            $xsd_file = $xsd_path . '/NFe/v4.0.0/nfe_v' . NFe::VERSAO . '.xsd';
         } else {
-            $xsd_file = $xsd_path . '/NFe/v4.0.0/procNFe_v' . self::VERSAO . '.xsd';
+            $xsd_file = $xsd_path . '/NFe/v4.0.0/procNFe_v' . NFe::VERSAO . '.xsd';
         }
         if (!file_exists($xsd_file)) {
             throw new \Exception(sprintf('O arquivo "%s" de esquema XSD não existe!', $xsd_file), 404);
@@ -1508,9 +1490,9 @@ abstract class Nota implements Node
         $notae_xml = $dom->saveXML($notae);
 
         $element = $dom->createElement('nfeProc');
-        $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', self::PORTAL);
+        $element->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', NFe::PORTAL);
         $versao = $dom->createAttribute('versao');
-        $versao->value = self::VERSAO;
+        $versao->value = NFe::VERSAO;
         $element->appendChild($versao);
         $dom->removeChild($notae);
         // Corrige xmlns:default
