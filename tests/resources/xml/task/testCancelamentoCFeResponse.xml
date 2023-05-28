@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<CFeCanc>
+  <infCFe Id="CFe35161261099008000141599000026310003038725260" chCanc="CFe35161261099008000141599000026310003024947916" versao="0.07">
+    <dEmi>20161220</dEmi>
+    <hEmi>095111</hEmi>
+    <ide>
+      <cUF>35</cUF>
+      <cNF>872526</cNF>
+      <mod>59</mod>
+      <nserieSAT>900002631</nserieSAT>
+      <nCFe>000303</nCFe>
+      <dEmi>20161220</dEmi>
+      <hEmi>095203</hEmi>
+      <cDV>0</cDV>
+      <CNPJ>08427847000169</CNPJ>
+      <signAC>SGR-SAT SISTEMA DE GESTAO E RETAGUARDA DO SAT</signAC>
+      <assinaturaQRCODE>XbWIYJSkzTJyixs9ZHOn07dUFuxFFZYAd/slcOj2WjTUqwDHVAYk5v2efko6/0tE3rtEJ3Zm1vAyoXeG12i+OYJaykoGzUdyTtSkwZdT1FnPoOkHzPipR+Be7GmaxYBkWD/ytoGd6bApFvlWbxOGqmW1Ngo4mIr4Rn14TL31tGXz4HAuTCnIP/bKkQlJ8R1d1+4SB06DbEM/8QC3mFLzKTH2T7rEtqF7KTLdIrovzyeIAL6ci6AebB/wpna9KcfWiC2zoAc0rsp08zQUe5B+8kE6KPjPWvQkSOndhIdxLOt45v7rsl72J0qjIVzSSCkj3UtCitAmorkrfCtKTWi/WA==</assinaturaQRCODE>
+      <numeroCaixa>001</numeroCaixa>
+    </ide>
+    <emit>
+      <CNPJ>61099008000141</CNPJ>
+      <xNome>DIMAS DE MELO PIMENTA SISTEMAS DE PONTO E ACESSO LTDA</xNome>
+      <xFant>DIMEP</xFant>
+      <enderEmit>
+        <xLgr>AVENIDA MOFARREJ</xLgr>
+        <nro>840</nro>
+        <xCpl>908</xCpl>
+        <xBairro>VL. LEOPOLDINA</xBairro>
+        <xMun>SAO PAULO</xMun>
+        <CEP>05311000</CEP>
+      </enderEmit>
+      <IE>111111111111</IE>
+      <IM>12345</IM>
+    </emit>
+    <dest/>
+    <total>
+      <vCFe>4.00</vCFe>
+    </total>
+  </infCFe>
+  <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+    <SignedInfo>
+      <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+      <SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+      <Reference URI="#CFe35161261099008000141599000026310003038725260">
+        <Transforms>
+          <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+          <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+        </Transforms>
+        <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+        <DigestValue>tzvG+236ZjAEMmwraPQoLGEBXNYJ3YAWoJ+5C4NXzdc=</DigestValue>
+      </Reference>
+    </SignedInfo>
+    <SignatureValue>ciPsCbdN8RHYJ13BqkYY+IiR3DePjCfehK8XBukyMvCsBVkNrM++nQyIgTWeAXhYuCWFsoX3BHlGLAvHQPG1xqnynqh2UFQmgxuh32mHUyJu/Q4HF9OYzA6frylWMSfmZzqM64DHmXhhDr2YAggFneRDdBZy9qOYAewZux96vbeqHNrc0SHTmmWwDjn4DkeFe5aOxgT8u1tMVQIJWqygbWwrXW4wYb3Ool2JPJt7DIyvgpYbCGuokiB6w9Ewv/fHT8KK+S84lM02md/woEld4hI5B7lRb9mCWWR5T5OIx7JYqSkQtMc+vNRN+N/XkuWtq21EWRTnhgk3oAewOg+gBw==</SignatureValue>
+    <KeyInfo>
+      <X509Data>
+        <X509Certificate>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</X509Certificate>
+      </X509Data>
+    </KeyInfo>
+  </Signature>
+</CFeCanc>

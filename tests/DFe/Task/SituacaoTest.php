@@ -20,7 +20,7 @@ class SituacaoTest extends \PHPUnit\Framework\TestCase
             $soap_curl,
             $data,
             'task/testSituacaoSOAP.xml',
-            'task/testSituacaoAutorizadoReponseSOAP.xml'
+            'task/testSituacaoAutorizadoResponseSOAP.xml'
         );
     }
 
@@ -31,7 +31,7 @@ class SituacaoTest extends \PHPUnit\Framework\TestCase
             $soap_curl,
             $data,
             'task/testSituacaoSOAP.xml',
-            'task/testSituacaoInexistenteReponseSOAP.xml'
+            'task/testSituacaoInexistenteResponseSOAP.xml'
         );
     }
 
@@ -42,7 +42,7 @@ class SituacaoTest extends \PHPUnit\Framework\TestCase
             $soap_curl,
             $data,
             'task/testSituacaoSOAP.xml',
-            'task/testSituacaoCanceladoReponseSOAP.xml'
+            'task/testSituacaoCanceladoResponseSOAP.xml'
         );
     }
 

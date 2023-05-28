@@ -81,7 +81,7 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
             $url,
             $data,
             'testAutorizaSOAP.xml',
-            'testAutorizaAutorizadoReponseSOAP.xml'
+            'testAutorizaAutorizadoResponseSOAP.xml'
         );
     }
 
@@ -93,7 +93,7 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
             $url,
             $data,
             'testAutorizaSOAP.xml',
-            'testAutorizaRejeicaoReponseSOAP.xml'
+            'testAutorizaRejeicaoResponseSOAP.xml'
         );
     }
 
@@ -105,7 +105,7 @@ class AutorizacaoTest extends \PHPUnit\Framework\TestCase
             $url,
             $data,
             'testAutorizaSOAP.xml',
-            'testAutorizaProcessamentoReponseSOAP.xml'
+            'testAutorizaProcessamentoResponseSOAP.xml'
         );
     }
 

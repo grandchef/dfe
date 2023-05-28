@@ -2,6 +2,7 @@
 
 namespace DFe\Task;
 
+use DFe\Core\Nota;
 use Exception;
 
 class EventoTest extends \PHPUnit\Framework\TestCase
@@ -11,7 +12,12 @@ class EventoTest extends \PHPUnit\Framework\TestCase
         \DFe\Core\SEFAZTest::createSEFAZ();
     }
 
-    public static function createEvento($nota)
+    protected function tearDown(): void
+    {
+        \DFe\Common\CurlSoap::setPostFunction(null);
+    }
+
+    public static function createEvento(Nota $nota)
     {
         $evento = new Evento();
         $evento->setData(strtotime('2017-03-18T16:12:12+00:00'));
@@ -24,12 +30,23 @@ class EventoTest extends \PHPUnit\Framework\TestCase
         $evento->setIdentificador($nota->getEmitente()->getCNPJ());
         $evento->setNumero('141170000157685');
         $evento->setChave($nota->getID());
+        $evento->setCaixa($nota->getCaixa());
+        $evento->setResponsavel($nota->getResponsavel());
         return $evento;
     }
 
     public static function loadEventoRegistradoXML()
     {
         $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/task/testEventoRegistrado.xml';
+        $dom = new \DOMDocument();
+        $dom->preserveWhiteSpace = false;
+        $dom->load($xml_file);
+        return $dom;
+    }
+
+    public static function loadEventoCFeRegistradoXML()
+    {
+        $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/task/testCancelamentoCFeResponse.xml';
         $dom = new \DOMDocument();
         $dom->preserveWhiteSpace = false;
         $dom->load($xml_file);
@@ -43,7 +60,18 @@ class EventoTest extends \PHPUnit\Framework\TestCase
             $soap_curl,
             $data,
             'task/testEventoSOAP.xml',
-            'task/testEventoRegistradoReponseSOAP.xml'
+            'task/testEventoRegistradoResponseSOAP.xml'
+        );
+    }
+
+    public function registradoCFePostFunction($soap_curl, $url, $data)
+    {
+        \DFe\Common\CurlSoapTest::assertPostFunction(
+            $this,
+            $soap_curl,
+            $data,
+            'task/testCancelamentoCFe.xml',
+            'task/testCancelamentoCFeResponse.xml'
         );
     }
 
@@ -54,7 +82,7 @@ class EventoTest extends \PHPUnit\Framework\TestCase
             $soap_curl,
             $data,
             'task/testEventoSOAP.xml',
-            'task/testEventoRejeitadoReponseSOAP.xml'
+            'task/testEventoRejeitadoResponseSOAP.xml'
         );
     }
 
@@ -63,17 +91,15 @@ class EventoTest extends \PHPUnit\Framework\TestCase
         $data = \DFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
         \DFe\Common\CurlSoap::setPostFunction([$this, 'registradoPostFunction']);
-        try {
-            $evento = self::createEvento($nota);
-            $evento->envia();
-            $retorno = $evento->getInformacao();
-            $evento->fromArray($evento);
-            $evento->fromArray(null);
-            $evento->fromArray($evento->toArray());
-            $dom = $evento->getDocumento();
-        } finally {
-            \DFe\Common\CurlSoap::setPostFunction(null);
-        }
+
+        $evento = self::createEvento($nota);
+        $evento->envia();
+        $retorno = $evento->getInformacao();
+        $evento->fromArray($evento);
+        $evento->fromArray(null);
+        $evento->fromArray($evento->toArray());
+        $dom = $evento->getDocumento();
+
         $this->assertInstanceOf('\\DFe\\Task\\Evento', $retorno);
         $this->assertEquals('135', $retorno->getStatus());
         $this->assertEquals($nota->getID(), $retorno->getChave());
@@ -88,18 +114,40 @@ class EventoTest extends \PHPUnit\Framework\TestCase
         $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
     }
 
+    public function testEventoRegistradoCFe()
+    {
+        \DFe\Common\CurlSoap::setPostFunction([$this, 'registradoCFePostFunction']);
+
+        $xml_file = dirname(dirname(__DIR__)) . '/resources/xml/nota/testCFeResponse.xml';
+        $cfe = new \DFe\Core\CFe();
+        $cfe->load($xml_file);
+
+        $evento = self::createEvento($cfe);
+        $evento->envia();
+        $retorno = $evento->getInformacao();
+        $evento->fromArray($evento);
+        $evento->fromArray(null);
+        $evento->fromArray($evento->toArray());
+        $dom = $evento->getDocumento();
+
+        $this->assertInstanceOf('\\DFe\\Task\\Evento', $retorno);
+        $this->assertEquals('135', $retorno->getStatus());
+        $this->assertEquals($cfe->getID(), $retorno->getChave());
+
+        $dom_cmp = self::loadEventoCFeRegistradoXML();
+        $this->assertXmlStringEqualsXmlString($dom_cmp->saveXML(), $dom->saveXML());
+    }
+
     public function testEventoRejeitado()
     {
         $data = \DFe\Core\NFCeTest::loadNFCeValidada();
         $nota = $data['nota'];
         \DFe\Common\CurlSoap::setPostFunction([$this, 'rejeitadoPostFunction']);
-        try {
-            $evento = self::createEvento($nota);
-            $evento->envia();
-            $retorno = $evento->getInformacao();
-        } finally {
-            \DFe\Common\CurlSoap::setPostFunction(null);
-        }
+
+        $evento = self::createEvento($nota);
+        $evento->envia();
+        $retorno = $evento->getInformacao();
+
         $this->assertInstanceOf('\\DFe\\Task\\Evento', $retorno);
         $this->assertEquals('573', $retorno->getStatus());
     }

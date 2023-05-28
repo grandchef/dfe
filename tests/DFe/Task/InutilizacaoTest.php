@@ -36,7 +36,7 @@ class InutilizacaoTest extends \PHPUnit\Framework\TestCase
             $soap_curl,
             $data,
             'task/testInutilizaSOAP.xml',
-            'task/testInutilizaInutilizadoReponseSOAP.xml'
+            'task/testInutilizaInutilizadoResponseSOAP.xml'
         );
     }
 
@@ -47,7 +47,7 @@ class InutilizacaoTest extends \PHPUnit\Framework\TestCase
             $soap_curl,
             $data,
             'task/testInutilizaSOAP.xml',
-            'task/testInutilizaRejeicaoReponseSOAP.xml'
+            'task/testInutilizaRejeicaoResponseSOAP.xml'
         );
     }
 

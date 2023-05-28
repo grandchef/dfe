@@ -21,7 +21,7 @@ class ReciboTest extends \PHPUnit\Framework\TestCase
             $soap_curl,
             $data,
             'task/testReciboSOAP.xml',
-            'task/testReciboAutorizadoReponseSOAP.xml'
+            'task/testReciboAutorizadoResponseSOAP.xml'
         );
     }
 
@@ -32,7 +32,7 @@ class ReciboTest extends \PHPUnit\Framework\TestCase
             $soap_curl,
             $data,
             'task/testReciboSOAP.xml',
-            'task/testReciboRejeitadoReponseSOAP.xml'
+            'task/testReciboRejeitadoResponseSOAP.xml'
         );
     }
 
@@ -43,7 +43,7 @@ class ReciboTest extends \PHPUnit\Framework\TestCase
             $soap_curl,
             $data,
             'task/testReciboSOAP.xml',
-            'task/testReciboProcessamentoReponseSOAP.xml'
+            'task/testReciboProcessamentoResponseSOAP.xml'
         );
     }
 

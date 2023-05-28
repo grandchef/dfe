@@ -11,6 +11,8 @@
 
 namespace DFe\Task;
 
+use DFe\Core\Nota;
+
 class Tarefa
 {
     /**
@@ -62,6 +64,8 @@ class Tarefa
 
     /**
      * Nota que será processada se informado
+     *
+     * @return Nota
      */
     public function getNota()
     {
@@ -213,6 +217,8 @@ class Tarefa
             $evento->setAmbiente($nota->getAmbiente());
             $evento->setModelo($nota->getModelo());
             $evento->setIdentificador($nota->getEmitente()->getCNPJ());
+            $evento->setCaixa($nota->getCaixa());
+            $evento->setResponsavel($nota->getResponsavel());
             if (!is_null($nota->getProtocolo())) {
                 $evento->setNumero($nota->getProtocolo()->getNumero());
             }

@@ -12,7 +12,9 @@
 namespace DFe\Task;
 
 use DFe\Core\Nota;
+use DFe\Entity\Caixa;
 use DFe\Common\Loader;
+use DFe\Entity\Responsavel;
 use DFe\Loader\NFe\Task\EventoLoader;
 use DFe\Loader\CFe\Task\EventoLoader as CFeEventoLoader;
 
@@ -35,6 +37,20 @@ class Evento extends Retorno
 
     private $documento;
     private $informacao;
+
+    /**
+     * Caixa que realizou a venda
+     *
+     * @var Caixa
+     */
+    private $caixa;
+
+    /**
+     * Grupo de informações do responsável técnico pelo sistema
+     *
+     * @var Responsavel
+     */
+    private $responsavel;
 
     public function __construct($evento = [])
     {
@@ -251,6 +267,49 @@ class Evento extends Retorno
     }
 
     /**
+     * Caixa que realizou a venda
+     *
+     * @return Caixa|null
+     */
+    public function getCaixa()
+    {
+        return $this->caixa;
+    }
+
+    /**
+     * Altera o valor do Caixa para o informado no parâmetro
+     *
+     * @param Caixa $caixa
+     *
+     * @return self
+     */
+    public function setCaixa($caixa)
+    {
+        $this->caixa = $caixa;
+        return $this;
+    }
+
+    /**
+     * Grupo de informações do responsável técnico pelo sistema
+     * @return Responsavel|null responsável da Nota
+     */
+    public function getResponsavel()
+    {
+        return $this->responsavel;
+    }
+
+    /**
+     * Altera o valor do grupo de informações do responsável técnico pelo sistema
+     * @param Responsavel $responsavel novo valor para grupo de informações do responsável
+     * @return self
+     */
+    public function setResponsavel($responsavel)
+    {
+        $this->responsavel = $responsavel;
+        return $this;
+    }
+
+    /**
      * Informa se a identificação é um CNPJ
      */
     public function isCNPJ()
@@ -291,6 +350,8 @@ class Evento extends Retorno
         $evento['modelo'] = $this->getModelo();
         $evento['documento'] = $this->getDocumento();
         $evento['informacao'] = $this->getInformacao();
+        $evento['caixa'] = $this->getCaixa();
+        $evento['responsavel'] = $this->getResponsavel();
         return $evento;
     }
 
@@ -316,6 +377,8 @@ class Evento extends Retorno
         $this->setModelo($evento['modelo'] ?? null);
         $this->setDocumento($evento['documento'] ?? null);
         $this->setInformacao($evento['informacao'] ?? null);
+        $this->setCaixa($evento['caixa'] ?? null);
+        $this->setResponsavel($evento['responsavel'] ?? null);
         return $this;
     }
 

@@ -70,7 +70,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \DFe\Common\Event
             $url,
             $data,
             'testAutorizaSOAP.xml',
-            'testAutorizaAutorizadoReponseSOAP.xml'
+            'testAutorizaAutorizadoResponseSOAP.xml'
         );
     }
 
@@ -81,8 +81,8 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \DFe\Common\Event
             $soap_curl,
             $url,
             $data,
-            'testAutorizaCFeSOAP.xml',
-            'testAutorizaAutorizadoCFeReponseSOAP.xml'
+            'testCFe.xml',
+            'testCFeResponse.xml'
         );
     }
 
@@ -167,7 +167,7 @@ class SEFAZTest extends \PHPUnit\Framework\TestCase implements \DFe\Common\Event
             $soap_curl,
             $data,
             'task/testInutilizaSOAP.xml',
-            'task/testInutilizaInutilizadoReponseSOAP.xml'
+            'task/testInutilizaInutilizadoResponseSOAP.xml'
         );
     }
 
