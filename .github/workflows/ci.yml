@@ -41,14 +41,7 @@ jobs:
         run: composer analysis
 
       - name: Rodando PHPUnit
-        run: |
-          ls -l /etc/ssl/openssl.cnf
-          chmod o+w /etc/ssl/openssl.cnf || true
-          ls -l /etc/ssl/openssl.cnf
-          sed '/^default = default_sect/a legacy = legacy_sect' /etc/ssl/openssl.cnf > /tmp/openssl1.cnf
-          sed '/^\[default_sect\]/a activate = 1' /tmp/openssl1.cnf > /tmp/openssl.cnf
-          printf "[legacy_sect]\nactivate = 1" >> /tmp/openssl.cnf && cat /tmp/openssl.cnf > /etc/ssl/openssl.cnf
-          composer test
+        run: composer test
 
       - name: Enviando cobertura de código
         run: php vendor/bin/ocular code-coverage:upload --format=php-clover build/logs/clover.xml
