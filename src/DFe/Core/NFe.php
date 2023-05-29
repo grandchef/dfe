@@ -11,6 +11,9 @@
 
 namespace DFe\Core;
 
+use DFe\Common\Util;
+use DFe\Loader\NFe\NotaLoader;
+
 /**
  * Classe para validação da nota fiscal eletrônica
  */
@@ -30,6 +33,13 @@ class NFe extends Nota
     {
         parent::__construct($nfe);
         $this->setModelo(self::MODELO_NFE);
+    }
+
+    public function gerarID(): string
+    {
+        /** @var NotaLoader */
+        $loader = $this->getLoader();
+        return $loader->gerarID();
     }
 
     public function getLoaderVersion(): string

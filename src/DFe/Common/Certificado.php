@@ -13,6 +13,7 @@ namespace DFe\Common;
 
 use DFe\Common\Node;
 use DFe\Common\Util;
+use DFe\Util\XmlseclibsAdapter;
 
 /**
  * Certificado digital
@@ -248,6 +249,20 @@ class Certificado implements Node
         } elseif ($this->getExpiracao() < time()) {
             throw new \Exception('O certificado digital expirou', 500);
         }
+    }
+
+    /**
+     * Assina um dado com o certificado e retorna o base64 dele
+     *
+     * @throws \Exception quando o certificado estiver expirado ou não informado
+     */
+    public function assina(string $data): string
+    {
+        $this->requerValido();
+        $adapter = new XmlseclibsAdapter();
+        $adapter->setPrivateKey($this->getChavePrivada());
+        $adapter->setPublicKey($this->getChavePublica());
+        return $adapter->signData($data);
     }
 
     /**

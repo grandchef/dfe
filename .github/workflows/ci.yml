@@ -41,7 +41,11 @@ jobs:
         run: composer analysis
 
       - name: Rodando PHPUnit
-        run: composer test
+        run: |
+          sed -i '/^default = default_sect/a legacy = legacy_sect' /etc/ssl/openssl.cnf
+          sed -i '/^\[default_sect\]/a activate = 1' /etc/ssl/openssl.cnf
+          printf "[legacy_sect]\nactivate = 1" >> /etc/ssl/openssl.cnf
+          composer test
 
       - name: Enviando cobertura de código
         run: php vendor/bin/ocular code-coverage:upload --format=php-clover build/logs/clover.xml

@@ -11,6 +11,7 @@
 
 namespace DFe\Core;
 
+use Exception;
 use DOMElement;
 use DFe\Common\Util;
 
@@ -90,6 +91,11 @@ class CFe extends Nota
         parent::fromArray($nfce);
         $this->setQRCodeData($nfce['qrcode_data'] ?? null);
         return $this;
+    }
+
+    public function gerarID(): string
+    {
+        throw new Exception('A chave da CF-e é gerada pelo equipamento SAT');
     }
 
     public function getLoaderVersion(): string

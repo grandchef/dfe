@@ -231,6 +231,13 @@ class NFCe extends Nota
         return $element;
     }
 
+    public function gerarID(): string
+    {
+        /** @var NotaLoader */
+        $loader = $this->getLoader();
+        return $loader->gerarID();
+    }
+
     public function getLoaderVersion(): string
     {
         $version = $this->getVersao() ?? self::VERSAO;

@@ -652,7 +652,7 @@ abstract class Nota implements Node
     }
 
     /**
-     * Código do modelo do Documento Fiscal. 55 = NF-e; 65 = NFC-e.
+     * Código do modelo do Documento Fiscal. 55 = NF-e; 59 = CF-e; 65 = NFC-e.
      *
      * @return mixed modelo da Nota
      */
@@ -1376,6 +1376,7 @@ abstract class Nota implements Node
         return $total;
     }
 
+    abstract public function gerarID(): string;
     abstract public function getLoaderVersion(): string;
 
     public function getLoader(string $version = ''): Loader

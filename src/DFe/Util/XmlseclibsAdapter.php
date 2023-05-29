@@ -144,6 +144,23 @@ class XmlseclibsAdapter implements AdapterInterface
         }
     }
 
+    public function signData($data)
+    {
+        if (null === $this->privateKey) {
+            throw new RuntimeException(
+                'Missing private key. Use setPrivateKey to set one.'
+            );
+        }
+        $objKey = new XMLSecurityKey(
+            $this->keyAlgorithm,
+            array(
+                'type' => 'private',
+            )
+        );
+        $objKey->loadKey($this->privateKey);
+        return $objKey->signData($data);
+    }
+
     public function verify(DOMDocument $data)
     {
         $objKey = null;
@@ -236,7 +253,7 @@ class XmlseclibsAdapter implements AdapterInterface
 
         XMLSecEnc::staticLocateKeyInfo($objKey, $objDSig);
         $this->publicKey = $objKey->getX509Certificate();
-        $this->keyAlgorithm = $objKey->getAlgorith();
+        $this->keyAlgorithm = $objKey->getAlgorithm();
 
         return true;
     }
