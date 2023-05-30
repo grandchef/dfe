@@ -33,6 +33,7 @@ class EmitenteLoader implements Loader
         if (!is_null($this->emitente->getIM())) {
             Util::appendNode($element, 'IM', $this->emitente->getIM(true));
         }
+        Util::appendNode($element, 'indRatISSQN', 'N');
         return $element;
     }
 

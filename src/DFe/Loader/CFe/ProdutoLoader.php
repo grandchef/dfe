@@ -26,6 +26,11 @@ class ProdutoLoader implements Loader
     {
     }
 
+    public function getPrecoUnitario()
+    {
+        return Util::toFloat($this->produto->getPrecoUnitario(), 3);
+    }
+
     public function getNode(string $version = '', ?string $name = null): \DOMElement
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
@@ -36,13 +41,15 @@ class ProdutoLoader implements Loader
 
         $produto = $dom->createElement('prod');
         Util::appendNode($produto, 'cProd', $this->produto->getCodigo(true));
-        Util::appendNode($produto, 'cEAN', $this->produto->getCodigoBarras(true));
+        if ($this->produto->getCodigoBarras()) {
+            Util::appendNode($produto, 'cEAN', $this->produto->getCodigoBarras(true));
+        }
         Util::appendNode($produto, 'xProd', $this->produto->getDescricao(true));
         Util::appendNode($produto, 'NCM', $this->produto->getNCM(true));
         Util::appendNode($produto, 'CFOP', $this->produto->getCFOP(true));
         Util::appendNode($produto, 'uCom', $this->produto->getUnidade(true));
         Util::appendNode($produto, 'qCom', $this->produto->getQuantidade(true));
-        Util::appendNode($produto, 'vUnCom', $this->produto->getPrecoUnitario(true));
+        Util::appendNode($produto, 'vUnCom', $this->getPrecoUnitario());
         Util::appendNode($produto, 'indRegra', 'A');
         if (Util::isGreater($this->produto->getDesconto(), 0.00)) {
             Util::appendNode($produto, 'vDesc', $this->produto->getDesconto(true));

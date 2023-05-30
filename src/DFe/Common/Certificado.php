@@ -262,7 +262,7 @@ class Certificado implements Node
         $adapter = new XmlseclibsAdapter();
         $adapter->setPrivateKey($this->getChavePrivada());
         $adapter->setPublicKey($this->getChavePublica());
-        return $adapter->signData($data);
+        return base64_encode($adapter->signData($data));
     }
 
     /**

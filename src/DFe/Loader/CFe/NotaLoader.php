@@ -454,7 +454,7 @@ class NotaLoader implements Loader
         $ident = $dom->createElement('ide');
         Util::appendNode($ident, 'CNPJ', $this->nota->getResponsavel()->getCNPJ());
         Util::appendNode($ident, 'signAC', $this->nota->getResponsavel()->getAssinatura());
-        Util::appendNode($ident, 'numeroCaixa', $this->nota->getCaixa()->getNumero());
+        Util::appendNode($ident, 'numeroCaixa', Util::padDigit($this->nota->getCaixa()->getNumero(), 3));
         $info->appendChild($ident);
 
         $emitente = $this->nota->getEmitente()->getNode($version);
@@ -464,11 +464,13 @@ class NotaLoader implements Loader
             $destinatario = $this->nota->getDestinatario()->getNode($version);
             $destinatario = $dom->importNode($destinatario, true);
             $info->appendChild($destinatario);
+        } else {
+            Util::appendNode($info, 'dest', '');
         }
         if (!is_null($this->nota->getDestinatario()) && !is_null($this->nota->getDestinatario()->getEndereco())) {
-            $destinatario = $this->nota->getDestinatario()->getEndereco()->getNode($version);
-            $destinatario = $dom->importNode($destinatario, true);
-            $info->appendChild($destinatario);
+            $endereco = $this->nota->getDestinatario()->getEndereco()->getNode($version);
+            $endereco = $dom->importNode($endereco, true);
+            $info->appendChild($endereco);
         }
         $item = 0;
         $tributos = [];
@@ -496,6 +498,7 @@ class NotaLoader implements Loader
                 $tributos[$key] += $value;
             }
         }
+        Util::appendNode($info, 'total', '');
         $pag = $dom->createElement('pgto');
         $_pagamentos = $this->nota->getPagamentos();
         foreach ($_pagamentos as $_pagamento) {

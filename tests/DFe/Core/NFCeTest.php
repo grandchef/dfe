@@ -17,6 +17,7 @@ class NFCeTest extends \PHPUnit\Framework\TestCase
         $nfce->setCodigo('77882192');
         $nfce->setSerie('1');
         $nfce->setNumero('81');
+        $nfce->getCaixa()->setNumero(1);
         $nfce->setDataEmissao(strtotime('2016-09-16T21:36:03-03:00'));
         $nfce->setPresenca(\DFe\Core\Nota::PRESENCA_PRESENCIAL);
         $nfce->addObservacao('Vendedor', 'Fulano de Tal');
