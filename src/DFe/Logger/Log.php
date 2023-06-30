@@ -11,6 +11,8 @@
 
 namespace DFe\Logger;
 
+use Psr\Log\LoggerInterface;
+
 /**
  * Salva mensagens de erro, depuração entre outros
  *
@@ -73,7 +75,7 @@ class Log
     /**
      * Informa a nova pasta onde os logs serão salvos
      * @param string $directory caminho absoluto da pasta
-     * @return Log a própria instência de Log
+     * @return self a própria instância de Log
      */
     public function setDirectory($directory)
     {
@@ -90,7 +92,7 @@ class Log
      *
      * @param \Monolog\Handler\AbstractHandler|null $handler nova função que será usada
      *
-     * @return Log a própria instência de Log
+     * @return self a própria instância de Log
      */
     public function setHandler($handler)
     {
@@ -99,6 +101,18 @@ class Log
             $handler->setFilenameFormat('{date}', 'Ymd');
         }
         $this->logger->pushHandler($handler);
+        return $this;
+    }
+    /**
+     * Altera a instância escritora dos logs
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return self a própria instância de Log
+     */
+    public function setLogger($logger)
+    {
+        $this->logger = $logger;
         return $this;
     }
 
