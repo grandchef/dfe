@@ -30,7 +30,7 @@ class Log
     /**
      * Processador de log
      *
-     * @var \Monolog\Logger
+     * @var LoggerInterface
      */
     private $logger;
 
@@ -100,7 +100,9 @@ class Log
             $handler = new \Monolog\Handler\RotatingFileHandler($this->getDirectory() . '/{date}.txt');
             $handler->setFilenameFormat('{date}', 'Ymd');
         }
-        $this->logger->pushHandler($handler);
+        if ($this->logger instanceof \Monolog\Logger) {
+            $this->logger->pushHandler($handler);
+        }
         return $this;
     }
     /**
