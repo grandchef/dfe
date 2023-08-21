@@ -557,8 +557,11 @@ class Ajuste extends Configuracao implements Evento
             // implementar aqui pois o evento de inutilização não devolve o ID da nota no banco
             // atualizar a chave, protocolo, data de autorização, flag de conclusão e estado da inutilização
         } elseif ($tarefa->getAcao() == \DFe\Task\Tarefa::ACAO_CANCELAR || $cancelamento) {
-            // salva um XML diferenciado e não embutido no XML da nota
             $nota = $tarefa->getNota();
+            if ($nota->getModelo() == Nota::MODELO_CFE) {
+                // CFe já salva o XML original como cancelado
+                return;
+            }
             $path = $this->getPastaXmlCancelado($nota->getAmbiente());
             $filename = $path . '/' . $nota->getID() . '-procEventoNFe.xml';
             $xml = $tarefa->getDocumento();
