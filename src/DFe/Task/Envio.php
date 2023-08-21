@@ -214,6 +214,9 @@ class Envio
     public function getServiceInfo()
     {
         $config = SEFAZ::getInstance()->getConfiguracao();
+        if ($this->getModelo() === Nota::MODELO_CFE && $this->getServico() == self::SERVICO_EVENTO) {
+            return $config->getUrlSat() . '/cancelamento';
+        }
         if ($this->getModelo() === Nota::MODELO_CFE) {
             return $config->getUrlSat() . '/' . $this->getServico();
         }
