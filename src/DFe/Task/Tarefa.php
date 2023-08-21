@@ -174,9 +174,6 @@ class Tarefa
      */
     public function executa()
     {
-        if (!is_null($this->getNota())) {
-            $this->setID($this->getNota()->getID());
-        }
         $retorno = null;
         switch ($this->getAcao()) {
             case self::ACAO_CANCELAR:
@@ -201,9 +198,11 @@ class Tarefa
             if (is_null($nota)) {
                 throw new \Exception('A nota não foi informada na tarefa de cancelamento', 404);
             }
-            if (is_null($nota->getProtocolo())) {
-                throw new \Exception('A nota "' . $this->getID() .
-                    '" não possui protocolo de autorização para o cancelamento', 404);
+            if (is_null($nota->getProtocolo()) && $nota->getModelo() != Nota::MODELO_CFE) {
+                throw new \Exception(
+                    'A nota "' . $nota->getID() . '" não possui protocolo de autorização para o cancelamento',
+                    404
+                );
             }
             $evento = new Evento();
             $evento->setData(time());
