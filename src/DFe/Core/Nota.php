@@ -1395,7 +1395,7 @@ abstract class Nota implements Node
 
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
-        if ($element->nodeName === 'CFe') {
+        if (strpos($element->nodeName, 'CFe') === 0) {
             $this->setModelo(self::MODELO_CFE);
             $versionNode = Util::findNode($element, 'infCFe');
             $invoiceVersion = $versionNode->getAttribute('versaoDadosEnt');
@@ -1412,17 +1412,20 @@ abstract class Nota implements Node
 
     /**
      * Carrega um arquivo XML e preenche a nota com as informações dele
+     *
      * @param  string $filename caminho do arquivo
+     * @param  string $name nome do nó raiz
+     *
      * @return DOMDocument      objeto do documento carregado
      */
-    public function load($filename)
+    public function load($filename, ?string $name = null)
     {
-        $dom = new \DOMDocument();
+        $dom = new DOMDocument();
         if (!file_exists($filename)) {
             throw new \Exception('Arquivo XML "' . $filename . '" não encontrado', 404);
         }
         $dom->load($filename);
-        $this->loadNode($dom->documentElement);
+        $this->loadNode($dom->documentElement, $name);
         return $dom;
     }
 

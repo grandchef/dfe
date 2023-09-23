@@ -535,7 +535,8 @@ class NotaLoader implements Loader
 
     public function loadNode(\DOMElement $element, ?string $name = null, string $version = ''): \DOMElement
     {
-        $element = Util::findNode($element, $name ?? 'CFe');
+        $tagName = $name ?? 'CFe';
+        $element = Util::findNode($element, $tagName);
         $info = Util::findNode($element, 'infCFe');
         $id = $info->getAttribute('Id');
         if (strlen($id) != 47) {
@@ -603,7 +604,7 @@ class NotaLoader implements Loader
             Util::loadNode(
                 $ident,
                 'tpAmb',
-                'Tag "tpAmb" do campo "Ambiente" não encontrada'
+                $tagName == 'CFe' ? 'Tag "tpAmb" do campo "Ambiente" não encontrada' : null
             )
         );
         $this->nota->getCaixa()->setNumero(
@@ -675,9 +676,19 @@ class NotaLoader implements Loader
         $_fields = $info->getElementsByTagName('total');
         if ($_fields->length > 0) {
             $total = new Total();
-            $total->loadNode($_fields->item(0), 'ICMSTot', $version);
-            $infoAdic = Util::getNode($info, 'infAdic');
-            $total->setComplemento(Util::loadNode($infoAdic, 'infCpl'));
+            if ($tagName == 'CFe') {
+                $total->loadNode($_fields->item(0), 'ICMSTot', $version);
+                $infoAdic = Util::getNode($info, 'infAdic');
+                $total->setComplemento(Util::loadNode($infoAdic, 'infCpl'));
+            } else {
+                $total->setProdutos(
+                    Util::loadNode(
+                        $element,
+                        'vCFe',
+                        'Tag "vCFe" não encontrada no Total da nota'
+                    )
+                );
+            }
             $this->nota->setTotal($total);
         } else {
             throw new \Exception('Tag "total" do objeto "Total" não encontrada na Nota', 404);
