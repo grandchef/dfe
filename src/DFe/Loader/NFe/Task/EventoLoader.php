@@ -63,8 +63,8 @@ class EventoLoader implements Loader, Enveloper
 
     public function setData($data)
     {
-        if (!is_numeric($data)) {
-            $data = strtotime($data ?? '');
+        if (is_string($data)) {
+            $data = strtotime($data);
         }
         $this->evento->setData($data);
         return $this;
