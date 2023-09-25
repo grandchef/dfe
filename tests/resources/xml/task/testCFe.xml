@@ -42,7 +42,7 @@
           </ICMSSN102>
         </ICMS>
       </imposto>
-      <infAdProd>Trib. aprox.: R$ 0,75 Federal e R$ 0,90 Estadual. Fonte: IBPT/empresometro.com.br 2C01C1</infAdProd>
+      <infAdProd>Trib. aprox.: R$ 0,72 Federal e R$ 1,00 Estadual. Fonte: IBPT/empresometro.com.br 75B7F2</infAdProd>
     </det>
     <det nItem="2">
       <prod>
@@ -65,7 +65,7 @@
           </ICMSSN102>
         </ICMS>
       </imposto>
-      <infAdProd>Trib. aprox.: R$ 1,02 Federal e R$ 1,22 Estadual. Fonte: IBPT/empresometro.com.br 2C01C1</infAdProd>
+      <infAdProd>Trib. aprox.: R$ 0,99 Federal e R$ 1,36 Estadual. Fonte: IBPT/empresometro.com.br 75B7F2</infAdProd>
     </det>
     <total/>
     <pgto>
@@ -79,7 +79,7 @@
       </MP>
     </pgto>
     <infAdic>
-      <infCpl>Trib. aprox.: R$ 1,77 Federal e R$ 2,12 Estadual. Fonte: IBPT/empresometro.com.br 2C01C1</infCpl>
+      <infCpl>Trib. aprox.: R$ 1,71 Federal e R$ 2,36 Estadual. Fonte: IBPT/empresometro.com.br 75B7F2</infCpl>
       <obsFisco xCampo="RegimeEspecial">
         <xTexto>123456</xTexto>
       </obsFisco>
