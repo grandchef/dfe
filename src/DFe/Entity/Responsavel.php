@@ -226,7 +226,7 @@ class Responsavel extends Pessoa implements Node
         if (!is_null($this->getIdentificador())) {
             Util::appendNode($element, 'idCSRT', $this->getIdentificador(true));
         }
-        if (!is_null($this->getAssinatura())) {
+        if (!is_null($this->getAssinatura()) && strpos($version, 'CFe@') !== false) {
             Util::appendNode($element, 'hashCSRT', $this->getAssinatura(true));
         }
         return $element;
