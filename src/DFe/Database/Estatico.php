@@ -110,13 +110,11 @@ class Estatico extends Banco
         }
         $array = $this->mun_codes['municipios'][strtoupper($uf)];
         $elem = ['nome' => $municipio];
-        $o = false;
-        foreach ($array as $key => $value) {
-            if ($value['nome'] == $municipio) {
-                $o = $value;
-                break;
-            }
-        }
+        $o = Util::binarySearch($elem, $array, function ($o1, $o2) {
+            $n1 = Util::removeAccent($o1['nome']);
+            $n2 = Util::removeAccent($o2['nome']);
+            return strcasecmp($n1, $n2);
+        });
         if ($o === false) {
             throw new \Exception(
                 sprintf('Não foi encontrado o código do IBGE para o município "%s" do estado "%s"', $municipio, $uf),
