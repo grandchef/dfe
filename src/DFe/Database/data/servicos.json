@@ -519,7 +519,7 @@
 						"servico": "CscNFCe",
 						"versao": "1.00"
 					},
-					"qrcode": "https://nfe.sefaz.go.gov.br/nfeweb/sites/nfce/danfeNFCe",
+					"qrcode": "https://nfeweb.sefaz.go.gov.br/nfeweb/sites/nfce/danfeNFCe",
 					"consulta": "http://www.nfce.go.gov.br/post/ver/214344/consulta-nfce"
 				},
 				"homologacao": {
@@ -557,7 +557,7 @@
 						"servico": "CscNFCe",
 						"versao": "1.00"
 					},
-					"qrcode": "https://homolog.sefaz.go.gov.br/nfeweb/sites/nfce/danfeNFCe",
+					"qrcode": "https://nfewebhomolog.sefaz.go.gov.br/nfeweb/sites/nfce/danfeNFCe",
 					"consulta": "http://www.nfce.go.gov.br/post/ver/214413/consulta-nfc-e-homologacao"
 				}
 			}
@@ -676,7 +676,7 @@
 						"versao": "1.00"
 					},
 					"qrcode": "https://portalsped.fazenda.mg.gov.br/portalnfce/sistema/qrcode.xhtml",
-					"consulta": "http://nfce.fazenda.mg.gov.br/portalnfce"
+					"consulta": "https://portalsped.fazenda.mg.gov.br/portalnfce"
 				},
 				"homologacao": {
 					"autorizacao": {
@@ -1845,12 +1845,12 @@
 			"nfce": {
 				"base": "SVRS",
 				"producao": {
-					"qrcode": "http://www.receita.pb.gov.br/nfce",
-					"consulta": "http://www.receita.pb.gov.br/nfce/consulta"
+					"qrcode": "http://www.sefaz.pb.gov.br/nfce",
+					"consulta": "http://www.sefaz.pb.gov.br/nfce/consulta"
 				},
 				"homologacao": {
-					"qrcode": "http://www.receita.pb.gov.br/nfcehom",
-					"consulta": "http://www.receita.pb.gov.br/nfcehom"
+					"qrcode": "http://www.sefaz.pb.gov.br/nfcehom",
+					"consulta": "http://www.sefaz.pb.gov.br/nfcehom"
 				}
 			}
 		},
