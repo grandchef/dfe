@@ -95,7 +95,7 @@ class PagamentoLoader implements Loader
             case Pagamento::FORMA_DEPOSITO:
                 return '16';
             case Pagamento::FORMA_INSTANTANEO:
-                return '17';
+                return '20';
             case Pagamento::FORMA_TRANSFERENCIA:
                 return '18';
             case Pagamento::FORMA_FIDELIDADE:
@@ -155,6 +155,9 @@ class PagamentoLoader implements Loader
                 $forma = Pagamento::FORMA_DEPOSITO;
                 break;
             case '17':
+                $forma = Pagamento::FORMA_INSTANTANEO;
+                break;
+            case '20':
                 $forma = Pagamento::FORMA_INSTANTANEO;
                 break;
             case '18':
