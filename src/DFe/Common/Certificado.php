@@ -28,6 +28,11 @@ class Certificado implements Node
     /**
      * @var string
      */
+    private $cadeia_certificados;
+
+    /**
+     * @var string
+     */
     private $chave_privada;
 
     /**
@@ -102,6 +107,27 @@ class Certificado implements Node
     {
         $this->chave_publica = $chave_publica;
         $this->carregaChavePublica();
+        return $this;
+    }
+
+    /**
+     * Conteúdo da chave pública ou certificado no formato PEM
+     * @param string|null $chave_publica
+     * @return string|null
+     */
+    public function getCadeiaCertificados()
+    {
+        return $this->cadeia_certificados ?? $this->getChavePublica();
+    }
+
+    /**
+     * Conteúdo da chave pública ou certificado no formato PEM
+     * @param string|null $chave_publica
+     * @return self
+     */
+    public function setCadeiaCertificados($cadeia_certificados)
+    {
+        $this->cadeia_certificados = $cadeia_certificados;
         return $this;
     }
 

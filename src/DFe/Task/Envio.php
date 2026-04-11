@@ -302,7 +302,7 @@ class Envio
         $soap = new CurlSoap();
         $soap->setConnectTimeout(intval($config->getTempoLimite()));
         $soap->setTimeout(ceil($config->getTempoLimite() * 1.5));
-        $soap->setCertificate($config->getCertificado()->getArquivoChavePublica());
+        $soap->setCertificate($config->getCertificado()->getCadeiaCertificados());
         $soap->setPrivateKey($config->getCertificado()->getArquivoChavePrivada());
         $loader = $this->getLoader();
         $dom = $loader->getNode()->ownerDocument;
