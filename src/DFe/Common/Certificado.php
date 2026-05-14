@@ -26,7 +26,7 @@ class Certificado implements Node
     private $chave_publica;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $cadeia_certificados;
 
@@ -112,7 +112,6 @@ class Certificado implements Node
 
     /**
      * Conteúdo da chave pública ou certificado no formato PEM
-     * @param string|null $chave_publica
      * @return string|null
      */
     public function getCadeiaCertificados()
@@ -122,7 +121,7 @@ class Certificado implements Node
 
     /**
      * Conteúdo da chave pública ou certificado no formato PEM
-     * @param string|null $chave_publica
+     * @param string|null $cadeia_certificados
      * @return self
      */
     public function setCadeiaCertificados($cadeia_certificados)
