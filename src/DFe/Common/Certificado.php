@@ -116,7 +116,7 @@ class Certificado implements Node
      */
     public function getCadeiaCertificados()
     {
-        return $this->cadeia_certificados ?? $this->getChavePublica();
+        return $this->cadeia_certificados ?? $this->getArquivoChavePublica();
     }
 
     /**
